@@ -5,7 +5,7 @@ import type { CsvRow } from "./";
 
 // Service logic for CSV parser users
 export const parseAndSaveCSV = (csvContent: string): string => {
-	const parsedData = Papa.parse<CsvRow>(csvContent);
+	const parsedData = Papa.parse<CsvRow>(csvContent, {header : true, skipEmptyLines: true});
 	console.log(`Parsed CSV data: ${JSON.stringify(parsedData.data)}`);
 	// Process each row without validation
 	const processedData = parsedData.data.map((row) => row);

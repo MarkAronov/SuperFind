@@ -1,26 +1,16 @@
 [
-  [
-    "name",
-    "location",
-    "role",
-    "skills",
-    "experience_years"
-  ],
-  [
-    "Alice Chen",
-    "New York",
-    "ML Engineer",
-    "PyTorch, NLP, TensorFlow",
-    "4"
-  ],
-  [
-    "Bob Smith",
-    "San Diego",
-    "Frontend Developer",
-    "React, TypeScript",
-    "5"
-  ],
-  [
-    ""
-  ]
+  {
+    "name": "Alice Chen",
+    "location": "New York",
+    "role": "ML Engineer",
+    "skills": "PyTorch, NLP, TensorFlow",
+    "experience_years": "4"
+  },
+  {
+    "name": "Bob Smith",
+    "location": "San Diego",
+    "role": "Frontend Developer",
+    "skills": "React, TypeScript",
+    "experience_years": "5"
+  }
 ]

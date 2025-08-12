@@ -1,0 +1,26 @@
+[
+  [
+    "name",
+    "location",
+    "role",
+    "skills",
+    "experience_years"
+  ],
+  [
+    "Alice Chen",
+    "New York",
+    "ML Engineer",
+    "PyTorch, NLP, TensorFlow",
+    "4"
+  ],
+  [
+    "Bob Smith",
+    "San Diego",
+    "Frontend Developer",
+    "React, TypeScript",
+    "5"
+  ],
+  [
+    ""
+  ]
+]

@@ -1,5 +1,2 @@
 // Interface definitions for CSV parser users
-export interface CsvParserUser {
-  id: string;
-
-}
+export type CsvRow = Record<string, string>; // Define CsvRow locally if not exported elsewhere

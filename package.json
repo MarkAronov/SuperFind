@@ -8,11 +8,12 @@
     "check": "biome check ./src",
     "check:fix": "biome check ./src --fix",
     "check:format": "biome format ./src --check",
-		"check:format:fix": "biome format ./src --check --write"
+    "check:format:fix": "biome format ./src --check --write"
   },
   "dependencies": {
     "hono": "^4.9.0",
-    "papaparse": "^5.5.3"
+    "papaparse": "^5.5.3",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.4",

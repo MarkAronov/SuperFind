@@ -12,17 +12,17 @@ SuperFind is an intelligent tool that leverages advanced language models to help
 ## Getting Started
 
 1. Clone the repository:
-   ```bash
-   git clone 
+   ```zsh
+   git clone https://github.com/MarkAronov/SuperFind.git
    ```
 
 2. Install dependencies:
-   ```bash
+   ```zsh
    bun install
    ```
 
 3. Start the development server:
-   ```bash
+   ```zsh
    bun run dev
    ```
 

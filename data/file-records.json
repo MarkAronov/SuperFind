@@ -1,0 +1,23 @@
+{
+  "records": {
+    "e9717be62c352dc7": {
+      "id": "e9717be62c352dc7",
+      "md5Hash": "74d79b32eaeeebe2d1ea0339c4e631d1",
+      "lastSyncTime": "2025-09-04T10:52:22.979Z",
+      "isIndexed": true
+    },
+    "c78a225687e8e320": {
+      "id": "c78a225687e8e320",
+      "md5Hash": "a2246a38f5b865806f6cdf6e8735d4cf",
+      "lastSyncTime": "2025-09-04T10:52:22.987Z",
+      "isIndexed": true
+    },
+    "a8b15bc9620b293a": {
+      "id": "a8b15bc9620b293a",
+      "md5Hash": "bdfd795bc95f4a77a13a014016e514b9",
+      "lastSyncTime": "2025-09-04T10:52:22.988Z",
+      "isIndexed": true
+    }
+  },
+  "lastUpdated": "2025-09-04T10:52:22.988Z"
+}

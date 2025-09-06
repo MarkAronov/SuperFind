@@ -1,17 +1,21 @@
 import { Hono } from "hono";
-
-import csvParserApp from "./csv-parser/users/csv-parser.routes";
-import jsonParserApp from "./json-parser/users/json-parser.routes";
-import textParserApp from "./text-parser/users/text-parser.routes";
+import aiRouter from "./ai/ai-routes";
+import csvParserApp from "./parser/csv/csv-parser.routes";
+import jsonParserApp from "./parser/json/json-parser.routes";
+import textParserApp from "./parser/text/text-parser.routes";
 
 const app = new Hono();
 
 app.get("/", (c) => {
-	return c.text("Hello Hono!");
+	return c.json({
+		message: "SuperFind API",
+		status: "running",
+		version: "1.0.0",
+	});
 });
-
 app.route("/csv", csvParserApp);
 app.route("/json", jsonParserApp);
 app.route("/text", textParserApp);
+app.route("/ai", aiRouter);
 
 export default app;

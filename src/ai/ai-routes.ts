@@ -1,13 +1,15 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
-import { JsonFileHashDatabase } from "../services/json-database.js";
-import { PersistentAIService } from "../services/persistent-ai.service.js";
+
+// TODO: Fix these imports once database and service classes are implemented
+// import { JsonFileHashDatabase } from "../utils/json-database";
+// import { PersistentAIService } from "./ai-service";
 
 const AIRouter = new Hono();
 
-// Initialize AI service
-const database = new JsonFileHashDatabase();
-const aiService = new PersistentAIService(database);
+// TODO: Initialize AI service once classes are implemented
+// const database = new JsonFileHashDatabase();
+// const aiService = new PersistentAIService(database);
 
 // GET route for searching and getting AI answers
 AIRouter.get("/search", async (c: Context) => {
@@ -25,15 +27,15 @@ AIRouter.get("/search", async (c: Context) => {
 
 		console.log(`🔍 AI Search request: ${query}`);
 
-		// Get AI-powered answer
-		const answer = await aiService.getAnswer(query);
-		const searchResults = await aiService.searchContent(query, 5);
+		// TODO: Implement AI service calls once service is ready
+		// const answer = await aiService.getAnswer(query);
+		// const searchResults = await aiService.searchContent(query, 5);
 
 		return c.json({
 			success: true,
 			query,
-			answer,
-			sources: searchResults,
+			answer: "AI service is being implemented",
+			sources: [],
 			timestamp: new Date().toISOString(),
 		});
 	} catch (error) {

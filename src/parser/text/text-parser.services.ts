@@ -1,4 +1,4 @@
-import { AIService } from "../../ai/ai-service.js";
+import { convertTextToJson } from "../../ai/ai-service.js";
 import { saveFile } from "../../utils/save-file.js";
 
 export const saveTextFile = (
@@ -23,11 +23,8 @@ export const convertTextToJSON = async (
 	extractionHint?: string,
 ): Promise<object> => {
 	try {
-		// Create a temporary database for the AI service
-		const aiService = new AIService();
-
-		// Use the  AI service to convert text to JSON
-		const result = await aiService.convertTextToJson(
+		// Use the AI service to convert text to JSON
+		const result = await convertTextToJson(
 			textContent,
 			targetInterface,
 			extractionHint,
@@ -55,7 +52,7 @@ export const convertTextToJSON = async (
  * Extract property keys from TypeScript interface string
  * e.g., "interface Person { name: string; email: string; }" -> ["name", "email"]
  */
-function extractKeysFromInterface(interfaceString: string): string[] {
+const extractKeysFromInterface = (interfaceString: string): string[] => {
 	const propertyRegex = /(\w+)(?:\?)?\s*:/g;
 	const keys: string[] = [];
 	let match: RegExpExecArray | null;
@@ -67,4 +64,4 @@ function extractKeysFromInterface(interfaceString: string): string[] {
 	}
 
 	return keys;
-}
+};

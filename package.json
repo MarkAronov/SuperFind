@@ -1,8 +1,8 @@
 {
 	"name": "superfind",
 	"scripts": {
-		"start": "bun src/server.ts",
-		"dev": "bun run --hot src/server.ts",
+		"start": "bun src/index.ts",
+		"dev": "bun run --hot src/index.ts",
 		"lint": "biome lint ./src",
 		"format": "biome format ./src --write",
 		"check": "biome check ./src",

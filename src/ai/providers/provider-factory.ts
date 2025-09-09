@@ -1,25 +1,28 @@
 import type { AIProvider } from "./ai-provider.interface.js";
-import { OllamaProvider } from "./providers/ollama-provider.js";
-import { OpenAIProvider } from "./providers/openai-provider.js";
+import { createOllamaProvider } from "./ollama-provider.js";
+import { createOpenAIProvider } from "./openai-provider.js";
 
 /**
  * Create OpenAI provider with specific model
  */
-export function createOpenAI(model = "gpt-5-mini", apiKey?: string): OpenAIProvider {
-	return new OpenAIProvider(model, apiKey);
-}
+export const createOpenAI = (
+	model = "gpt-4o-mini",
+	apiKey?: string,
+): AIProvider => {
+	return createOpenAIProvider(model, apiKey);
+};
 
 /**
  * Create Ollama provider with specific model
  */
-export function createOllama(model?: string, baseUrl?: string): OllamaProvider {
-	return new OllamaProvider(model, baseUrl);
-}
+export const createOllama = (model?: string, baseUrl?: string): AIProvider => {
+	return createOllamaProvider(model, baseUrl);
+};
 
 /**
  * Create provider based on configuration
  */
-export function createProvider(config: ProviderConfig): AIProvider {
+export const createProvider = (config: ProviderConfig): AIProvider => {
 	switch (config.type) {
 		case "openai":
 			return createOpenAI(config.model, config.apiKey);
@@ -28,12 +31,12 @@ export function createProvider(config: ProviderConfig): AIProvider {
 		default:
 			throw new Error(`Unknown provider type: ${config.type}`);
 	}
-}
+};
 
 /**
  * Get popular model presets
  */
-export function getPresets(): Record<string, ProviderConfig> {
+export const getPresets = (): Record<string, ProviderConfig> => {
 	return {
 		// OpenAI Models
 		"gpt4-mini": {
@@ -79,12 +82,10 @@ export function getPresets(): Record<string, ProviderConfig> {
 			name: "DeepSeek Coder (Code Expert)",
 		},
 	};
-}
-
-/**
+}; /**
  * Auto-detect best available provider
  */
-export async function createBestAvailable(): Promise<AIProvider> {
+export const createBestAvailable = async (): Promise<AIProvider> => {
 	// Try OpenAI first (if API key exists)
 	if (process.env.OPENAI_API_KEY) {
 		try {
@@ -103,18 +104,19 @@ export async function createBestAvailable(): Promise<AIProvider> {
 	for (const model of commonModels) {
 		try {
 			const provider = createOllama(model);
-			const available = await provider.isModelAvailable(model);
-			if (available) {
-				console.log(`Using Ollama with model: ${model}`);
-				return provider;
-			}
-		} catch {}
+			// Test with a simple completion to see if model is available
+			await provider.generateCompletion("test", { maxTokens: 1 });
+			console.log(`Using Ollama with model: ${model}`);
+			return provider;
+		} catch {
+			// Model not available, try next one
+		}
 	}
 
 	throw new Error(
 		"No AI providers available. Install Ollama or set OPENAI_API_KEY",
 	);
-}
+};
 
 export interface ProviderConfig {
 	type: "openai" | "ollama";

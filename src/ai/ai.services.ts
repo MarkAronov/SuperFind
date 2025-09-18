@@ -265,9 +265,9 @@ export const initializeAI = async (): Promise<void> => {
 		// Initialize AI service with LangChain components
 		initializeAIService(provider, vectorStore);
 
-		console.log("🤖 AI service initialized successfully with LangChain");
+		console.log("[2] AI service initialized successfully with LangChain");
 	} catch (error) {
-		console.error("❌ Failed to initialize AI service:", error);
+		console.error("[ERROR] Failed to initialize AI service:", error);
 	}
 };
 
@@ -295,7 +295,7 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(`🔍 AI Search request: ${query}`);
+		console.log(`[SEARCH] AI Search request: ${query}`);
 
 		// Use the AI service to search and generate an answer
 		const result = await searchAndAnswer(query, 5);

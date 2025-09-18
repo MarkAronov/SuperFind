@@ -186,7 +186,7 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
 			return provider;
 		} catch {
-			console.log("OpenAI not available, trying Anthropic...");
+			console.log("[FALLBACK] OpenAI not available, trying Anthropic...");
 		}
 	}
 
@@ -195,10 +195,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createAnthropic();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("Using Anthropic Claude");
+			console.log("[OK] Using Anthropic Claude");
 			return provider;
 		} catch {
-			console.log("Anthropic not available, trying Gemini...");
+			console.log("[FALLBACK] Anthropic not available, trying Gemini...");
 		}
 	}
 
@@ -207,10 +207,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createGemini();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("Using Google Gemini");
+			console.log("[OK] Using Google Gemini");
 			return provider;
 		} catch {
-			console.log("Gemini not available, trying Hugging Face...");
+			console.log("[FALLBACK] Gemini not available, trying Hugging Face...");
 		}
 	}
 
@@ -219,10 +219,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createHuggingFace();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("Using Hugging Face");
+			console.log("[OK] Using Hugging Face");
 			return provider;
 		} catch {
-			console.log("Hugging Face not available, trying Ollama...");
+			console.log("[FALLBACK] Hugging Face not available, trying Ollama...");
 		}
 	}
 
@@ -234,7 +234,7 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 			const provider = createOllama(model);
 			// Test with a simple completion to see if model is available
 			await provider.generateCompletion("test", { maxTokens: 1 });
-			console.log(`Using Ollama with model: ${model}`);
+			console.log(`[OK] Using Ollama with model: ${model}`);
 			return provider;
 		} catch {
 			// Model not available, try next one

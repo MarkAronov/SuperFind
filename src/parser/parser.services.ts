@@ -345,7 +345,7 @@ export async function processFiles(
  */
 export function storeProcessedData(data: ProcessedFile[]): void {
 	processedDataStore = [...data];
-	console.log(`📊 Stored ${data.length} processed files in data store`);
+	console.log(`[STORE] Stored ${data.length} processed files in data store`);
 }
 
 /**
@@ -515,7 +515,7 @@ export async function scanStaticDataFolder(): Promise<FileInfo[]> {
 			files.push(...textFiles);
 		}
 
-		console.log(`📁 Found ${files.length} files to process`);
+		console.log(`[SCAN] Found ${files.length} files to process`);
 		return files;
 	} catch (error) {
 		console.error("Error scanning static data folder:", error);

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import aiRouter from "./ai/ai.routes";
-import { initializeAIService } from "./ai/ai.service";
+import { initializeAIService } from "./ai/ai.services";
 import { createBestAvailable } from "./ai/providers/provider-factory";
 import parserApp from "./parser/parser.routes";
 import {
@@ -9,7 +9,7 @@ import {
 	storeProcessedData,
 } from "./parser/parser.services";
 import { checkApplicationHealth } from "./services/health.services";
-import { initQdrant } from "./vector/qdrant.service";
+import { initQdrant } from "./vector/qdrant.services";
 
 interface ProcessedFile {
 	fileName: string;

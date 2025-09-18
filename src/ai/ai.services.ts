@@ -1,11 +1,13 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
+import { createLangChainVectorStore, initQdrant } from "../vector/qdrant.services";
 import type {
 	AIProvider,
 	SearchResult,
 	TextToJsonResult,
 	VectorStore,
 } from "./ai.interface";
+import { createProvider, getPresets } from "./providers/provider-factory";
 
 /**
  * Main AI Service - handles the 2 core tasks using LangChain:
@@ -235,5 +237,91 @@ const parseAndValidateJson = (
 			fallback[key] = "";
 		}
 		return fallback;
+	}
+};
+
+/**
+ * Initialize AI service with LangChain providers and vector store
+ */
+export const initializeAI = async (): Promise<void> => {
+	try {
+		// Initialize Qdrant connection first
+		await initQdrant();
+
+		// Create AI provider (fallback to Ollama if OpenAI not available)
+		const preset = process.env.OPENAI_API_KEY ?? "gpt5-mini";
+		const config = getPresets()[preset] || {
+			type: "ollama" as const,
+			model: "llama3.2:latest",
+			name: "Llama 3.2",
+		};
+
+		const provider = createProvider(config);
+		const vectorStore = await createLangChainVectorStore();
+
+		// Initialize AI service with LangChain components
+		initializeAIService(provider, vectorStore);
+
+		console.log("🤖 AI service initialized successfully with LangChain");
+	} catch (error) {
+		console.error("❌ Failed to initialize AI service:", error);
+	}
+};
+
+/**
+ * Handle search requests and return AI-powered answers
+ */
+export const handleSearchRequest = async (
+	query: string,
+): Promise<{
+	success: boolean;
+	query: string;
+	answer?: string;
+	sources?: Array<{ content: string; metadata: Record<string, unknown> }>;
+	timestamp: string;
+	error?: string;
+	details?: string;
+}> => {
+	try {
+		if (!query) {
+			return {
+				success: false,
+				query: "",
+				error: "Query parameter is required",
+				timestamp: new Date().toISOString(),
+			};
+		}
+
+		console.log(`🔍 AI Search request: ${query}`);
+
+		// Use the AI service to search and generate an answer
+		const result = await searchAndAnswer(query, 5);
+
+		if (!result.success) {
+			return {
+				success: false,
+				query,
+				error: "Failed to process search request",
+				details: result.error || "Unknown error",
+				timestamp: new Date().toISOString(),
+			};
+		}
+
+		return {
+			success: true,
+			query,
+			answer: result.answer,
+			sources: result.sources,
+			timestamp: new Date().toISOString(),
+		};
+	} catch (error) {
+		console.error("AI search error:", error);
+		return {
+			success: false,
+			query,
+			error: "Failed to process search request",
+			details: error instanceof Error ? error.message : "Unknown error",
+			timestamp: new Date().toISOString(),
+		};
 	}
 };

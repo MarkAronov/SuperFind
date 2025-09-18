@@ -1,12 +1,12 @@
 import { promises as fs } from "fs";
 import * as Papa from "papaparse";
 import * as path from "path";
-import { convertTextToJson } from "../ai/ai.service";
+import { convertTextToJson } from "../ai/ai.services";
 import {
 	documentExistsByMD5,
 	generateMD5,
 	storeDocument,
-} from "../vector/qdrant.service";
+} from "../vector/qdrant.services";
 
 /**
  * Comprehensive file parser service - handles CSV, JSON, and Text parsing

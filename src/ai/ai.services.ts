@@ -1,6 +1,9 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
-import { createLangChainVectorStore, initQdrant } from "../vector/qdrant.services";
+import {
+	createLangChainVectorStore,
+	initQdrant,
+} from "../vector/qdrant.services";
 import type {
 	AIProvider,
 	SearchResult,

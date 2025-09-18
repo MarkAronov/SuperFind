@@ -1,10 +1,10 @@
+import { Document } from "@langchain/core/documents";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { QdrantVectorStore } from "@langchain/qdrant";
-import { Document } from "@langchain/core/documents";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { createHash } from "crypto";
-import type { CollectionStatus, QdrantResponse } from "./qdrant.interfaces";
 import type { VectorStore } from "../ai/ai.interface";
+import type { CollectionStatus, QdrantResponse } from "./qdrant.interfaces";
 
 // Global Qdrant client instance
 let qdrantClient: QdrantClient | null = null;

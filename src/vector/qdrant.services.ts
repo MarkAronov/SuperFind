@@ -1,10 +1,10 @@
+import { Document } from "@langchain/core/documents";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { QdrantVectorStore } from "@langchain/qdrant";
-import { Document } from "@langchain/core/documents";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { createHash } from "crypto";
-import type { CollectionStatus, QdrantResponse } from "./qdrant.interfaces";
 import type { VectorStore } from "../ai/ai.interface";
+import type { CollectionStatus, QdrantResponse } from "./qdrant.interfaces";
 
 // Global Qdrant client instance
 let qdrantClient: QdrantClient | null = null;
@@ -538,18 +538,18 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 			},
 		);
 
-		console.log("✅ LangChain Qdrant vector store created successfully");
+		console.log("[OK] LangChain Qdrant vector store created successfully");
 		return vectorStore as VectorStore;
 	} catch (error) {
 		console.warn(
-			"⚠️ Failed to create LangChain vector store, using fallback:",
+			"[WARN] Failed to create LangChain vector store, using fallback:",
 			error,
 		);
 
 		// Create a mock implementation that satisfies the VectorStore interface
 		const mockVectorStore = {
 			async similaritySearch(query: string, k = 5) {
-				console.log(`🔍 Fallback search for: ${query}`);
+				console.log(`[FALLBACK] Search for: ${query}`);
 				return [
 					new Document({
 						pageContent: `Sample content related to: ${query}`,
@@ -562,10 +562,10 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 				].slice(0, k);
 			},
 			async addDocuments(documents: Document[]) {
-				console.log(`📝 Fallback: Would add ${documents.length} documents`);
+				console.log(`[FALLBACK] Would add ${documents.length} documents`);
 			},
 			async delete() {
-				console.log("🗑️ Fallback: Would delete documents");
+				console.log("[FALLBACK] Would delete documents");
 			},
 		};
 

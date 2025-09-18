@@ -1,7 +1,13 @@
-// Core AI Provider Interface - any LLM can implement this
+import type { BaseLanguageModel } from "@langchain/core/language_models/base";
+import type { VectorStore as LangChainVectorStore } from "@langchain/core/vectorstores";
+
+// Core AI Provider Interface - now using LangChain models
 export interface AIProvider {
 	name: string;
 	model?: string;
+
+	// LangChain model instance
+	languageModel: BaseLanguageModel;
 
 	// Core method: generate text completion
 	generateCompletion(
@@ -46,25 +52,8 @@ export interface SearchSource {
 	relevanceScore: number;
 }
 
-// TypeScript Interface parsing
-export interface TypeScriptInterface {
-	name: string;
-	properties: InterfaceProperty[];
-}
-
-export interface InterfaceProperty {
-	key: string;
-	type: string;
-	optional: boolean;
-	description?: string;
-}
-
-// Database/Vector Store abstraction
-export interface VectorStore {
-	addDocuments(documents: Document[]): Promise<void>;
-	search(query: string, limit?: number): Promise<SearchSource[]>;
-	delete(id: string): Promise<void>;
-}
+// Use LangChain's VectorStore instead of custom implementation
+export type VectorStore = LangChainVectorStore;
 
 export interface Document {
 	id: string;

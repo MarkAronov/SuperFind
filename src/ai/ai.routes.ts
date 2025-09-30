@@ -1,11 +1,10 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
-import { handleSearchRequest, initializeAI } from "./ai.services";
+import { handleSearchRequest } from "./ai.services";
 
 const AIRouter = new Hono();
 
-// Initialize AI service on module load
-initializeAI();
+// Note: AI service is initialized in the main app startup sequence
 
 // Get route for searching and getting AI answers
 AIRouter.get("/search", async (c: Context) => {

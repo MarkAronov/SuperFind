@@ -6,50 +6,60 @@ import { createOllamaProvider } from "./ollama.provider.js";
 import { createOpenAIProvider } from "./openai.provider.js";
 
 /**
- * Create OpenAI provider with specific model
+ * Get model from environment variables with fallbacks
  */
-export const createOpenAI = (
-	model = "gpt-4o-mini",
-	apiKey?: string,
-): AIProvider => {
-	return createOpenAIProvider(model, apiKey);
+const getModelFromEnv = (provider: string, fallback: string): string => {
+	const envKey = `${provider.toUpperCase()}_MODEL`;
+	return process.env[envKey] || fallback;
 };
 
 /**
- * Create Ollama provider with specific model
+ * Create OpenAI provider with model from environment
+ */
+export const createOpenAI = (model?: string, apiKey?: string): AIProvider => {
+	const modelName = model || getModelFromEnv("openai", "gpt-4o-mini");
+	return createOpenAIProvider(modelName, apiKey);
+};
+
+/**
+ * Create Ollama provider with model from environment
  */
 export const createOllama = (model?: string, baseUrl?: string): AIProvider => {
-	return createOllamaProvider(model, baseUrl);
+	const modelName = model || getModelFromEnv("ollama", "llama3.2");
+	return createOllamaProvider(modelName, baseUrl);
 };
 
 /**
- * Create Anthropic Claude provider with specific model
+ * Create Anthropic Claude provider with model from environment
  */
 export const createAnthropic = (
-	model = "claude-3-5-sonnet-20241022",
+	model?: string,
 	apiKey?: string,
 ): AIProvider => {
-	return createAnthropicProvider(model, apiKey);
+	const modelName =
+		model || getModelFromEnv("anthropic", "claude-3-5-sonnet-20241022");
+	return createAnthropicProvider(modelName, apiKey);
 };
 
 /**
- * Create Google Gemini provider with specific model
+ * Create Google Gemini provider with model from environment
  */
-export const createGemini = (
-	model = "gemini-1.5-pro",
-	apiKey?: string,
-): AIProvider => {
-	return createGeminiProvider(model, apiKey);
+export const createGemini = (model?: string, apiKey?: string): AIProvider => {
+	const modelName = model || getModelFromEnv("gemini", "gemini-1.5-pro");
+	return createGeminiProvider(modelName, apiKey);
 };
 
 /**
- * Create Hugging Face provider with specific model
+ * Create Hugging Face provider with model from environment
  */
 export const createHuggingFace = (
-	model = "mistralai/Mistral-7B-Instruct-v0.1",
+	model?: string,
 	apiKey?: string,
 ): AIProvider => {
-	return createHuggingFaceProvider(model, apiKey);
+	const modelName =
+		model ||
+		getModelFromEnv("huggingface", "mistralai/Mistral-7B-Instruct-v0.1");
+	return createHuggingFaceProvider(modelName, apiKey);
 };
 
 /**
@@ -186,7 +196,7 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
 			return provider;
 		} catch {
-			console.log("[FALLBACK] OpenAI not available, trying Anthropic...");
+			console.log("        → OpenAI not available, trying Anthropic...");
 		}
 	}
 
@@ -195,10 +205,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createAnthropic();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("[OK] Using Anthropic Claude");
+			console.log("        ✓ Using Anthropic Claude");
 			return provider;
 		} catch {
-			console.log("[FALLBACK] Anthropic not available, trying Gemini...");
+			console.log("        → Anthropic not available, trying Gemini...");
 		}
 	}
 
@@ -207,10 +217,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createGemini();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("[OK] Using Google Gemini");
+			console.log("        ✓ Using Google Gemini");
 			return provider;
 		} catch {
-			console.log("[FALLBACK] Gemini not available, trying Hugging Face...");
+			console.log("        → Gemini not available, trying Hugging Face...");
 		}
 	}
 
@@ -219,10 +229,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createHuggingFace();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("[OK] Using Hugging Face");
+			console.log("        ✓ Using Hugging Face");
 			return provider;
 		} catch {
-			console.log("[FALLBACK] Hugging Face not available, trying Ollama...");
+			console.log("        → Hugging Face not available, trying Ollama...");
 		}
 	}
 
@@ -234,7 +244,7 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 			const provider = createOllama(model);
 			// Test with a simple completion to see if model is available
 			await provider.generateCompletion("test", { maxTokens: 1 });
-			console.log(`[OK] Using Ollama with model: ${model}`);
+			console.log(`        ✓ Using Ollama with model: ${model}`);
 			return provider;
 		} catch {
 			// Model not available, try next one

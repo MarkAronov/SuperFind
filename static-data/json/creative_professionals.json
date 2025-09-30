@@ -1,0 +1,76 @@
+[
+	{
+		"name": "Yuki Nakamura",
+		"location": "Kyoto, Japan",
+		"role": "Ceramic Artist",
+		"skills": [
+			"Pottery",
+			"Ceramic Sculpture",
+			"Traditional Techniques",
+			"Art Education"
+		],
+		"experience_years": 22,
+		"email": "yuki.nakamura@ceramics.jp",
+		"style": "Contemporary Japanese Ceramics",
+		"exhibitions": 45,
+		"awards": ["Japan Ceramic Art Prize"],
+		"materials": ["Porcelain", "Stoneware", "Raku"]
+	},
+	{
+		"name": "Antonio Silva",
+		"location": "Lisbon, Portugal",
+		"role": "Film Director",
+		"skills": [
+			"Film Direction",
+			"Screenwriting",
+			"Cinematography",
+			"Post-Production"
+		],
+		"experience_years": 14,
+		"email": "antonio.silva@filmdirector.pt",
+		"films_directed": 8,
+		"awards": [
+			"Cannes Film Festival Nomination",
+			"Portuguese Film Academy Award"
+		],
+		"genres": ["Drama", "Documentary", "Short Films"]
+	},
+	{
+		"name": "Fatima Al-Zahra",
+		"location": "Dubai, UAE",
+		"role": "Architect",
+		"skills": [
+			"Architectural Design",
+			"Sustainable Design",
+			"BIM Software",
+			"Project Management"
+		],
+		"experience_years": 12,
+		"email": "fatima.alzahra@architecture.ae",
+		"specialization": "Sustainable Architecture",
+		"projects_completed": 23,
+		"certifications": ["LEED Accredited", "BREEAM Certified"]
+	},
+	{
+		"name": "Bjorn Larsen",
+		"location": "Copenhagen, Denmark",
+		"role": "Industrial Designer",
+		"skills": ["Product Design", "3D Modeling", "Prototyping", "User Research"],
+		"experience_years": 9,
+		"email": "bjorn.larsen@industrialdesign.dk",
+		"specialization": "Sustainable Product Design",
+		"products_designed": 15,
+		"clients": ["IKEA", "Bang & Olufsen", "Maersk"]
+	},
+	{
+		"name": "Mei Ling Wong",
+		"location": "Singapore",
+		"role": "Classical Pianist",
+		"skills": ["Piano Performance", "Music Theory", "Composition", "Teaching"],
+		"experience_years": 25,
+		"email": "meiling.wong@piano.sg",
+		"repertoire": ["Classical", "Contemporary", "Jazz"],
+		"concerts_performed": 200,
+		"awards": ["Singapore Young Artist Award"]
+	}
+]

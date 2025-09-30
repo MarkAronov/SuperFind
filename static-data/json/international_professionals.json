@@ -1,0 +1,77 @@
+[
+	{
+		"name": "Dr. Elena Vasquez",
+		"location": "Madrid, Spain",
+		"role": "Research Scientist",
+		"skills": ["Molecular Biology", "CRISPR", "Genomics", "Scientific Writing"],
+		"experience_years": 12,
+		"email": "elena.vasquez@researchlabs.es",
+		"education": "PhD in Molecular Biology",
+		"publications": 45,
+		"specialization": "Gene Editing"
+	},
+	{
+		"name": "Marcus Johnson",
+		"location": "London, UK",
+		"role": "Investment Banker",
+		"skills": [
+			"Financial Analysis",
+			"Mergers & Acquisitions",
+			"Risk Assessment",
+			"Portfolio Management"
+		],
+		"experience_years": 15,
+		"email": "marcus.johnson@investmentbank.co.uk",
+		"education": "MBA from London Business School",
+		"certifications": ["CFA", "FRM"],
+		"specialization": "Private Equity"
+	},
+	{
+		"name": "Priya Patel",
+		"location": "Mumbai, India",
+		"role": "AI Ethics Researcher",
+		"skills": [
+			"Machine Learning",
+			"Ethics",
+			"Policy Development",
+			"Public Speaking"
+		],
+		"experience_years": 7,
+		"email": "priya.patel@aiethics.in",
+		"education": "PhD in Computer Science",
+		"publications": 28,
+		"specialization": "Algorithmic Bias"
+	},
+	{
+		"name": "Dr. Hiroshi Tanaka",
+		"location": "Tokyo, Japan",
+		"role": "Robotics Engineer",
+		"skills": [
+			"ROS",
+			"Computer Vision",
+			"Control Systems",
+			"Embedded Programming"
+		],
+		"experience_years": 10,
+		"email": "hiroshi.tanaka@robotics.jp",
+		"education": "PhD in Robotics",
+		"patents": 8,
+		"specialization": "Humanoid Robotics"
+	},
+	{
+		"name": "Isabella Rossi",
+		"location": "Milan, Italy",
+		"role": "Fashion Designer",
+		"skills": [
+			"Fashion Design",
+			"Textile Knowledge",
+			"CAD Software",
+			"Trend Analysis"
+		],
+		"experience_years": 8,
+		"email": "isabella.rossi@fashiondesign.it",
+		"education": "Bachelor of Fine Arts",
+		"brands": ["Milan Fashion Week", "Paris Fashion Week"],
+		"specialization": "Sustainable Fashion"
+	}
+]

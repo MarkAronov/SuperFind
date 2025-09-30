@@ -101,3 +101,7 @@ temp/
 *.sqlite3
 data/*.db
 data/*.sqlite
+
+# Documentation (keep only README.md)
+*.md
+!README.md

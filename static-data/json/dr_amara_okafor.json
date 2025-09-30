@@ -1,0 +1,18 @@
+{
+	"name": "Dr. Amara Okafor",
+	"location": "Lagos, Nigeria",
+	"role": "Neurosurgeon",
+	"skills": [
+		"Neurosurgery",
+		"Brain Surgery",
+		"Medical Research",
+		"Patient Care"
+	],
+	"experience_years": 15,
+	"email": "amara.okafor@neurosurgery.ng",
+	"education": "MD from University of Lagos, Neurosurgery Fellowship at Johns Hopkins",
+	"specialization": "Pediatric Neurosurgery",
+	"publications": 38,
+	"awards": ["Young Neurosurgeon of the Year", "Medical Excellence Award"],
+	"languages": ["English", "Yoruba", "French"]
+}

@@ -1,0 +1,98 @@
+[
+	{
+		"name": "Captain Sarah Mitchell",
+		"location": "Vancouver, Canada",
+		"role": "Commercial Pilot",
+		"skills": [
+			"Aircraft Operation",
+			"Navigation",
+			"Safety Protocols",
+			"Crew Management"
+		],
+		"experience_years": 18,
+		"email": "sarah.mitchell@pilots.ca",
+		"aircraft_types": ["Boeing 737", "Airbus A320"],
+		"flight_hours": 15000,
+		"certifications": ["ATPL", "Type Ratings"]
+	},
+	{
+		"name": "Dr. Ahmed Hassan",
+		"location": "Cairo, Egypt",
+		"role": "Archaeologist",
+		"skills": [
+			"Field Excavation",
+			"Artifact Analysis",
+			"Historical Research",
+			"Documentation"
+		],
+		"experience_years": 14,
+		"email": "ahmed.hassan@archaeology.eg",
+		"specialization": "Ancient Egyptian Civilization",
+		"excavations": 12,
+		"publications": 32
+	},
+	{
+		"name": "Maria Santos",
+		"location": "Rio de Janeiro, Brazil",
+		"role": "Environmental Activist",
+		"skills": [
+			"Community Organizing",
+			"Environmental Policy",
+			"Public Speaking",
+			"Fundraising"
+		],
+		"experience_years": 9,
+		"email": "maria.santos@enviro.br",
+		"focus_areas": ["Amazon Rainforest", "Climate Change", "Indigenous Rights"],
+		"awards": ["Environmental Leadership Award"],
+		"languages": ["Portuguese", "Spanish", "English"]
+	},
+	{
+		"name": "Dr. James O'Connor",
+		"location": "Dublin, Ireland",
+		"role": "Climate Scientist",
+		"skills": [
+			"Climate Modeling",
+			"Data Analysis",
+			"Scientific Communication",
+			"Policy Advising"
+		],
+		"experience_years": 16,
+		"email": "james.oconnor@climate.ie",
+		"research_focus": "Climate Change Impacts",
+		"publications": 67,
+		"international_committees": 3
+	},
+	{
+		"name": "Ling Chen",
+		"location": "Shanghai, China",
+		"role": "Quantum Physicist",
+		"skills": [
+			"Quantum Computing",
+			"Theoretical Physics",
+			"Mathematics",
+			"Programming"
+		],
+		"experience_years": 11,
+		"email": "ling.chen@quantum.cn",
+		"research_area": "Quantum Algorithms",
+		"publications": 41,
+		"collaborations": ["MIT", "Oxford University"]
+	},
+	{
+		"name": "Carlos Mendoza",
+		"location": "Buenos Aires, Argentina",
+		"role": "Professional Athlete",
+		"skills": [
+			"Soccer",
+			"Team Strategy",
+			"Physical Conditioning",
+			"Sports Psychology"
+		],
+		"experience_years": 13,
+		"email": "carlos.mendoza@soccer.ar",
+		"position": "Midfielder",
+		"clubs": ["Boca Juniors", "Barcelona FC"],
+		"international_caps": 45
+	}
+]

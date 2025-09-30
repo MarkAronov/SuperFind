@@ -232,7 +232,17 @@ const parseAndValidateJson = (
 
 		return result;
 	} catch (error) {
-		console.warn("JSON parsing/validation failed:", error);
+		console.warn("        ⚠ JSON parsing/validation failed:");
+		if (error instanceof z.ZodError) {
+			console.warn("          Schema validation errors:");
+			for (const issue of error.issues) {
+				console.warn(`          - ${issue.path.join(".")}: ${issue.message}`);
+			}
+		} else {
+			console.warn(
+				`          ${error instanceof Error ? error.message : "Unknown error"}`,
+			);
+		}
 
 		// Fallback: create empty object with expected keys
 		const fallback: Record<string, unknown> = {};
@@ -265,9 +275,11 @@ export const initializeAI = async (): Promise<void> => {
 		// Initialize AI service with LangChain components
 		initializeAIService(provider, vectorStore);
 
-		console.log("[2] AI service initialized successfully with LangChain");
+		console.log(
+			"        ✓ AI service initialized successfully with LangChain ",
+		);
 	} catch (error) {
-		console.error("[ERROR] Failed to initialize AI service:", error);
+		console.error("        ✗ Failed to initialize AI service:", error);
 	}
 };
 
@@ -295,7 +307,7 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(`[SEARCH] AI Search request: ${query}`);
+		console.log(`        → AI Search request: ${query}`);
 
 		// Use the AI service to search and generate an answer
 		const result = await searchAndAnswer(query, 5);
@@ -318,7 +330,7 @@ export const handleSearchRequest = async (
 			timestamp: new Date().toISOString(),
 		};
 	} catch (error) {
-		console.error("AI search error:", error);
+		console.error("        ✗ AI search error:", error);
 		return {
 			success: false,
 			query,

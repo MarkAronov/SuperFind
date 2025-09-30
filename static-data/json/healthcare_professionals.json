@@ -1,0 +1,66 @@
+[
+	{
+		"name": "Dr. Michael Reynolds",
+		"location": "Sydney, Australia",
+		"role": "Cardiologist",
+		"skills": [
+			"Cardiology",
+			"Heart Surgery",
+			"Cardiac Imaging",
+			"Patient Care"
+		],
+		"experience_years": 20,
+		"email": "michael.reynolds@cardiology.au",
+		"specialization": "Interventional Cardiology",
+		"procedures_performed": 2500,
+		"research_interests": ["Heart Disease Prevention", "Cardiac Stem Cells"]
+	},
+	{
+		"name": "Dr. Sofia Papadopoulos",
+		"location": "Athens, Greece",
+		"role": "Psychiatrist",
+		"skills": [
+			"Clinical Psychiatry",
+			"Therapy",
+			"Medication Management",
+			"Crisis Intervention"
+		],
+		"experience_years": 13,
+		"email": "sofia.papadopoulos@psychiatry.gr",
+		"specialization": "Child and Adolescent Psychiatry",
+		"approaches": ["CBT", "Family Therapy", "Play Therapy"],
+		"languages": ["Greek", "English", "German"]
+	},
+	{
+		"name": "Dr. Rajesh Kumar",
+		"location": "Delhi, India",
+		"role": "Ophthalmologist",
+		"skills": [
+			"Eye Surgery",
+			"Vision Correction",
+			"Diagnostic Procedures",
+			"Patient Education"
+		],
+		"experience_years": 16,
+		"email": "rajesh.kumar@ophthalmology.in",
+		"specialization": "Refractive Surgery",
+		"surgeries_performed": 1800,
+		"technologies": ["LASIK", "PRK", "Cataract Surgery"]
+	},
+	{
+		"name": "Dr. Anna Kowalski",
+		"location": "Warsaw, Poland",
+		"role": "Dentist",
+		"skills": [
+			"General Dentistry",
+			"Oral Surgery",
+			"Cosmetic Dentistry",
+			"Patient Care"
+		],
+		"experience_years": 11,
+		"email": "anna.kowalski@dentistry.pl",
+		"specialization": "Cosmetic Dentistry",
+		"certifications": ["Invisalign Certified", "Sedation Dentistry"],
+		"languages": ["Polish", "English", "Russian"]
+	}
+]

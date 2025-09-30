@@ -1,0 +1,21 @@
+name,location,role,skills,experience_years,email
+Victoria Chen,San Diego,Software Architect,System Design; Microservices; Cloud Architecture; Leadership,11,victoria.chen@softwarearch.com
+Sebastian Thompson,Las Vegas,Game Developer,Unity; C#; Game Physics; 3D Modeling,4,sebastian.thompson@gamedev.com
+Natalie Garcia,Pittsburgh,Biomedical Engineer,Medical Devices; FDA Regulations; Prototyping; MATLAB,6,natalie.garcia@biomedeng.com
+Jack Wilson,Cincinnati,Environmental Scientist,Environmental Impact; GIS; Data Analysis; Report Writing,8,jack.wilson@enviroscientist.com
+Lily Martinez,Kansas City,Nutritionist,Dietary Planning; Nutritional Counseling; Health Education; Research,5,lily.martinez@nutritionist.com
+Owen Davis,Virginia Beach,Mechanical Engineer,CAD; SolidWorks; Manufacturing; Quality Control,7,owen.davis@mecheng.com
+Zoe Park,Raleigh,Electrical Engineer,Circuit Design; PCB Layout; Embedded Systems; IoT,4,zoe.park@electreng.com
+Ryan Rodriguez,Oklahoma City,Civil Engineer,Structural Design; AutoCAD; Construction Management; Building Codes,9,ryan.rodriguez@civileng.com
+Nora Thompson,Colorado Springs,Pharmacist,Medication Management; Patient Counseling; Pharmacy Software; Compliance,6,nora.thompson@pharmacist.com
+Felix Chen,Wichita,Aerospace Engineer,Aerodynamics; Propulsion Systems; Materials Science; Simulation,10,felix.chen@aeroeng.com
+Stella Davis,Albuquerque,Marine Biologist,Marine Ecology; Field Research; Data Analysis; Scientific Writing,5,stella.davis@marinebio.com
+Oscar Wilson,Tucson,Geologist,Mineral Exploration; GIS; Remote Sensing; Report Writing,8,oscar.wilson@geologist.com
+Maya Garcia,Omaha,Veterinarian,Animal Medicine; Surgery; Diagnostics; Client Communication,7,maya.garcia@veterinarian.com
+Leo Park,Fresno,Archaeologist,Field Excavation; Artifact Analysis; Cultural Heritage; Documentation,6,leo.park@archaeologist.com
+Ruby Thompson,Bakersfield,Psychologist,Clinical Psychology; Counseling; Assessment; Research,9,ruby.thompson@psychologist.com
+Jasper Davis,Stockton,Urban Planner,Urban Design; GIS; Sustainability; Community Engagement,4,jasper.davis@urbanplanner.com
+Ivy Chen,Modesto,Journalist,Investigative Reporting; Digital Media; Video Production; Editing,5,ivy.chen@journalist.com
+Silas Rodriguez,Sacramento,Teacher,Education; Curriculum Development; Classroom Management; Student Assessment,12,silas.rodriguez@teacher.com
+Aurora Wilson,Irvine,Librarian,Information Management; Research; Digital Archives; Public Service,7,aurora.wilson@librarian.com
+Theodore Garcia,Fremont,Chef,Culinary Arts; Menu Planning; Food Safety; Team Management,8,theodore.garcia@chef.com

@@ -1,30 +1,25 @@
 [
 	{
-		"name": "Dr. Elena Vasquez",
+		"name": "Elena Vasquez",
 		"location": "Madrid, Spain",
-		"role": "Research Scientist",
-		"skills": ["Molecular Biology", "CRISPR", "Genomics", "Scientific Writing"],
-		"experience_years": 12,
-		"email": "elena.vasquez@researchlabs.es",
-		"education": "PhD in Molecular Biology",
-		"publications": 45,
-		"specialization": "Gene Editing"
+		"role": "Data Engineer",
+		"skills": ["Big Data", "Apache Spark", "Python", "SQL"],
+		"experience_years": 10,
+		"email": "elena.vasquez@dataeng.es",
+		"education": "MSc in Computer Science",
+		"projects": 25,
+		"specialization": "Real-time Data Processing"
 	},
 	{
 		"name": "Marcus Johnson",
 		"location": "London, UK",
-		"role": "Investment Banker",
-		"skills": [
-			"Financial Analysis",
-			"Mergers & Acquisitions",
-			"Risk Assessment",
-			"Portfolio Management"
-		],
-		"experience_years": 15,
-		"email": "marcus.johnson@investmentbank.co.uk",
-		"education": "MBA from London Business School",
-		"certifications": ["CFA", "FRM"],
-		"specialization": "Private Equity"
+		"role": "Cloud Solutions Architect",
+		"skills": ["AWS", "Azure", "Terraform", "Microservices"],
+		"experience_years": 13,
+		"email": "marcus.johnson@cloudarch.co.uk",
+		"education": "MSc in Cloud Computing",
+		"certifications": ["AWS Solutions Architect", "Azure Solutions Architect"],
+		"specialization": "Multi-cloud Architecture"
 	},
 	{
 		"name": "Priya Patel",
@@ -43,7 +38,7 @@
 		"specialization": "Algorithmic Bias"
 	},
 	{
-		"name": "Dr. Hiroshi Tanaka",
+		"name": "Hiroshi Tanaka",
 		"location": "Tokyo, Japan",
 		"role": "Robotics Engineer",
 		"skills": [
@@ -61,17 +56,12 @@
 	{
 		"name": "Isabella Rossi",
 		"location": "Milan, Italy",
-		"role": "Fashion Designer",
-		"skills": [
-			"Fashion Design",
-			"Textile Knowledge",
-			"CAD Software",
-			"Trend Analysis"
-		],
-		"experience_years": 8,
-		"email": "isabella.rossi@fashiondesign.it",
-		"education": "Bachelor of Fine Arts",
-		"brands": ["Milan Fashion Week", "Paris Fashion Week"],
-		"specialization": "Sustainable Fashion"
+		"role": "AR/VR Developer",
+		"skills": ["Unity", "Unreal Engine", "C#", "3D Modeling"],
+		"experience_years": 6,
+		"email": "isabella.rossi@arvr.it",
+		"education": "MSc in Computer Graphics",
+		"projects": ["VR Training Simulators", "AR Retail Apps"],
+		"specialization": "Immersive Experiences"
 	}
 ]

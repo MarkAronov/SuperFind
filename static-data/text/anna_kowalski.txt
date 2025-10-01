@@ -1,3 +1,3 @@
-Anna Kowalski is a professional opera singer with a stunning soprano voice. She performs regularly at major opera houses including the Metropolitan Opera and La Scala. With 15 years of professional experience, she has sung leading roles in over 30 operas and recorded several acclaimed albums.
+Anna Kowalski is a senior DevOps engineer with extensive experience in cloud infrastructure and automation. She specializes in AWS and Kubernetes deployments, with 12 years of professional experience building scalable systems for enterprise clients.
 
-Anna began her training in Poland and won numerous international competitions early in her career. She is known for her powerful voice and dramatic stage presence. In addition to performing, she teaches master classes and supports young opera singers through mentorship programs.
+Anna started her career in Poland and quickly moved into cloud technologies. She is known for her expertise in CI/CD pipelines and infrastructure as code. In addition to her technical work, she mentors junior engineers and speaks at international tech conferences about DevOps best practices.

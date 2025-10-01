@@ -1,66 +1,61 @@
 [
 	{
-		"name": "Dr. Michael Reynolds",
+		"name": "Michael Reynolds",
 		"location": "Sydney, Australia",
-		"role": "Cardiologist",
+		"role": "Health Informatics Specialist",
 		"skills": [
-			"Cardiology",
-			"Heart Surgery",
-			"Cardiac Imaging",
-			"Patient Care"
+			"Electronic Health Records",
+			"HL7 Standards",
+			"Data Analytics",
+			"Healthcare Integration"
 		],
-		"experience_years": 20,
-		"email": "michael.reynolds@cardiology.au",
-		"specialization": "Interventional Cardiology",
-		"procedures_performed": 2500,
-		"research_interests": ["Heart Disease Prevention", "Cardiac Stem Cells"]
+		"experience_years": 12,
+		"email": "michael.reynolds@healthinformatics.au",
+		"specialization": "Clinical Decision Support Systems",
+		"systems_implemented": 15,
+		"certifications": ["CCHI", "HL7 Certified"]
 	},
 	{
-		"name": "Dr. Sofia Papadopoulos",
+		"name": "Sofia Papadopoulos",
 		"location": "Athens, Greece",
-		"role": "Psychiatrist",
+		"role": "Medical Software Developer",
 		"skills": [
-			"Clinical Psychiatry",
-			"Therapy",
-			"Medication Management",
-			"Crisis Intervention"
+			"Healthcare Software Development",
+			"HIPAA Compliance",
+			"Patient Portal Development",
+			"API Integration"
 		],
-		"experience_years": 13,
-		"email": "sofia.papadopoulos@psychiatry.gr",
-		"specialization": "Child and Adolescent Psychiatry",
-		"approaches": ["CBT", "Family Therapy", "Play Therapy"],
-		"languages": ["Greek", "English", "German"]
+		"experience_years": 9,
+		"email": "sofia.papadopoulos@medsoftware.gr",
+		"specialization": "Telemedicine Platforms",
+		"projects_completed": 8,
+		"languages": ["JavaScript", "Python", "SQL"]
 	},
 	{
-		"name": "Dr. Rajesh Kumar",
+		"name": "Rajesh Kumar",
 		"location": "Delhi, India",
-		"role": "Ophthalmologist",
+		"role": "Biomedical Engineer",
 		"skills": [
-			"Eye Surgery",
-			"Vision Correction",
-			"Diagnostic Procedures",
-			"Patient Education"
+			"Medical Device Software",
+			"Embedded Systems",
+			"IoT Healthcare",
+			"Regulatory Compliance"
 		],
-		"experience_years": 16,
-		"email": "rajesh.kumar@ophthalmology.in",
-		"specialization": "Refractive Surgery",
-		"surgeries_performed": 1800,
-		"technologies": ["LASIK", "PRK", "Cataract Surgery"]
+		"experience_years": 10,
+		"email": "rajesh.kumar@biomedeng.in",
+		"specialization": "Wearable Medical Devices",
+		"patents": 5,
+		"technologies": ["Arduino", "Raspberry Pi", "Bluetooth LE"]
 	},
 	{
-		"name": "Dr. Anna Kowalski",
+		"name": "Anna Kowalski",
 		"location": "Warsaw, Poland",
-		"role": "Dentist",
-		"skills": [
-			"General Dentistry",
-			"Oral Surgery",
-			"Cosmetic Dentistry",
-			"Patient Care"
-		],
-		"experience_years": 11,
-		"email": "anna.kowalski@dentistry.pl",
-		"specialization": "Cosmetic Dentistry",
-		"certifications": ["Invisalign Certified", "Sedation Dentistry"],
-		"languages": ["Polish", "English", "Russian"]
+		"role": "Healthcare Data Analyst",
+		"skills": ["Healthcare Analytics", "SQL", "Python", "Machine Learning"],
+		"experience_years": 7,
+		"email": "anna.kowalski@healthdata.pl",
+		"specialization": "Predictive Healthcare Analytics",
+		"projects_led": 12,
+		"languages": ["Python", "R", "SQL"]
 	}
 ]

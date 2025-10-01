@@ -1,11 +1,11 @@
-Dr. Lisa Chen is a quantum chemist developing new materials for renewable energy applications. With 10 years of research experience at a national laboratory, she specializes in computational chemistry and molecular modeling. Her work focuses on designing better solar cell materials and battery technologies.
+Dr. Lisa Chen is a machine learning researcher developing AI models for scientific applications. With 10 years of research experience at a major tech company, she specializes in deep learning and computer vision. Her work focuses on applying AI to drug discovery and materials science.
 
-Dr. Chen holds a PhD in physical chemistry and has published over 35 papers in top journals. She collaborates with industry partners to bring her research from the lab to commercial applications. She is passionate about increasing diversity in STEM fields and mentors underrepresented minority students.
+Dr. Chen holds a PhD in Computer Science and has published over 35 papers in top AI conferences. She collaborates with research institutions to advance scientific discovery through machine learning. She is passionate about increasing diversity in AI fields and mentors underrepresented groups in tech.
 
-Contact: lisa.chen@quantumchemistry.com
+Contact: lisa.chen@mlresearch.com
 
-Carlos Mendoza is a master luthier crafting classical guitars by hand. With 25 years of experience, he has created over 200 instruments that are played by professional musicians worldwide. His guitars are known for their exceptional tone and craftsmanship.
+Carlos Mendoza is a senior software engineer specializing in audio processing and music technology. With 15 years of experience, he has developed audio software used by musicians and producers worldwide. His work includes digital signal processing algorithms and music production tools.
 
-Carlos learned his craft in Spain and brings traditional European techniques to his work. He sources the finest woods and uses time-honored methods passed down through generations. His instruments have won awards at international guitar competitions and are featured in museums.
+Carlos learned programming through self-study and brings creative problem-solving to his technical work. He develops software that enhances musical creativity and audio quality. His applications have won awards in music technology and are used by professional studios.
 
-Contact: carlos.mendoza@luthier.com
+Contact: carlos.mendoza@audiotech.com

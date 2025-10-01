@@ -1,17 +1,17 @@
-Victoria Chang is a venture capitalist and startup investor. She founded her own VC firm specializing in AI and biotechnology investments. With 13 years in venture capital, she has invested in over 50 companies and sits on the boards of several successful startups that have gone public.
+Victoria Chang is a product manager specializing in AI and machine learning products. She leads product teams at a major tech company developing enterprise AI solutions. With 11 years in product management, she has launched over 20 AI products and built teams from startup to scale.
 
-Victoria holds an MBA from Stanford and previously worked as a management consultant at McKinsey. She is known for her data-driven investment approach and her ability to identify emerging trends. She mentors female entrepreneurs and serves on the advisory board of several tech accelerators.
+Victoria holds a degree in Computer Science from Stanford and previously worked as a software engineer. She is known for her user-centric product approach and her ability to bridge technical and business requirements. She mentors product managers and speaks at industry conferences about AI product strategy.
 
-Contact: victoria.chang@vcinvestments.com
+Contact: victoria.chang@productmgmt.com
 
-David Kim is a professional photographer specializing in wildlife and nature photography. His work has been featured in National Geographic and won numerous awards including Wildlife Photographer of the Year. With 16 years of experience, he has traveled to over 40 countries capturing images of endangered species and remote ecosystems.
+David Kim is a site reliability engineer specializing in large-scale distributed systems. His work focuses on ensuring high availability and performance of cloud infrastructure. With 14 years of experience, he has worked at major tech companies managing systems that serve millions of users.
 
-David combines his passion for conservation with his photography, using his platform to raise awareness about environmental issues. He leads photography workshops and has published several coffee table books featuring his work.
+David holds multiple cloud certifications and has led incident response teams during major outages. He is known for his expertise in monitoring and automation, using his skills to prevent system failures. He contributes to open source projects and teaches SRE best practices.
 
-Contact: david.kim@wildlifephoto.com
+Contact: david.kim@sreengineer.com
 
-Dr. Robert Chen is a forensic pathologist with the medical examiner's office. With 19 years of experience, he has conducted thousands of autopsies and testified in numerous high-profile cases. His expertise includes forensic toxicology and injury pattern analysis.
+Dr. Robert Chen is a security researcher and penetration tester. With 15 years of experience in cybersecurity, he has discovered critical vulnerabilities in widely-used software and conducted security assessments for government agencies. His expertise includes web application security and network penetration testing.
 
-Dr. Chen holds board certification in forensic pathology and has published extensively in forensic science journals. He is frequently called upon as an expert witness and has trained law enforcement officers in death investigation techniques. His meticulous approach to evidence collection has helped solve many complex cases.
+Dr. Chen holds a PhD in Computer Science and has published extensively in security conferences. He is frequently called upon as a security consultant and has trained development teams in secure coding practices. His research has helped improve security standards across the industry.
 
-Contact: robert.chen@forensicpath.com
+Contact: robert.chen@securityresearch.com

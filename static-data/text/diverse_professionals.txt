@@ -4,14 +4,14 @@ Her expertise includes network security, vulnerability assessment, and security 
 
 Contact: sarah.chen@cybersecurity.com
 
-Marcus Rodriguez is a professional race car driver competing in the IndyCar series. Born in Mexico City, he moved to the US at age 16 to pursue his racing dreams. With 12 years of professional racing experience, he has won 15 races and finished in the top 5 in the championship standings multiple times.
+Marcus Rodriguez is a senior mobile applications developer specializing in iOS and Android development. Born in Mexico City, he moved to the US to pursue his tech career. With 10 years of professional development experience, he has built over 50 mobile apps and led development teams at major tech companies.
 
-Marcus is known for his precision driving and strategic race craft. He speaks three languages fluently and is actively involved in promoting motorsport diversity in Latin America. Off the track, he enjoys mentoring young drivers and supporting STEM education initiatives.
+Marcus is known for his expertise in cross-platform development and user experience design. He speaks three languages fluently and is actively involved in promoting diversity in tech. Off the screen, he enjoys mentoring junior developers and supporting coding education initiatives.
 
-Contact: marcus.rodriguez@racing.com
+Contact: marcus.rodriguez@mobiledev.com
 
-Dr. Aisha Khan is a pediatric oncologist at Johns Hopkins Hospital. She specializes in treating childhood cancers with a focus on leukemia and lymphoma. With 14 years of medical experience, she has treated over 500 young patients and achieved remarkable success rates in her field.
+Dr. Aisha Khan is a machine learning engineer specializing in healthcare AI applications. She develops ML models for medical diagnosis and treatment optimization. With 12 years of experience in AI, she has built predictive models that have improved patient outcomes and reduced healthcare costs.
 
-Dr. Khan is also involved in medical research, particularly in developing less toxic treatment protocols for children. She holds multiple research grants and has published extensively in medical journals. Her compassionate approach to patient care has earned her numerous awards and the deep gratitude of countless families.
+Dr. Aisha is also involved in AI research, particularly in developing ethical and unbiased ML systems for healthcare. She holds multiple patents and has published extensively in AI conferences. Her innovative approach to healthcare technology has earned her numerous awards and recognition in the field.
 
-Contact: aisha.khan@pediatriconcology.com
+Contact: aisha.khan@healthai.com

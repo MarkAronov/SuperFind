@@ -1,98 +1,88 @@
 [
 	{
-		"name": "Captain Sarah Mitchell",
+		"name": "Dr. Sarah Chen",
 		"location": "Vancouver, Canada",
-		"role": "Commercial Pilot",
+		"role": "AI Research Scientist",
 		"skills": [
-			"Aircraft Operation",
-			"Navigation",
-			"Safety Protocols",
-			"Crew Management"
+			"Machine Learning",
+			"Deep Learning",
+			"Computer Vision",
+			"Python"
 		],
-		"experience_years": 18,
-		"email": "sarah.mitchell@pilots.ca",
-		"aircraft_types": ["Boeing 737", "Airbus A320"],
-		"flight_hours": 15000,
-		"certifications": ["ATPL", "Type Ratings"]
+		"experience_years": 12,
+		"email": "sarah.chen@airesearch.ca",
+		"specialization": "Computer Vision",
+		"publications": 45,
+		"phd_university": "University of Toronto"
 	},
 	{
-		"name": "Dr. Ahmed Hassan",
+		"name": "Ahmed Hassan",
 		"location": "Cairo, Egypt",
-		"role": "Archaeologist",
+		"role": "Cybersecurity Expert",
 		"skills": [
-			"Field Excavation",
-			"Artifact Analysis",
-			"Historical Research",
-			"Documentation"
+			"Network Security",
+			"Ethical Hacking",
+			"Penetration Testing",
+			"Security Architecture"
 		],
-		"experience_years": 14,
-		"email": "ahmed.hassan@archaeology.eg",
-		"specialization": "Ancient Egyptian Civilization",
-		"excavations": 12,
-		"publications": 32
+		"experience_years": 10,
+		"email": "ahmed.hassan@cybersec.eg",
+		"certifications": ["CISSP", "CEH", "OSCP"],
+		"specialization": "Enterprise Security",
+		"companies_worked": ["Google", "Microsoft"]
 	},
 	{
 		"name": "Maria Santos",
 		"location": "Rio de Janeiro, Brazil",
-		"role": "Environmental Activist",
-		"skills": [
-			"Community Organizing",
-			"Environmental Policy",
-			"Public Speaking",
-			"Fundraising"
-		],
-		"experience_years": 9,
-		"email": "maria.santos@enviro.br",
-		"focus_areas": ["Amazon Rainforest", "Climate Change", "Indigenous Rights"],
-		"awards": ["Environmental Leadership Award"],
-		"languages": ["Portuguese", "Spanish", "English"]
+		"role": "Blockchain Developer",
+		"skills": ["Solidity", "Smart Contracts", "Web3", "Ethereum"],
+		"experience_years": 7,
+		"email": "maria.santos@blockchain.br",
+		"projects": ["DeFi Protocol", "NFT Marketplace"],
+		"languages": ["Solidity", "JavaScript", "Python"],
+		"blockchains": ["Ethereum", "Polygon", "Binance Smart Chain"]
 	},
 	{
 		"name": "Dr. James O'Connor",
 		"location": "Dublin, Ireland",
-		"role": "Climate Scientist",
+		"role": "Data Science Lead",
 		"skills": [
-			"Climate Modeling",
-			"Data Analysis",
-			"Scientific Communication",
-			"Policy Advising"
+			"Big Data Analytics",
+			"Machine Learning",
+			"Python",
+			"Apache Spark"
 		],
-		"experience_years": 16,
-		"email": "james.oconnor@climate.ie",
-		"research_focus": "Climate Change Impacts",
-		"publications": 67,
-		"international_committees": 3
+		"experience_years": 14,
+		"email": "james.oconnor@datascience.ie",
+		"specialization": "Predictive Analytics",
+		"publications": 28,
+		"industry_experience": "Financial Services"
 	},
 	{
 		"name": "Ling Chen",
 		"location": "Shanghai, China",
-		"role": "Quantum Physicist",
-		"skills": [
-			"Quantum Computing",
-			"Theoretical Physics",
-			"Mathematics",
-			"Programming"
-		],
-		"experience_years": 11,
+		"role": "Quantum Computing Engineer",
+		"skills": ["Quantum Algorithms", "Qiskit", "Python", "Linear Algebra"],
+		"experience_years": 9,
 		"email": "ling.chen@quantum.cn",
-		"research_area": "Quantum Algorithms",
-		"publications": 41,
-		"collaborations": ["MIT", "Oxford University"]
+		"research_focus": "Quantum Machine Learning",
+		"publications": 23,
+		"collaborations": ["IBM Quantum", "Google Quantum AI"]
 	},
 	{
 		"name": "Carlos Mendoza",
 		"location": "Buenos Aires, Argentina",
-		"role": "Professional Athlete",
+		"role": "Mobile App Architect",
 		"skills": [
-			"Soccer",
-			"Team Strategy",
-			"Physical Conditioning",
-			"Sports Psychology"
+			"React Native",
+			"Flutter",
+			"iOS Development",
+			"Android Development"
 		],
-		"experience_years": 13,
-		"email": "carlos.mendoza@soccer.ar",
-		"position": "Midfielder",
-		"clubs": ["Boca Juniors", "Barcelona FC"],
-		"international_caps": 45
+		"experience_years": 11,
+		"email": "carlos.mendoza@mobiledev.ar",
+		"platforms": ["iOS", "Android"],
+		"apps_developed": 15,
+		"users_reached": "5M+"
 	}
 ]

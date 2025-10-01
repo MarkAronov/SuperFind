@@ -1,0 +1,67 @@
+[
+	{
+		"name": "Elena Vasquez",
+		"location": "Madrid, Spain",
+		"role": "Data Engineer",
+		"skills": ["Big Data", "Apache Spark", "Python", "SQL"],
+		"experience_years": 10,
+		"email": "elena.vasquez@dataeng.es",
+		"education": "MSc in Computer Science",
+		"projects": 25,
+		"specialization": "Real-time Data Processing"
+	},
+	{
+		"name": "Marcus Johnson",
+		"location": "London, UK",
+		"role": "Cloud Solutions Architect",
+		"skills": ["AWS", "Azure", "Terraform", "Microservices"],
+		"experience_years": 13,
+		"email": "marcus.johnson@cloudarch.co.uk",
+		"education": "MSc in Cloud Computing",
+		"certifications": ["AWS Solutions Architect", "Azure Solutions Architect"],
+		"specialization": "Multi-cloud Architecture"
+	},
+	{
+		"name": "Priya Patel",
+		"location": "Mumbai, India",
+		"role": "AI Ethics Researcher",
+		"skills": [
+			"Machine Learning",
+			"Ethics",
+			"Policy Development",
+			"Public Speaking"
+		],
+		"experience_years": 7,
+		"email": "priya.patel@aiethics.in",
+		"education": "PhD in Computer Science",
+		"publications": 28,
+		"specialization": "Algorithmic Bias"
+	},
+	{
+		"name": "Hiroshi Tanaka",
+		"location": "Tokyo, Japan",
+		"role": "Robotics Engineer",
+		"skills": [
+			"ROS",
+			"Computer Vision",
+			"Control Systems",
+			"Embedded Programming"
+		],
+		"experience_years": 10,
+		"email": "hiroshi.tanaka@robotics.jp",
+		"education": "PhD in Robotics",
+		"patents": 8,
+		"specialization": "Humanoid Robotics"
+	},
+	{
+		"name": "Isabella Rossi",
+		"location": "Milan, Italy",
+		"role": "AR/VR Developer",
+		"skills": ["Unity", "Unreal Engine", "C#", "3D Modeling"],
+		"experience_years": 6,
+		"email": "isabella.rossi@arvr.it",
+		"education": "MSc in Computer Graphics",
+		"projects": ["VR Training Simulators", "AR Retail Apps"],
+		"specialization": "Immersive Experiences"
+	}
+]

@@ -16,6 +16,14 @@ import {
 // Type definitions
 type CsvRow = Record<string, string>;
 
+interface EntityResult {
+	id: string;
+	content: string;
+	entityType: "person" | "organization" | "location";
+	storedInQdrant: boolean;
+	metadata: Record<string, unknown>;
+}
+
 interface FileInfo {
 	path: string;
 	name: string;
@@ -35,6 +43,150 @@ interface ProcessedFile {
 
 // In-memory storage for processed data (could be replaced with database)
 let processedDataStore: ProcessedFile[] = [];
+
+/**
+ * Extract individual entities from processed data and store each as separate vector
+ */
+async function extractAndStoreEntities(
+	originalContent: string,
+	processedData: object,
+	baseMetadata: Record<string, unknown>,
+): Promise<EntityResult[]> {
+	const entities: EntityResult[] = [];
+
+	// Handle CSV files with multiple people
+	if (Array.isArray(processedData)) {
+		for (const item of processedData) {
+			if (item && typeof item === "object") {
+				const personContent = createPersonContent(item);
+				const entityId = `person_${item.name?.replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
+
+				const entityMetadata = {
+					...baseMetadata,
+					entityType: "person",
+					entityId,
+					personName: item.name,
+					role: item.role,
+					location: item.location,
+					skills: item.skills,
+					experience: item.experience_years,
+					email: item.email,
+				};
+
+				// Check if this specific person already exists using content hash
+				const personMD5 = generateMD5(personContent);
+				const existsResult = await documentExistsByMD5(personMD5, "people");
+
+				if (existsResult.success && existsResult.data) {
+					console.log(
+						`        ⚬ Person ${item.name || "Unknown"} already exists (MD5: ${personMD5})`,
+					);
+					entities.push({
+						id: entityId,
+						content: personContent,
+						entityType: "person",
+						storedInQdrant: true, // Already exists
+						metadata: entityMetadata,
+					});
+					continue; // Skip to next person
+				}
+
+				// Store each person as separate vector
+				const storeResult = await storeDocument(
+					personContent,
+					item,
+					entityMetadata,
+					"people", // Use separate collection for people
+				);
+
+				entities.push({
+					id: entityId,
+					content: personContent,
+					entityType: "person",
+					storedInQdrant: storeResult.success,
+					metadata: entityMetadata,
+				});
+
+				if (storeResult.success) {
+					console.log(`        → Stored person: ${item.name || "Unknown"}`);
+				} else {
+					console.error(
+						`        ✗ Failed to store person: ${item.name || "Unknown"} - ${storeResult.error}`,
+					);
+				}
+			}
+		}
+	}
+	// Handle single entity objects (like text files)
+	else if (processedData && typeof processedData === "object") {
+		const personContent = originalContent; // Use original content for text files
+		const personData = processedData as Record<string, unknown>;
+		const entityId = `person_${personData.name?.toString()?.replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
+
+		const entityMetadata = {
+			...baseMetadata,
+			entityType: "person",
+			entityId,
+			personName: personData.name,
+			role: personData.role,
+			location: personData.location,
+			skills: personData.skills,
+			experience: personData.experience,
+			email: personData.email,
+		};
+
+		// Check if this specific person already exists using content hash
+		const personMD5 = generateMD5(personContent);
+		const existsResult = await documentExistsByMD5(personMD5, "people");
+
+		let storeResult: { success: boolean; error?: string };
+		if (existsResult.success && existsResult.data) {
+			console.log(
+				`        ⚬ Person ${personData.name || "Unknown"} already exists (MD5: ${personMD5})`,
+			);
+			storeResult = { success: true }; // Mark as successful since it already exists
+		} else {
+			storeResult = await storeDocument(
+				personContent,
+				processedData,
+				entityMetadata,
+				"people",
+			);
+		}
+
+		entities.push({
+			id: entityId,
+			content: personContent,
+			entityType: "person",
+			storedInQdrant: storeResult.success,
+			metadata: entityMetadata,
+		});
+
+		if (storeResult.success) {
+			console.log(`        → Stored person: ${personData.name || "Unknown"}`);
+		} else {
+			console.error(
+				`        ✗ Failed to store person: ${personData.name || "Unknown"} - ${storeResult.error}`,
+			);
+		}
+	}
+
+	return entities;
+}
+
+/**
+ * Create human-readable content for a person entity
+ */
+function createPersonContent(person: Record<string, unknown>): string {
+	const name = person.name || "Unknown";
+	const role = person.role || "Unknown role";
+	const location = person.location || "Unknown location";
+	const skills = person.skills || "No skills listed";
+	const experience =
+		person.experience_years || person.experience || "Unknown experience";
+
+	return `${name} is a ${role} from ${location}. Skills: ${skills}. Experience: ${experience} years.`;
+}
 
 /**
  * Validate file extension matches declared type
@@ -139,7 +291,7 @@ export const parseCSV = (csvContent: string): CsvRow[] => {
 		header: true,
 		skipEmptyLines: true,
 	});
-	console.log(`Parsed CSV data: ${JSON.stringify(parsedData.data)}`);
+	console.log(`        → Parsed CSV data: ${JSON.stringify(parsedData.data)}`);
 	return parsedData.data.map((row) => row);
 };
 
@@ -149,10 +301,10 @@ export const parseCSV = (csvContent: string): CsvRow[] => {
 export const parseJSON = (jsonContent: string): object => {
 	try {
 		const parsedData = JSON.parse(jsonContent);
-		console.log(`Parsed JSON data:`, parsedData);
+		console.log(`        → Parsed JSON data:`, parsedData);
 		return parsedData;
 	} catch (error) {
-		console.error("JSON parsing error:", error);
+		console.error("        ✗ JSON parsing error:", error);
 		throw new Error("Invalid JSON content");
 	}
 };
@@ -182,7 +334,7 @@ export const convertTextToJSON = async (
 			throw new Error(result.error || "AI conversion failed");
 		}
 	} catch (error) {
-		console.error("AI text extraction error:", error);
+		console.error("        ✗ AI text extraction error:", error);
 
 		// Fallback: create empty object with expected keys
 		const interfaceKeys = extractKeysFromInterface(targetInterface);
@@ -222,8 +374,10 @@ export async function processFile(
 		// Generate MD5 hash of the original file content
 		const md5Hash = generateMD5(file.content);
 
-		// Check if the file already exists in Qdrant
-		const existsResult = await documentExistsByMD5(md5Hash);
+		// Check if the file already exists in the appropriate collection
+		// For people data, check in 'people' collection; for general documents, use 'documents'
+		const collectionToCheck = "people"; // Since we're mainly processing person data
+		const existsResult = await documentExistsByMD5(md5Hash, collectionToCheck);
 		if (!existsResult.success) {
 			console.warn(
 				`Warning: Could not check document existence: ${existsResult.error}. Proceeding with processing...`,
@@ -234,7 +388,7 @@ export async function processFile(
 		// If document already exists, return early
 		if (existsResult.success && existsResult.data) {
 			console.log(
-				`✓ Document ${file.name} already exists in Qdrant (MD5: ${md5Hash})`,
+				`        ⚬ Document ${file.name} already exists (MD5: ${md5Hash})`,
 			);
 			return {
 				fileName: file.name,
@@ -267,6 +421,7 @@ export async function processFile(
 						role?: string;
 						skills?: string[];
 						experience?: string;
+						email?: string;
 					}
 				`;
 
@@ -282,16 +437,20 @@ export async function processFile(
 				return null;
 		}
 
-		// Store the processed document in Qdrant
-		const storeResult = await storeDocument(file.content, processedData, {
-			fileName: file.name,
-			filePath: file.path,
-			dataType: file.type,
-			processedAt: new Date().toISOString(),
-		});
+		// Extract and store individual entities instead of entire file
+		const entityResults = await extractAndStoreEntities(
+			file.content,
+			processedData,
+			{
+				fileName: file.name,
+				filePath: file.path,
+				dataType: file.type,
+				processedAt: new Date().toISOString(),
+			},
+		);
 
-		if (!storeResult.success) {
-			console.error(`Error storing document in Qdrant: ${storeResult.error}`);
+		if (entityResults.length === 0) {
+			console.error(`        ✗ No entities extracted from ${file.name}`);
 			return {
 				fileName: file.name,
 				filePath: file.path,
@@ -303,8 +462,11 @@ export async function processFile(
 			};
 		}
 
+		// Check if all entities were stored successfully
+		const allStored = entityResults.every((result) => result.storedInQdrant);
+
 		console.log(
-			`✓ Processed and stored ${file.name} in Qdrant (MD5: ${md5Hash})`,
+			`        ✓ Processed and stored ${entityResults.length} entities from ${file.name} (MD5: ${md5Hash})`,
 		);
 
 		return {
@@ -313,11 +475,11 @@ export async function processFile(
 			dataType: file.type,
 			md5Hash,
 			alreadyExists: false,
-			storedInQdrant: true,
+			storedInQdrant: allStored,
 			processedData,
 		};
 	} catch (error) {
-		console.error(`Error processing file ${file.name}:`, error);
+		console.error(`        ✗ Error processing file ${file.name}:`, error);
 		return null;
 	}
 }
@@ -345,7 +507,7 @@ export async function processFiles(
  */
 export function storeProcessedData(data: ProcessedFile[]): void {
 	processedDataStore = [...data];
-	console.log(`[STORE] Stored ${data.length} processed files in data store`);
+	console.log(`    ✓ Stored ${data.length} processed files in data store`);
 }
 
 /**
@@ -515,10 +677,9 @@ export async function scanStaticDataFolder(): Promise<FileInfo[]> {
 			files.push(...textFiles);
 		}
 
-		console.log(`[SCAN] Found ${files.length} files to process`);
 		return files;
 	} catch (error) {
-		console.error("Error scanning static data folder:", error);
+		console.error("        ✗ Error scanning static data folder:", error);
 		return [];
 	}
 }
@@ -550,7 +711,7 @@ async function getFilesFromDirectory(
 			}
 		}
 	} catch (error) {
-		console.error(`Error reading directory ${dirPath}:`, error);
+		console.error(`        ✗ Error reading directory ${dirPath}:`, error);
 	}
 
 	return files;

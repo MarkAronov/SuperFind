@@ -1,0 +1,21 @@
+name,location,role,skills,experience_years,email
+Sarah Mitchell,San Francisco,Senior Software Engineer,React; Node.js; TypeScript; GraphQL,6,sarah.mitchell@techcorp.com
+David Chen,Seattle,DevOps Engineer,Docker; Kubernetes; AWS; Terraform,4,david.chen@cloudtech.com
+Emma Rodriguez,Austin,Product Manager,Agile; Scrum; Analytics; User Research,8,emma.rodriguez@productlabs.com
+James Wilson,Boston,Data Scientist,Python; Machine Learning; SQL; Tableau,5,james.wilson@dataworks.com
+Lisa Park,Denver,UX Designer,Figma; Adobe Creative Suite; User Testing; Prototyping,7,lisa.park@designstudio.com
+Michael Brown,Chicago,Backend Developer,Java; Spring Boot; PostgreSQL; Redis,9,michael.brown@backendpro.com
+Anna Johnson,Portland,Frontend Developer,JavaScript; Vue.js; CSS; Webpack,3,anna.johnson@frontenddev.com
+Robert Davis,Miami,Full Stack Developer,MERN Stack; Python; Django; MongoDB,6,robert.davis@fullstackinc.com
+Jennifer Garcia,Atlanta,QA Engineer,Selenium; Cypress; API Testing; Jenkins,4,jennifer.garcia@qatest.com
+Thomas Anderson,Minneapolis,Security Engineer,Cybersecurity; Penetration Testing; AWS Security; Compliance,7,thomas.anderson@securityfirst.com
+Karen Lee,Seattle,Technical Writer,Docs as Code; Markdown; API Documentation; Technical Communication,5,karen.lee@techdocs.com
+Steven Martinez,Austin,Database Administrator,PostgreSQL; MySQL; Oracle; Performance Tuning,8,steven.martinez@dbadmin.com
+Rachel Thompson,San Francisco,Mobile Developer,React Native; iOS; Android; Flutter,4,rachel.thompson@mobiledev.com
+Christopher White,Boston,Cloud Architect,AWS; Azure; GCP; Infrastructure as Code,10,chris.white@cloudarch.com
+Michelle Davis,Denver,Scrum Master,Agile Methodologies; Team Leadership; JIRA; Confluence,6,michelle.davis@agileteam.com
+Andrew Garcia,Chicago,AI/ML Engineer,Python; TensorFlow; PyTorch; Computer Vision,5,andrew.garcia@aiml.com
+Jessica Wilson,Portland,Business Analyst,Requirements Gathering; SQL; Excel; Process Modeling,7,jessica.wilson@bizanalyst.com
+Daniel Rodriguez,Miami,Site Reliability Engineer,Monitoring; Incident Response; Linux; Automation,6,daniel.rodriguez@srepro.com
+Amanda Chen,Atlanta,Technical Lead,Team Management; Code Reviews; Mentoring; Architecture,9,amanda.chen@techlead.com
+Kevin Park,Minneapolis,Blockchain Developer,Solidity; Web3; Smart Contracts; DeFi,3,kevin.park@blockchaindev.com

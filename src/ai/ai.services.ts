@@ -59,11 +59,13 @@ Extract information from the following text and return a valid JSON object with 
 Text to analyze:
 {text}
 
-Instructions:
-- Return ONLY a valid JSON object, no explanations
+CRITICAL INSTRUCTIONS:
+- Return ONLY a valid JSON object - no markdown, no explanations, no code blocks
 - Use the exact key names provided: {keys}
-- If a key's value is not found, use empty string ""
+- If a key's value is not found in the text, use an empty string ""
 - Ensure all required keys are present
+- Do NOT wrap the JSON in \`\`\`json or \`\`\` markers
+- The response must start with {{ and end with }}
 
 JSON Response:`);
 
@@ -205,7 +207,7 @@ const createZodSchemaFromKeys = (keys: string[]) => {
 };
 
 /**
- * Helper: Parse and validate JSON response using Zod
+ * Helper: Parse and validate JSON response using Zod with improved error handling
  */
 const parseAndValidateJson = (
 	response: string,
@@ -213,13 +215,30 @@ const parseAndValidateJson = (
 	expectedKeys: string[],
 ): Record<string, unknown> => {
 	try {
-		// Try to extract JSON from response
-		const jsonMatch = response.match(/\{[\s\S]*\}/);
+		// Clean the response - remove markdown code blocks if present
+		let cleanedResponse = response.trim();
+		cleanedResponse = cleanedResponse.replace(/^```json\s*/i, "");
+		cleanedResponse = cleanedResponse.replace(/^```\s*/i, "");
+		cleanedResponse = cleanedResponse.replace(/\s*```$/i, "");
+		cleanedResponse = cleanedResponse.trim();
+
+		// Try to extract JSON from response - support both object and array
+		const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
 		if (!jsonMatch) {
-			throw new Error("No JSON found in response");
+			throw new Error(
+				`No JSON object found in response. Response preview: ${cleanedResponse.substring(0, 100)}...`,
+			);
 		}
 
-		const parsed = JSON.parse(jsonMatch[0]);
+		// Parse JSON
+		let parsed: unknown;
+		try {
+			parsed = JSON.parse(jsonMatch[0]);
+		} catch (parseError) {
+			throw new Error(
+				`JSON syntax error: ${parseError instanceof Error ? parseError.message : "Invalid JSON"}. Content: ${jsonMatch[0].substring(0, 100)}...`,
+			);
+		}
 
 		// Validate using Zod schema
 		const validated = schema.parse(parsed) as Record<string, unknown>;
@@ -232,7 +251,20 @@ const parseAndValidateJson = (
 
 		return result;
 	} catch (error) {
-		console.warn("JSON parsing/validation failed:", error);
+		console.warn("        ⚠ JSON parsing/validation failed:");
+		if (error instanceof z.ZodError) {
+			console.warn("          Schema validation errors:");
+			for (const issue of error.issues) {
+				console.warn(`          - ${issue.path.join(".")}: ${issue.message}`);
+			}
+		} else {
+			console.warn(
+				`          ${error instanceof Error ? error.message : "Unknown error"}`,
+			);
+		}
+		console.warn(
+			"          Using fallback data with empty values for all keys",
+		);
 
 		// Fallback: create empty object with expected keys
 		const fallback: Record<string, unknown> = {};
@@ -244,51 +276,15 @@ const parseAndValidateJson = (
 };
 
 /**
- * Initialize AI service with LangChain providers and vector store
- */
-export const initializeAI = async (): Promise<void> => {
-	try {
-		// Initialize Qdrant connection first
-		await initQdrant();
-
-		// Create AI provider (fallback to Ollama if OpenAI not available)
-		const preset = process.env.OPENAI_API_KEY ?? "gpt5-mini";
-		const config = getPresets()[preset] || {
-			type: "ollama" as const,
-			model: "llama3.2:latest",
-			name: "Llama 3.2",
-		};
-
-		const provider = createProvider(config);
-		const vectorStore = await createLangChainVectorStore();
-
-		// Initialize AI service with LangChain components
-		initializeAIService(provider, vectorStore);
-
-		console.log("[2] AI service initialized successfully with LangChain");
-	} catch (error) {
-		console.error("[ERROR] Failed to initialize AI service:", error);
-	}
-};
-
-/**
  * Handle search requests and return AI-powered answers
  */
 export const handleSearchRequest = async (
 	query: string,
-	limit = 5,
-	offset = 0,
 ): Promise<{
 	success: boolean;
 	query: string;
 	answer?: string;
 	sources?: Array<{ content: string; metadata: Record<string, unknown> }>;
-	pagination?: {
-		total: number;
-		returned: number;
-		limit: number;
-		offset: number;
-	};
 	timestamp: string;
 	error?: string;
 	details?: string;
@@ -303,12 +299,10 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(`[SEARCH] AI Search request: ${query} (limit: ${limit}, offset: ${offset})`);
+		console.log(`        → AI Search request: ${query}`);
 
 		// Use the AI service to search and generate an answer
-		// Fetch more documents than needed to handle offset
-		const totalToFetch = limit + offset;
-		const result = await searchAndAnswer(query, totalToFetch);
+		const result = await searchAndAnswer(query, 5);
 
 		if (!result.success) {
 			return {
@@ -320,26 +314,15 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		// Apply pagination: slice the sources array
-		const totalSources = result.sources?.length || 0;
-		const paginatedSources =
-			result.sources?.slice(offset, offset + limit) || [];
-
 		return {
 			success: true,
 			query,
 			answer: result.answer,
-			sources: paginatedSources,
-			pagination: {
-				total: totalSources,
-				returned: paginatedSources.length,
-				limit,
-				offset,
-			},
+			sources: result.sources,
 			timestamp: new Date().toISOString(),
 		};
 	} catch (error) {
-		console.error("AI search error:", error);
+		console.error("        ✗ AI search error:", error);
 		return {
 			success: false,
 			query,

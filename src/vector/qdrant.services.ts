@@ -1,26 +1,35 @@
 import { Document } from "@langchain/core/documents";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { createHash } from "crypto";
 import type { VectorStore } from "../ai/ai.interface";
+import {
+	createEmbeddingProvider,
+	type EmbeddingConfig,
+	getBestAvailableEmbedding,
+	getEmbeddingDimensions,
+} from "./embedding-factory";
 import type { CollectionStatus, QdrantResponse } from "./qdrant.interfaces";
 
 // Global Qdrant client instance
 let qdrantClient: QdrantClient | null = null;
 let isConnected = false;
-let embeddings: OpenAIEmbeddings | null = null;
+let embeddingProvider: ReturnType<typeof createEmbeddingProvider> | null = null;
+let currentEmbeddingConfig: EmbeddingConfig | null = null;
 
 /**
- * Initialize embeddings provider
+ * Initialize embeddings provider with automatic best-available selection
  */
-function initEmbeddings(): OpenAIEmbeddings {
-	if (!embeddings) {
-		embeddings = new OpenAIEmbeddings({
-			model: "text-embedding-3-small",
-		});
+function initEmbeddings(config?: EmbeddingConfig) {
+	if (!embeddingProvider) {
+		const embeddingConfig = config || getBestAvailableEmbedding();
+		embeddingProvider = createEmbeddingProvider(embeddingConfig);
+		currentEmbeddingConfig = embeddingConfig;
+		console.log(
+			`        ✓ Using ${embeddingConfig.provider} embeddings (${embeddingConfig.model})`,
+		);
 	}
-	return embeddings;
+	return embeddingProvider;
 }
 
 /**
@@ -33,7 +42,10 @@ function generateId(): string {
 /**
  * Ensure a collection exists in Qdrant
  */
-async function ensureCollectionExists(collectionName: string): Promise<void> {
+async function ensureCollectionExists(
+	collectionName: string,
+	embeddingConfig?: EmbeddingConfig,
+): Promise<void> {
 	if (!qdrantClient) {
 		throw new Error("Qdrant client not initialized");
 	}
@@ -43,13 +55,19 @@ async function ensureCollectionExists(collectionName: string): Promise<void> {
 		await qdrantClient.getCollection(collectionName);
 	} catch {
 		// Collection doesn't exist, create it
+		const config =
+			embeddingConfig || currentEmbeddingConfig || getBestAvailableEmbedding();
+		const dimensions = getEmbeddingDimensions(config);
+
 		await qdrantClient.createCollection(collectionName, {
 			vectors: {
-				size: 1536, // OpenAI text-embedding-3-small dimension
+				size: dimensions,
 				distance: "Cosine",
 			},
 		});
-		console.log(`Created collection: ${collectionName}`);
+		console.log(
+			`        → Created collection: ${collectionName} (${dimensions}D vectors)`,
+		);
 	}
 }
 
@@ -72,7 +90,7 @@ export async function initQdrant(): Promise<QdrantResponse<boolean>> {
 		await qdrantClient.getCollections();
 
 		isConnected = true;
-		console.log(`Connected to Qdrant at ${host}:${port}`);
+		console.log(`        ✓ Connected to Qdrant at ${host}:${port}`);
 
 		return {
 			success: true,
@@ -135,11 +153,36 @@ export async function qdrantRest(
 
 				try {
 					// Ensure collection exists
-					await ensureCollectionExists(params.collection);
+					await ensureCollectionExists(
+						params.collection,
+						currentEmbeddingConfig || undefined,
+					);
 
-					// Convert text to vector using OpenAI embeddings
-					const embeddingsProvider = initEmbeddings();
 					const content = params.payload.content as string;
+					const contentMD5 = generateMD5(content);
+
+					// Check for duplicates before storing (unless explicitly disabled)
+					if (!params.payload.skipDuplicateCheck) {
+						const existsResult = await documentExistsByMD5(
+							contentMD5,
+							params.collection,
+						);
+						if (existsResult.success && existsResult.data) {
+							console.log(
+								`        ⚬ Document already exists (MD5: ${contentMD5}) - skipping storage`,
+							);
+							return {
+								success: true,
+								data: { id: "existing", stored: false, duplicate: true },
+								message: "Document already exists - skipped duplicate",
+							};
+						}
+					}
+
+					// Convert text to vector using configured embeddings
+					const embeddingsProvider = initEmbeddings(
+						currentEmbeddingConfig || undefined,
+					);
 					const vectors = await embeddingsProvider.embedDocuments([content]);
 
 					if (vectors.length === 0) {
@@ -159,13 +202,15 @@ export async function qdrantRest(
 								vector: vectors[0],
 								payload: {
 									...params.payload,
-									md5: generateMD5(content),
+									md5: contentMD5,
 								},
 							},
 						],
 					});
 
-					console.log(`Document stored successfully with ID: ${pointId}`);
+					console.log(
+						`        → Document stored successfully with ID: ${pointId}`,
+					);
 					return {
 						success: true,
 						data: { id: pointId, stored: true },
@@ -190,8 +235,10 @@ export async function qdrantRest(
 				}
 
 				try {
-					// Convert query to vector using OpenAI embeddings
-					const embeddingsProvider = initEmbeddings();
+					// Convert query to vector using configured embeddings
+					const embeddingsProvider = initEmbeddings(
+						currentEmbeddingConfig || undefined,
+					);
 					const queryVectors = await embeddingsProvider.embedDocuments([
 						params.query,
 					]);
@@ -220,7 +267,7 @@ export async function qdrantRest(
 					}));
 
 					console.log(
-						`Search completed: found ${formattedResults.length} results`,
+						`        → Search completed: found ${formattedResults.length} results`,
 					);
 					return {
 						success: true,
@@ -251,7 +298,9 @@ export async function qdrantRest(
 						points: [params.documentId],
 					});
 
-					console.log(`Document deleted successfully: ${params.documentId}`);
+					console.log(
+						`        → Document deleted successfully: ${params.documentId}`,
+					);
 					return {
 						success: true,
 						data: { deleted: true, id: params.documentId },
@@ -308,7 +357,9 @@ export async function qdrantRest(
 						],
 					});
 
-					console.log(`Document updated successfully: ${params.documentId}`);
+					console.log(
+						`        → Document updated successfully: ${params.documentId}`,
+					);
 					return {
 						success: true,
 						data: { updated: true, id: params.documentId },
@@ -431,7 +482,7 @@ export async function documentExistsByMD5(
 		const exists = scrollResult.points.length > 0;
 
 		console.log(
-			`MD5 check: Document with hash ${md5Hash} ${exists ? "exists" : "does not exist"} in collection ${collection}`,
+			`        → MD5 check: Document with hash ${md5Hash} ${exists ? "exists" : "does not exist"} in collection ${collection}`,
 		);
 
 		return {
@@ -459,7 +510,7 @@ export async function storeDocument(
 	processedData: object,
 	metadata: Record<string, unknown>,
 	collection = "documents",
-): Promise<QdrantResponse<{ id: string; md5: string }>> {
+): Promise<QdrantResponse<{ id: string | number; md5: string }>> {
 	if (!qdrantClient || !isConnected) {
 		return {
 			success: false,
@@ -469,10 +520,14 @@ export async function storeDocument(
 
 	try {
 		const md5Hash = generateMD5(content);
-		const documentId = `doc_${md5Hash}`;
+		// Use a proper integer ID that fits in Qdrant's unsigned integer range
+		const documentId = Math.floor(Math.random() * 2147483647); // Max 32-bit signed integer
 
-		// Ensure collection exists
-		await ensureCollectionExists(collection);
+		// Ensure collection exists with proper embedding config
+		await ensureCollectionExists(
+			collection,
+			currentEmbeddingConfig || undefined,
+		);
 
 		// Generate embeddings for the content
 		const embeddingsProvider = initEmbeddings();
@@ -485,26 +540,60 @@ export async function storeDocument(
 			};
 		}
 
-		// Store in Qdrant with full payload
+		console.log(
+			`        → Storing document for ${metadata.personName || "Unknown"} with content: "${content.substring(0, 100)}..."`,
+		);
+
+		// Create simple payload with only primitive values
+		const simplePayload: Record<string, string | number | boolean> = {
+			md5: md5Hash,
+			content: content,
+			stored_at: new Date().toISOString(),
+		};
+
+		// Add processedData as simple key-value pairs
+		if (typeof processedData === "object" && processedData !== null) {
+			for (const [key, value] of Object.entries(processedData)) {
+				if (
+					typeof value === "string" ||
+					typeof value === "number" ||
+					typeof value === "boolean"
+				) {
+					simplePayload[`data_${key}`] = value;
+				} else {
+					simplePayload[`data_${key}`] = String(value || "");
+				}
+			}
+		}
+
+		// Add metadata as simple key-value pairs
+		if (metadata) {
+			for (const [key, value] of Object.entries(metadata)) {
+				if (
+					typeof value === "string" ||
+					typeof value === "number" ||
+					typeof value === "boolean"
+				) {
+					simplePayload[`meta_${key}`] = value;
+				} else {
+					simplePayload[`meta_${key}`] = String(value || "");
+				}
+			}
+		}
+
+		// Store in Qdrant with simplified payload
 		await qdrantClient.upsert(collection, {
 			wait: true,
 			points: [
 				{
 					id: documentId,
 					vector: vectors[0],
-					payload: {
-						md5: md5Hash,
-						content: content,
-						processedData: processedData,
-						metadata: metadata,
-						stored_at: new Date().toISOString(),
-					},
+					payload: simplePayload,
 				},
 			],
 		});
-
 		console.log(
-			`Document stored successfully: ${documentId} with MD5 ${md5Hash} in collection ${collection}`,
+			`        → Document stored successfully: ${documentId} with MD5 ${md5Hash} in collection ${collection}`,
 		);
 
 		return {
@@ -528,28 +617,29 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 		// Initialize embeddings (reuse existing function)
 		const embeddings = initEmbeddings();
 
+		// Ensure the people collection exists before creating vector store
+		await ensureCollectionExists("people");
+
 		// Create LangChain Qdrant vector store
 		const vectorStore = await QdrantVectorStore.fromExistingCollection(
 			embeddings,
 			{
 				url: `${process.env.QDRANT_PROTOCOL || "http"}://${process.env.QDRANT_HOST || "localhost"}:${process.env.QDRANT_PORT || 6333}`,
-				collectionName: "documents",
+				collectionName: "people", // Changed from "documents" to "people"
 				apiKey: process.env.QDRANT_API_KEY,
 			},
 		);
 
-		console.log("[OK] LangChain Qdrant vector store created successfully");
+		console.log("        ✓ LangChain Qdrant vector store created successfully");
 		return vectorStore as VectorStore;
 	} catch (error) {
-		console.warn(
-			"[WARN] Failed to create LangChain vector store, using fallback:",
-			error,
-		);
+		console.error("        ✗ Failed to create LangChain vector store:", error);
+		console.warn("        ⚠ Using fallback mock vector store");
 
 		// Create a mock implementation that satisfies the VectorStore interface
 		const mockVectorStore = {
 			async similaritySearch(query: string, k = 5) {
-				console.log(`[FALLBACK] Search for: ${query}`);
+				console.log(`        → Fallback search for: ${query}`);
 				return [
 					new Document({
 						pageContent: `Sample content related to: ${query}`,
@@ -562,10 +652,12 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 				].slice(0, k);
 			},
 			async addDocuments(documents: Document[]) {
-				console.log(`[FALLBACK] Would add ${documents.length} documents`);
+				console.log(
+					`        → Fallback: Would add ${documents.length} documents`,
+				);
 			},
 			async delete() {
-				console.log("[FALLBACK] Would delete documents");
+				console.log("        → Fallback: Would delete documents");
 			},
 		};
 

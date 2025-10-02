@@ -276,34 +276,6 @@ const parseAndValidateJson = (
 };
 
 /**
- * Initialize AI service with LangChain providers and vector store
- */
-export const initializeAI = async (): Promise<void> => {
-	try {
-		// Initialize Qdrant connection first
-		await initQdrant();
-
-		// Create AI provider (fallback to Ollama if OpenAI not available)
-		const preset = process.env.OPENAI_API_KEY ?? "gpt5-mini";
-		const config = getPresets()[preset] || {
-			type: "ollama" as const,
-			model: "llama3.2:latest",
-			name: "Llama 3.2",
-		};
-
-		const provider = createProvider(config);
-		const vectorStore = await createLangChainVectorStore();
-
-		// Initialize AI service with LangChain components
-		initializeAIService(provider, vectorStore);
-
-		console.log("        ✓ AI service initialized successfully with LangChain");
-	} catch (error) {
-		console.error("        ✗ Failed to initialize AI service:", error);
-	}
-};
-
-/**
  * Handle search requests and return AI-powered answers
  */
 export const handleSearchRequest = async (

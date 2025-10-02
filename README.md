@@ -26,6 +26,7 @@
 
 ### Core Capabilities
 - **Semantic Search**: Find relevant results based on meaning, not just keywords
+- **Complex Query Support**: Handles multi-criteria queries (experience + location, skills + role)
 - **Multi-AI Provider Support**: OpenAI, Anthropic, Google Gemini, Ollama, HuggingFace
 - **Vector Database Integration**: Qdrant for high-performance similarity search
 - **RAG Pattern**: Retrieval Augmented Generation for context-aware AI responses
@@ -187,6 +188,8 @@ SuperFind/
 - [Vector Database](./VECTOR_DATABASE.md) - Qdrant integration details
 - [Pagination](./PAGINATION.md) - Pagination implementation
 - [Implementation Guide](./IMPLEMENTATION.md) - Learning path for developers
+- [Search Tests](./SEARCH_TESTS.md) - Comprehensive test scenarios and examples
+- [Test Results](./TEST_RESULTS.md) - Validation results with 100% accuracy
 
 ---
 

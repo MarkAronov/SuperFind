@@ -78,7 +78,9 @@ async function initializeApplication(): Promise<ProcessedFile[]> {
 		// Load and process static data
 		const processedFiles = await loadStaticData();
 
-		console.log(`\n    ✓ Data processing complete! Processed ${processedFiles.length} files`);
+		console.log(
+			`\n    ✓ Data processing complete! Processed ${processedFiles.length} files`,
+		);
 
 		return processedFiles;
 	} catch (error) {
@@ -135,7 +137,9 @@ const runInitialization = async (): Promise<void> => {
 			isInitialized = true;
 			console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 			console.log("✅ SuperFind initialization completed successfully!");
-			console.log(`🌐 Server running at: http://localhost:${process.env.PORT || 3000}`);
+			console.log(
+				`🌐 Server running at: http://localhost:${process.env.PORT || 3000}`,
+			);
 			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 		} catch (error) {
 			console.error(

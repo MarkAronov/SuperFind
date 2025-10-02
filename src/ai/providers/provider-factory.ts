@@ -63,36 +63,6 @@ export const createHuggingFace = (
 };
 
 /**
- * Create Anthropic Claude provider with specific model
- */
-export const createAnthropic = (
-	model = "claude-3-5-sonnet-20241022",
-	apiKey?: string,
-): AIProvider => {
-	return createAnthropicProvider(model, apiKey);
-};
-
-/**
- * Create Google Gemini provider with specific model
- */
-export const createGemini = (
-	model = "gemini-1.5-pro",
-	apiKey?: string,
-): AIProvider => {
-	return createGeminiProvider(model, apiKey);
-};
-
-/**
- * Create Hugging Face provider with specific model
- */
-export const createHuggingFace = (
-	model = "mistralai/Mistral-7B-Instruct-v0.1",
-	apiKey?: string,
-): AIProvider => {
-	return createHuggingFaceProvider(model, apiKey);
-};
-
-/**
  * Create provider based on configuration
  */
 export const createProvider = (config: ProviderConfig): AIProvider => {

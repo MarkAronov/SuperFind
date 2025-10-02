@@ -1,7 +1,7 @@
+import { useMemo } from "react";
 import type { SearchResult } from "@/types/api";
 import { Card } from "../atoms/Card";
 import { PersonCard } from "../molecules/PersonCard";
-import { useMemo } from "react";
 
 interface SearchResultsProps {
 	data: SearchResult;
@@ -11,26 +11,29 @@ interface SearchResultsProps {
 export function SearchResults({ data, isLoading }: SearchResultsProps) {
 	// Use people array if available, otherwise fall back to empty array
 	const people = data.people || [];
-	
+
 	console.log("SearchResults - data.people:", data.people);
 	console.log("SearchResults - people length:", people.length);
 
 	// Deduplicate people by name (only if name exists)
 	const uniquePeople = useMemo(() => {
 		if (!people || people.length === 0) return [];
-		
+
 		// Filter out any undefined/null entries first
-		const validPeople = people.filter((person) => person !== null && person !== undefined);
-		
+		const validPeople = people.filter(
+			(person) => person !== null && person !== undefined,
+		);
+
 		console.log("Valid people count:", validPeople.length);
-		
+
 		const seen = new Set<string>();
 		return validPeople.filter((person) => {
 			// Skip if no name
 			if (!person.name) return true;
-			
+
 			// Create a hash from name + role
-			const personHash = `${person.name}-${person.role || 'unknown'}`.toLowerCase();
+			const personHash =
+				`${person.name}-${person.role || "unknown"}`.toLowerCase();
 			if (seen.has(personHash)) {
 				return false;
 			}

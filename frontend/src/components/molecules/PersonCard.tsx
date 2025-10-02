@@ -15,7 +15,9 @@ export function PersonCard({ person }: PersonCardProps) {
 					<h3 className="text-lg font-semibold text-gray-900">
 						{person.name || "Unknown"}
 					</h3>
-					<p className="text-sm text-gray-600">{person.role || "No role specified"}</p>
+					<p className="text-sm text-gray-600">
+						{person.role || "No role specified"}
+					</p>
 				</div>
 
 				{/* Location and Experience */}
@@ -39,18 +41,21 @@ export function PersonCard({ person }: PersonCardProps) {
 					<div>
 						<p className="text-xs text-gray-500 mb-1">Skills:</p>
 						<div className="flex flex-wrap gap-1">
-							{typeof person.skills === 'string' 
+							{typeof person.skills === "string"
 								? person.skills.split(/[;,]/).map((skill) => (
-										<Badge key={skill.trim()} variant="default" className="text-xs">
+										<Badge
+											key={skill.trim()}
+											variant="default"
+											className="text-xs"
+										>
 											{skill.trim()}
 										</Badge>
-								))
+									))
 								: person.skills.map((skill) => (
 										<Badge key={skill} variant="default" className="text-xs">
 											{skill}
 										</Badge>
-								))
-							}
+									))}
 						</div>
 					</div>
 				)}
@@ -58,7 +63,7 @@ export function PersonCard({ person }: PersonCardProps) {
 				{/* Email */}
 				{person.email && (
 					<div className="text-sm">
-						<a 
+						<a
 							href={`mailto:${person.email}`}
 							className="text-blue-600 hover:text-blue-800 hover:underline"
 						>

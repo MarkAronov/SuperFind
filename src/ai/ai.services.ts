@@ -297,9 +297,7 @@ export const initializeAI = async (): Promise<void> => {
 		// Initialize AI service with LangChain components
 		initializeAIService(provider, vectorStore);
 
-		console.log(
-			"        ✓ AI service initialized successfully with LangChain ",
-		);
+		console.log("        ✓ AI service initialized successfully with LangChain");
 	} catch (error) {
 		console.error("        ✗ Failed to initialize AI service:", error);
 	}
@@ -310,19 +308,11 @@ export const initializeAI = async (): Promise<void> => {
  */
 export const handleSearchRequest = async (
 	query: string,
-	limit = 5,
-	offset = 0,
 ): Promise<{
 	success: boolean;
 	query: string;
 	answer?: string;
 	sources?: Array<{ content: string; metadata: Record<string, unknown> }>;
-	pagination?: {
-		limit: number;
-		offset: number;
-		total: number;
-		returned: number;
-	};
 	timestamp: string;
 	error?: string;
 	details?: string;
@@ -337,14 +327,10 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(
-			`        → AI Search request: ${query} (limit: ${limit}, offset: ${offset})`,
-		);
+		console.log(`        → AI Search request: ${query}`);
 
 		// Use the AI service to search and generate an answer
-		// Fetch more documents than needed to handle offset
-		const totalToFetch = limit + offset;
-		const result = await searchAndAnswer(query, totalToFetch);
+		const result = await searchAndAnswer(query, 5);
 
 		if (!result.success) {
 			return {
@@ -356,22 +342,11 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		// Apply pagination: slice the sources array
-		const totalSources = result.sources?.length || 0;
-		const paginatedSources =
-			result.sources?.slice(offset, offset + limit) || [];
-
 		return {
 			success: true,
 			query,
 			answer: result.answer,
-			sources: paginatedSources,
-			pagination: {
-				limit,
-				offset,
-				total: totalSources,
-				returned: paginatedSources.length,
-			},
+			sources: result.sources,
 			timestamp: new Date().toISOString(),
 		};
 	} catch (error) {

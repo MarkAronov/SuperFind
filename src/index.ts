@@ -13,7 +13,10 @@ import {
 	storeProcessedData,
 } from "./parser/parser.services";
 import { checkApplicationHealth } from "./services/health.services";
-import { initQdrant } from "./vector/qdrant.services";
+import {
+	createLangChainVectorStore,
+	initQdrant,
+} from "./vector/qdrant.services";
 
 interface ProcessedFile {
 	fileName: string;
@@ -70,21 +73,16 @@ async function loadStaticData(): Promise<ProcessedFile[]> {
  */
 async function initializeApplication(): Promise<ProcessedFile[]> {
 	try {
-		console.log("\n[2] Starting application initialization...");
+		console.log("\n[3] Loading and processing static data...");
 
-		// 1. Initialize external dependencies
-		await initializeExternalServices();
-
-		// 2. Load and process static data
+		// Load and process static data
 		const processedFiles = await loadStaticData();
 
-		console.log(
-			`\n    ✓ Application initialization complete! Processed ${processedFiles.length} files`,
-		);
+		console.log(`\n    ✓ Data processing complete! Processed ${processedFiles.length} files`);
 
 		return processedFiles;
 	} catch (error) {
-		console.error("\n    ✗ Application initialization failed:", error);
+		console.error("\n    ✗ Data processing failed:", error);
 		throw error;
 	}
 }
@@ -117,25 +115,27 @@ const runInitialization = async (): Promise<void> => {
 				throw new Error("Environment configuration invalid");
 			}
 
-			// Step 1: Initialize AI Service
+			// Step 1: Initialize external services first (Qdrant, etc.)
+			await initializeExternalServices();
+
+			// Step 2: Initialize AI Service (now that Qdrant is ready)
 			console.log("\n[1] Initializing AI service...");
 			const aiProvider = await createBestAvailable();
-			initializeAIService(aiProvider);
+			const aiVectorStore = await createLangChainVectorStore();
+			initializeAIService(aiProvider, aiVectorStore);
 			console.log(`    ✓ AI service initialized with ${aiProvider.name}`);
 
-			// Step 2: Initialize application (data processing, external services)
+			// Step 3: Initialize application (data processing)
 			const processedFiles = await initializeApplication();
 
-			// Step 3: Store processed data
-			console.log("\n[5] Storing processed data...");
+			// Step 4: Store processed data
+			console.log("\n[4] Storing processed data...");
 			storeProcessedData(processedFiles);
 
 			isInitialized = true;
 			console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 			console.log("✅ SuperFind initialization completed successfully!");
-			console.log(
-				`🌐 Server running at: http://localhost:${process.env.PORT || 3000}`,
-			);
+			console.log(`🌐 Server running at: http://localhost:${process.env.PORT || 3000}`);
 			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 		} catch (error) {
 			console.error(

@@ -70,12 +70,8 @@ export function logCurrentConfiguration() {
 
 	// Qdrant Configuration
 	console.log("\n🗃️  Vector Database:");
-	console.log(
-		`    Qdrant: ${config.qdrant.protocol}://${config.qdrant.host}:${config.qdrant.port}`,
-	);
-	console.log(
-		`    API Key: ${config.qdrant.has_api_key ? "✅ Configured" : "❌ Not set"}`,
-	);
+	console.log(`    Qdrant: ${config.qdrant.protocol}://${config.qdrant.host}:${config.qdrant.port}`);
+	console.log(`    API Key: ${config.qdrant.has_api_key ? "✅ Configured" : "❌ Not set"}`);
 
 	console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 

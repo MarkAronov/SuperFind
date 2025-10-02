@@ -633,10 +633,8 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 		console.log("        ✓ LangChain Qdrant vector store created successfully");
 		return vectorStore as VectorStore;
 	} catch (error) {
-		console.warn(
-			"        ⚠ Failed to create LangChain vector store, using fallback:",
-			error,
-		);
+		console.error("        ✗ Failed to create LangChain vector store:", error);
+		console.warn("        ⚠ Using fallback mock vector store");
 
 		// Create a mock implementation that satisfies the VectorStore interface
 		const mockVectorStore = {

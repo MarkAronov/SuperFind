@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import aiRouter from "./ai/ai.routes";
 import { initializeAIService } from "./ai/ai.services";
 import { createBestAvailable } from "./ai/providers/provider-factory";
@@ -90,6 +91,15 @@ async function initializeApplication(): Promise<ProcessedFile[]> {
 }
 
 const app = new Hono();
+
+// Enable CORS for frontend
+app.use(
+	"/*",
+	cors({
+		origin: "http://localhost:5173", // Vite dev server
+		credentials: true,
+	}),
+);
 
 // Initialize the system on startup
 let isInitialized = false;

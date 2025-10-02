@@ -1,0 +1,80 @@
+[
+	{
+		"name": "Yuki Nakamura",
+		"location": "Kyoto, Japan",
+		"role": "UX/UI Designer",
+		"skills": [
+			"User Experience Design",
+			"Interface Design",
+			"Prototyping",
+			"User Research"
+		],
+		"experience_years": 8,
+		"email": "yuki.nakamura@uxdesign.jp",
+		"specialization": "Mobile App Design",
+		"projects_completed": 45,
+		"tools": ["Figma", "Sketch", "Adobe XD", "InVision"]
+	},
+	{
+		"name": "Antonio Silva",
+		"location": "Lisbon, Portugal",
+		"role": "Game Designer",
+		"skills": [
+			"Game Design",
+			"Level Design",
+			"Narrative Design",
+			"Player Experience"
+		],
+		"experience_years": 12,
+		"email": "antonio.silva@gamedesign.pt",
+		"games_developed": 8,
+		"awards": [
+			"Independent Games Festival Nomination",
+			"Portuguese Game Developer Award"
+		],
+		"genres": ["Adventure", "RPG", "Puzzle Games"]
+	},
+	{
+		"name": "Fatima Al-Zahra",
+		"location": "Dubai, UAE",
+		"role": "Digital Artist",
+		"skills": [
+			"Digital Illustration",
+			"3D Modeling",
+			"Motion Graphics",
+			"Visual Effects"
+		],
+		"experience_years": 10,
+		"email": "fatima.alzahra@digitalart.ae",
+		"specialization": "Concept Art for Games",
+		"projects_completed": 23,
+		"software": ["Blender", "Photoshop", "After Effects", "ZBrush"]
+	},
+	{
+		"name": "Bjorn Larsen",
+		"location": "Copenhagen, Denmark",
+		"role": "Product Designer",
+		"skills": [
+			"Product Design",
+			"Design Systems",
+			"Prototyping",
+			"User Research"
+		],
+		"experience_years": 9,
+		"email": "bjorn.larsen@productdesign.dk",
+		"specialization": "SaaS Product Design",
+		"products_designed": 15,
+		"clients": ["Microsoft", "Google", "Spotify"]
+	},
+	{
+		"name": "Mei Ling Wong",
+		"location": "Singapore",
+		"role": "Creative Technologist",
+		"skills": ["Creative Coding", "Interactive Design", "p5.js", "Processing"],
+		"experience_years": 7,
+		"email": "meiling.wong@creativetech.sg",
+		"specialization": "Interactive Installations",
+		"projects_completed": 12,
+		"technologies": ["JavaScript", "WebGL", "Arduino", "Raspberry Pi"]
+	}
+]

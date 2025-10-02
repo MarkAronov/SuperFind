@@ -1,0 +1,88 @@
+[
+	{
+		"name": "Dr. Sarah Chen",
+		"location": "Vancouver, Canada",
+		"role": "AI Research Scientist",
+		"skills": [
+			"Machine Learning",
+			"Deep Learning",
+			"Computer Vision",
+			"Python"
+		],
+		"experience_years": 12,
+		"email": "sarah.chen@airesearch.ca",
+		"specialization": "Computer Vision",
+		"publications": 45,
+		"phd_university": "University of Toronto"
+	},
+	{
+		"name": "Ahmed Hassan",
+		"location": "Cairo, Egypt",
+		"role": "Cybersecurity Expert",
+		"skills": [
+			"Network Security",
+			"Ethical Hacking",
+			"Penetration Testing",
+			"Security Architecture"
+		],
+		"experience_years": 10,
+		"email": "ahmed.hassan@cybersec.eg",
+		"certifications": ["CISSP", "CEH", "OSCP"],
+		"specialization": "Enterprise Security",
+		"companies_worked": ["Google", "Microsoft"]
+	},
+	{
+		"name": "Maria Santos",
+		"location": "Rio de Janeiro, Brazil",
+		"role": "Blockchain Developer",
+		"skills": ["Solidity", "Smart Contracts", "Web3", "Ethereum"],
+		"experience_years": 7,
+		"email": "maria.santos@blockchain.br",
+		"projects": ["DeFi Protocol", "NFT Marketplace"],
+		"languages": ["Solidity", "JavaScript", "Python"],
+		"blockchains": ["Ethereum", "Polygon", "Binance Smart Chain"]
+	},
+	{
+		"name": "Dr. James O'Connor",
+		"location": "Dublin, Ireland",
+		"role": "Data Science Lead",
+		"skills": [
+			"Big Data Analytics",
+			"Machine Learning",
+			"Python",
+			"Apache Spark"
+		],
+		"experience_years": 14,
+		"email": "james.oconnor@datascience.ie",
+		"specialization": "Predictive Analytics",
+		"publications": 28,
+		"industry_experience": "Financial Services"
+	},
+	{
+		"name": "Ling Chen",
+		"location": "Shanghai, China",
+		"role": "Quantum Computing Engineer",
+		"skills": ["Quantum Algorithms", "Qiskit", "Python", "Linear Algebra"],
+		"experience_years": 9,
+		"email": "ling.chen@quantum.cn",
+		"research_focus": "Quantum Machine Learning",
+		"publications": 23,
+		"collaborations": ["IBM Quantum", "Google Quantum AI"]
+	},
+	{
+		"name": "Carlos Mendoza",
+		"location": "Buenos Aires, Argentina",
+		"role": "Mobile App Architect",
+		"skills": [
+			"React Native",
+			"Flutter",
+			"iOS Development",
+			"Android Development"
+		],
+		"experience_years": 11,
+		"email": "carlos.mendoza@mobiledev.ar",
+		"platforms": ["iOS", "Android"],
+		"apps_developed": 15,
+		"users_reached": "5M+"
+	}
+]

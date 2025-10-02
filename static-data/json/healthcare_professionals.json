@@ -1,0 +1,61 @@
+[
+	{
+		"name": "Michael Reynolds",
+		"location": "Sydney, Australia",
+		"role": "Health Informatics Specialist",
+		"skills": [
+			"Electronic Health Records",
+			"HL7 Standards",
+			"Data Analytics",
+			"Healthcare Integration"
+		],
+		"experience_years": 12,
+		"email": "michael.reynolds@healthinformatics.au",
+		"specialization": "Clinical Decision Support Systems",
+		"systems_implemented": 15,
+		"certifications": ["CCHI", "HL7 Certified"]
+	},
+	{
+		"name": "Sofia Papadopoulos",
+		"location": "Athens, Greece",
+		"role": "Medical Software Developer",
+		"skills": [
+			"Healthcare Software Development",
+			"HIPAA Compliance",
+			"Patient Portal Development",
+			"API Integration"
+		],
+		"experience_years": 9,
+		"email": "sofia.papadopoulos@medsoftware.gr",
+		"specialization": "Telemedicine Platforms",
+		"projects_completed": 8,
+		"languages": ["JavaScript", "Python", "SQL"]
+	},
+	{
+		"name": "Rajesh Kumar",
+		"location": "Delhi, India",
+		"role": "Biomedical Engineer",
+		"skills": [
+			"Medical Device Software",
+			"Embedded Systems",
+			"IoT Healthcare",
+			"Regulatory Compliance"
+		],
+		"experience_years": 10,
+		"email": "rajesh.kumar@biomedeng.in",
+		"specialization": "Wearable Medical Devices",
+		"patents": 5,
+		"technologies": ["Arduino", "Raspberry Pi", "Bluetooth LE"]
+	},
+	{
+		"name": "Anna Kowalski",
+		"location": "Warsaw, Poland",
+		"role": "Healthcare Data Analyst",
+		"skills": ["Healthcare Analytics", "SQL", "Python", "Machine Learning"],
+		"experience_years": 7,
+		"email": "anna.kowalski@healthdata.pl",
+		"specialization": "Predictive Healthcare Analytics",
+		"projects_led": 12,
+		"languages": ["Python", "R", "SQL"]
+	}
+]

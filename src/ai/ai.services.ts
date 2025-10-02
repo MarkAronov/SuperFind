@@ -276,11 +276,19 @@ export const initializeAI = async (): Promise<void> => {
  */
 export const handleSearchRequest = async (
 	query: string,
+	limit = 5,
+	offset = 0,
 ): Promise<{
 	success: boolean;
 	query: string;
 	answer?: string;
 	sources?: Array<{ content: string; metadata: Record<string, unknown> }>;
+	pagination?: {
+		total: number;
+		returned: number;
+		limit: number;
+		offset: number;
+	};
 	timestamp: string;
 	error?: string;
 	details?: string;
@@ -295,10 +303,12 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(`[SEARCH] AI Search request: ${query}`);
+		console.log(`[SEARCH] AI Search request: ${query} (limit: ${limit}, offset: ${offset})`);
 
 		// Use the AI service to search and generate an answer
-		const result = await searchAndAnswer(query, 5);
+		// Fetch more documents than needed to handle offset
+		const totalToFetch = limit + offset;
+		const result = await searchAndAnswer(query, totalToFetch);
 
 		if (!result.success) {
 			return {
@@ -310,11 +320,22 @@ export const handleSearchRequest = async (
 			};
 		}
 
+		// Apply pagination: slice the sources array
+		const totalSources = result.sources?.length || 0;
+		const paginatedSources =
+			result.sources?.slice(offset, offset + limit) || [];
+
 		return {
 			success: true,
 			query,
 			answer: result.answer,
-			sources: result.sources,
+			sources: paginatedSources,
+			pagination: {
+				total: totalSources,
+				returned: paginatedSources.length,
+				limit,
+				offset,
+			},
 			timestamp: new Date().toISOString(),
 		};
 	} catch (error) {

@@ -1,3 +1,6 @@
-name;location;role;skills;experience_years
-Alice Chen;New York;ML Engineer;"PyTorch; NLP; TensorFlow";4
-Bob Smith;San Diego;Frontend Developer;"React; TypeScript";5
+name,location,role,skills,experience_years,email
+Alice Chen,New York,ML Engineer,PyTorch; NLP; TensorFlow,4,alice.chen@mlengineer.com
+Bob Smith,San Diego,Frontend Developer,React; TypeScript,5,bob.smith@frontenddev.com
+Charlie Wilson,Austin,Backend Developer,Node.js; Express; MongoDB,6,charlie.wilson@backenddev.com
+Diana Rodriguez,Seattle,DevOps Engineer,Docker; Kubernetes; CI/CD,7,diana.rodriguez@devopseng.com
+Edward Kim,Denver,Full Stack Developer,React; Node.js; PostgreSQL,4,edward.kim@fullstackdev.com

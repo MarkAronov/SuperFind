@@ -1,0 +1,17 @@
+Sarah Chen is a senior cybersecurity analyst at a Fortune 500 company. She specializes in threat intelligence and incident response. With 8 years of experience in the field, she has successfully led multiple cyber attack investigations and helped implement robust security measures that prevented millions in potential losses.
+
+Her expertise includes network security, vulnerability assessment, and security awareness training. Sarah holds CISSP and CEH certifications and regularly speaks at cybersecurity conferences. She is passionate about closing the gender gap in tech and mentors young women interested in cybersecurity careers.
+
+Contact: sarah.chen@cybersecurity.com
+
+Marcus Rodriguez is a senior mobile applications developer specializing in iOS and Android development. Born in Mexico City, he moved to the US to pursue his tech career. With 10 years of professional development experience, he has built over 50 mobile apps and led development teams at major tech companies.
+
+Marcus is known for his expertise in cross-platform development and user experience design. He speaks three languages fluently and is actively involved in promoting diversity in tech. Off the screen, he enjoys mentoring junior developers and supporting coding education initiatives.
+
+Contact: marcus.rodriguez@mobiledev.com
+
+Dr. Aisha Khan is a machine learning engineer specializing in healthcare AI applications. She develops ML models for medical diagnosis and treatment optimization. With 12 years of experience in AI, she has built predictive models that have improved patient outcomes and reduced healthcare costs.
+
+Dr. Aisha is also involved in AI research, particularly in developing ethical and unbiased ML systems for healthcare. She holds multiple patents and has published extensively in AI conferences. Her innovative approach to healthcare technology has earned her numerous awards and recognition in the field.
+
+Contact: aisha.khan@healthai.com

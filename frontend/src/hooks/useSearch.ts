@@ -9,9 +9,6 @@ async function searchPeople(query: string): Promise<SearchResult> {
 			params: { query },
 		},
 	);
-	console.log("API Response:", data);
-	console.log("People array:", data.people);
-	console.log("Sources array:", data.sources);
 	return data;
 }
 

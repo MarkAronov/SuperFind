@@ -2,10 +2,12 @@
 export interface SearchResult {
 	success: boolean;
 	query: string;
-	answer: string;
-	people: Person[];
-	sources: Source[];
+	answer?: string; // Optional - may not be present in error cases
+	people?: Person[]; // Optional - may not be present in error cases
+	sources?: Source[]; // Optional - may not be present in error cases
 	timestamp: string;
+	error?: string; // Optional - present in error cases
+	details?: string; // Optional - present in error cases
 }
 
 export interface Source {

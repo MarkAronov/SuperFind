@@ -111,10 +111,13 @@ export const searchAndAnswer = async (
 			throw new Error("Vector store not configured");
 		}
 
-		// Retrieve relevant documents using LangChain vector store
-		const documents = await vectorStore.similaritySearch(query, limit);
+		// Retrieve relevant documents with similarity scores
+		const documentsWithScores = await vectorStore.similaritySearchWithScore(
+			query,
+			limit,
+		);
 
-		if (documents.length === 0) {
+		if (documentsWithScores.length === 0) {
 			return {
 				success: true,
 				answer: "I couldn't find any relevant information for your query.",
@@ -122,12 +125,12 @@ export const searchAndAnswer = async (
 			};
 		}
 
-		// Convert documents to search sources format
-		const sources = documents.map((doc, index) => ({
+		// Convert documents to search sources format with actual similarity scores
+		const sources = documentsWithScores.map(([doc, score], index) => ({
 			id: doc.metadata?.id || `doc-${index}`,
 			content: doc.pageContent,
-			metadata: doc.metadata || {},
-			relevanceScore: doc.metadata?.score || 0.8,
+			metadata: { ...doc.metadata, score },
+			relevanceScore: score,
 		}));
 
 		// Create LangChain prompt template for answer generation
@@ -373,15 +376,12 @@ export const handleSearchRequest = async (
 		// Parse person data from each source
 		const people = result.sources.map((source) => {
 			const personData = parsePersonFromContent(source.content);
-			console.log("        → Parsed person:", personData);
 			return {
 				...personData,
 				relevanceScore: source.metadata?.score || 0.8,
 				rawContent: source.content, // Keep original for reference
 			};
 		});
-
-		console.log("        → Total people parsed:", people.length);
 
 		return {
 			success: true,

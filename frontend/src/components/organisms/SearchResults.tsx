@@ -63,7 +63,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 					location: locationMatch?.[1]?.trim() || "",
 					role: roleMatch?.[1]?.trim() || "",
 					skills: skillsMatch?.[1]?.trim().replace(/\s*;\s*/g, "; ") || "",
-					experience_years: expMatch?.[1] ? Number.parseInt(expMatch[1]) : 0,
+					experience_years: expMatch?.[1] ? Number.parseInt(expMatch[1], 10) : 0,
 					email: emailMatch?.[1]?.trim() || "",
 					relevanceScore: source.relevanceScore || 0.8,
 					rawContent: content,

@@ -1,9 +1,8 @@
 import type * as React from "react";
+
 import { cn } from "@/lib/utils";
 
-export interface InputProps extends React.ComponentProps<"input"> {}
-
-export function Input({ className, type, ...props }: InputProps) {
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
 	return (
 		<input
 			type={type}
@@ -18,3 +17,5 @@ export function Input({ className, type, ...props }: InputProps) {
 		/>
 	);
 }
+
+export { Input };

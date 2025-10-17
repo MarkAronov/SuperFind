@@ -1,11 +1,11 @@
-Dr. Lisa Chen is a machine learning researcher developing AI models for scientific applications. With 10 years of research experience at a major tech company, she specializes in deep learning and computer vision. Her work focuses on applying AI to drug discovery and materials science.
+Dr. Lisa Chen is a machine learning researcher from Palo Alto, USA developing AI models for scientific applications specializing in deep learning, computer vision, PyTorch, TensorFlow, Python, drug discovery AI, materials science, and neural networks. 10 years of professional research experience at a major tech company, focusing on applying AI to drug discovery and materials science.
 
 Dr. Chen holds a PhD in Computer Science and has published over 35 papers in top AI conferences. She collaborates with research institutions to advance scientific discovery through machine learning. She is passionate about increasing diversity in AI fields and mentors underrepresented groups in tech.
 
-Contact: lisa.chen@mlresearch.com
+Email: lisa.chen@mlresearch.com
 
-Carlos Mendoza is a senior software engineer specializing in audio processing and music technology. With 15 years of experience, he has developed audio software used by musicians and producers worldwide. His work includes digital signal processing algorithms and music production tools.
+Carlos Mendoza is a senior software engineer from Los Angeles, USA specializing in audio processing, music technology, digital signal processing, C++, Python, JUCE framework, audio algorithms, VST plugin development, and real-time audio. 15 years of professional experience developing audio software used by musicians and producers worldwide. His work includes digital signal processing algorithms and music production tools.
 
 Carlos learned programming through self-study and brings creative problem-solving to his technical work. He develops software that enhances musical creativity and audio quality. His applications have won awards in music technology and are used by professional studios.
 
-Contact: carlos.mendoza@audiotech.com
+Email: carlos.mendoza@audiotech.com

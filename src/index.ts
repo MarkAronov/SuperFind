@@ -92,11 +92,36 @@ async function initializeApplication(): Promise<ProcessedFile[]> {
 
 const app = new Hono();
 
-// Enable CORS for frontend
+// Enable CORS for frontend (development and production)
+const allowedOrigins = [
+	"http://localhost:5173", // Local development
+	"http://localhost:3000", // Local backend
+];
+
+// Add production frontend URL if in production
+if (process.env.NODE_ENV === "production" && process.env.FRONTEND_URL) {
+	allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(
 	"/*",
 	cors({
-		origin: "http://localhost:5173", // Vite dev server
+		origin: (origin) => {
+			// Allow requests with no origin (like mobile apps or curl)
+			if (!origin) return "*";
+			// Check if origin is in allowed list
+			if (allowedOrigins.some((allowed) => origin.startsWith(allowed))) {
+				return origin;
+			}
+			// Allow any vercel.app domain in production
+			if (
+				process.env.NODE_ENV === "production" &&
+				origin.includes(".vercel.app")
+			) {
+				return origin;
+			}
+			return allowedOrigins[0];
+		},
 		credentials: true,
 	}),
 );

@@ -1,0 +1,69 @@
+# Render.com Blueprint for SuperFind Backend
+# This file configures automatic deployment to Render
+
+services:
+  # Backend API Service
+  - type: web
+    name: superfind-api
+    runtime: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      # Port Configuration
+      - key: PORT
+        value: 3000
+      
+      - key: NODE_ENV
+        value: production
+      
+      # Frontend URL for CORS
+      - key: FRONTEND_URL
+        value: https://superfind.vercel.app  # Update this with your actual Vercel URL
+      
+      # OpenAI Configuration
+      - key: OPENAI_API_KEY
+        sync: false  # Set this in Render dashboard (secret)
+      
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      
+      - key: OPENAI_SMALL_EMBEDDING_MODEL
+        value: text-embedding-3-small
+      
+      - key: OPENAI_LARGE_EMBEDDING_MODEL
+        value: text-embedding-3-large
+      
+      # Qdrant Cloud Configuration
+      - key: QDRANT_HOST
+        sync: false  # Set this in Render dashboard (your Qdrant Cloud URL)
+      
+      - key: QDRANT_PORT
+        value: 6333
+      
+      - key: QDRANT_PROTOCOL
+        value: https
+      
+      - key: QDRANT_API_KEY
+        sync: false  # Set this in Render dashboard (secret)
+      
+      # Qdrant Configuration
+      - key: QDRANT_MAX_BATCH_SIZE
+        value: 100
+      
+      - key: QDRANT_RETRY_ATTEMPTS
+        value: 3
+      
+      - key: QDRANT_RETRY_DELAY
+        value: 1000
+      
+      # Embedding Configuration
+      - key: EMBEDDING_PROVIDER
+        value: openai
+      
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-large
+      
+      - key: EMBEDDING_DIMENSION
+        value: 3072

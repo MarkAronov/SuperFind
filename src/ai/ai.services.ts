@@ -1,3 +1,4 @@
+import type { Document as LangChainDocument } from "@langchain/core/documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 import {
@@ -104,14 +105,14 @@ JSON Response:`);
  */
 export const searchAndAnswer = async (
 	query: string,
-	limit = 5,
+	limit = 20,
 ): Promise<SearchResult> => {
 	try {
 		if (!vectorStore) {
 			throw new Error("Vector store not configured");
 		}
 
-		// Retrieve relevant documents with similarity scores
+		// Retrieve relevant documents
 		const documentsWithScores = await vectorStore.similaritySearchWithScore(
 			query,
 			limit,
@@ -120,56 +121,53 @@ export const searchAndAnswer = async (
 		if (documentsWithScores.length === 0) {
 			return {
 				success: true,
-				answer: "I couldn't find any relevant information for your query.",
+				answer: "I couldn't find any people matching your criteria.",
 				sources: [],
 			};
 		}
 
-		// Convert documents to search sources format with actual similarity scores
-		const sources = documentsWithScores.map(([doc, score], index) => ({
-			id: doc.metadata?.id || `doc-${index}`,
-			content: doc.pageContent,
-			metadata: { ...doc.metadata, score },
-			relevanceScore: score,
-		}));
+		console.log(`        → Retrieved ${documentsWithScores.length} candidates`);
 
-		// Create LangChain prompt template for answer generation
-		const answerPrompt = ChatPromptTemplate.fromTemplate(`
-Answer the following question based ONLY on the provided context. If the context doesn't contain enough information, say so clearly.
+		// Log first score to understand the scoring format
+		if (documentsWithScores.length > 0) {
+			const firstScore = documentsWithScores[0][1];
+			console.log(`        → Sample score: ${firstScore} (raw from Qdrant)`);
+		}
 
-Question: {query}
+		// Convert documents to search sources format
+		// Qdrant with Cosine distance returns similarity scores (higher = more similar)
+		// Scores should be between 0 and 1, but let's normalize them properly
+		const allSources = documentsWithScores.map(([doc, score], index) => {
+			// Convert score to percentage (0-1 range)
+			// If using cosine similarity, score is already 0-1 where 1 = perfect match
+			// If score is negative or >1, it indicates distance metric - convert it
+			let normalizedScore = score;
 
-Context:
-{context}
+			// Handle different score formats
+			if (score < 0 || score > 1) {
+				// If score is outside 0-1, assume it's a distance metric
+				// For cosine distance: convert to similarity (1 - distance/2)
+				normalizedScore = Math.max(0, 1 - Math.abs(score) / 2);
+			}
 
-Instructions:
-- Provide a clear, concise answer
-- Only use information from the context provided
-- If you're unsure about any information, mention the uncertainty
-- Cite specific sources when possible using phrases like "According to Source 1..." 
-- If the context is insufficient, state that clearly
+			// Clamp to 0-1 range
+			normalizedScore = Math.max(0, Math.min(1, normalizedScore));
 
-Answer:`);
-
-		const context = sources
-			.map((source, index) => `Source ${index + 1}: ${source.content}`)
-			.join("\n\n");
-
-		const formattedPrompt = await answerPrompt.format({
-			query,
-			context,
+			return {
+				id: `doc-${index}`,
+				content: doc.pageContent,
+				metadata: { ...doc.metadata, score: normalizedScore },
+				relevanceScore: normalizedScore,
+			};
 		});
 
-		// Generate AI-powered answer
-		const answer = await provider.generateCompletion(formattedPrompt, {
-			temperature: 0.3,
-			maxTokens: 500,
-		});
+		// Single AI call: Filter AND generate answer
+		const result = await filterAndAnswerWithAI(query, allSources);
 
 		return {
 			success: true,
-			answer: answer.trim(),
-			sources,
+			answer: result.answer,
+			sources: result.filteredSources,
 		};
 	} catch (error) {
 		return {
@@ -177,6 +175,111 @@ Answer:`);
 			answer: "",
 			sources: [],
 			error: error instanceof Error ? error.message : "Search failed",
+		};
+	}
+};
+
+/**
+ * Single AI call: Filter candidates AND generate answer
+ */
+const filterAndAnswerWithAI = async (
+	query: string,
+	sources: Array<{
+		id: string;
+		content: string;
+		metadata: Record<string, unknown>;
+		relevanceScore: number;
+	}>,
+): Promise<{
+	answer: string;
+	filteredSources: Array<{
+		id: string;
+		content: string;
+		metadata: Record<string, unknown>;
+		relevanceScore: number;
+	}>;
+}> => {
+	if (sources.length === 0) {
+		return { answer: "No candidates found.", filteredSources: [] };
+	}
+
+	try {
+		const prompt = ChatPromptTemplate.fromTemplate(`
+You are a search assistant. Analyze the query and candidates, then:
+1. Identify which candidates match ALL criteria in the query
+2. Provide a brief summary of the matching people
+
+Query: "{query}"
+
+Candidates:
+{candidates}
+
+Instructions:
+- If query mentions location (e.g., "from Italy"), only include people from that location
+- If query mentions skills (e.g., "Python"), only include people with those skills
+- If query mentions experience (e.g., "5+ years"), only include people meeting that requirement
+- Return a JSON object with:
+  - "matchingIndices": array of numbers (e.g., [0, 2, 5]) of candidates who match ALL criteria
+  - "summary": brief text summary of the matching people
+
+Response format:
+{{"matchingIndices": [0, 1], "summary": "Found 2 Python developers from Italy..."}}
+
+Response:`);
+
+		const candidatesText = sources
+			.map((s, idx) => `[${idx}] ${s.content.substring(0, 300)}`)
+			.join("\n\n");
+
+		const formattedPrompt = await prompt.format({
+			query,
+			candidates: candidatesText,
+		});
+
+		const response = await provider.generateCompletion(formattedPrompt, {
+			temperature: 0.2,
+			maxTokens: 300,
+		});
+
+		// Parse response
+		const cleanResponse = response
+			.trim()
+			.replace(/^```json\s*/i, "")
+			.replace(/^```\s*/i, "")
+			.replace(/\s*```$/i, "")
+			.trim();
+
+		const parsed = JSON.parse(cleanResponse) as {
+			matchingIndices: number[];
+			summary: string;
+		};
+
+		// Filter sources by matching indices
+		const filteredSources = parsed.matchingIndices
+			.filter((idx) => idx >= 0 && idx < sources.length)
+			.map((idx) => sources[idx]);
+
+		console.log(
+			`        → AI filtered ${sources.length} → ${filteredSources.length} results`,
+		);
+
+		// Return all sources if AI found nothing (fallback)
+		if (filteredSources.length === 0) {
+			return {
+				answer: parsed.summary || "No exact matches found.",
+				filteredSources: sources,
+			};
+		}
+
+		return {
+			answer: parsed.summary,
+			filteredSources,
+		};
+	} catch (error) {
+		console.warn(`        ⚠ AI filtering error:`, error);
+		return {
+			answer: "Found several candidates matching your search.",
+			filteredSources: sources, // Fallback: return all
 		};
 	}
 };
@@ -360,8 +463,8 @@ export const handleSearchRequest = async (
 
 		console.log(`        → AI Search request: ${query}`);
 
-		// Use the AI service to search and generate an answer
-		const result = await searchAndAnswer(query, 5);
+		// Use the AI service with AI-powered filtering
+		const result = await searchAndAnswer(query, 20);
 
 		if (!result.success) {
 			return {
@@ -372,6 +475,8 @@ export const handleSearchRequest = async (
 				timestamp: new Date().toISOString(),
 			};
 		}
+
+		console.log(`        ✓ Found ${result.sources.length} relevant results`);
 
 		// Parse person data from each source
 		const people = result.sources.map((source) => {

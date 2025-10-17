@@ -17,7 +17,7 @@ export function SearchPage() {
 				<SearchBar
 					onSearch={setQuery}
 					placeholder="Search for people... (e.g., 'Python developers', 'DevOps from Europe')"
-					debounceMs={800}
+					isLoading={isLoading}
 				/>
 			}
 			error={

@@ -1,6 +1,13 @@
 import type { Person } from "@/types/api";
 import { Badge } from "../atoms/Badge";
-import { Card } from "../atoms/Card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "../atoms/Card";
 
 interface PersonCardProps {
 	person: Person;
@@ -8,18 +15,15 @@ interface PersonCardProps {
 
 export function PersonCard({ person }: PersonCardProps) {
 	return (
-		<Card hoverable>
-			<div className="space-y-3">
-				{/* Name and Role */}
-				<div>
-					<h3 className="text-lg font-semibold text-gray-900">
-						{person.name || "Unknown"}
-					</h3>
-					<p className="text-sm text-gray-600">
-						{person.role || "No role specified"}
-					</p>
-				</div>
+		<Card className="hover:shadow-lg transition-shadow cursor-pointer">
+			<CardHeader>
+				<CardTitle className="text-lg">{person.name || "Unknown"}</CardTitle>
+				<CardDescription className="text-sm">
+					{person.role || "No role specified"}
+				</CardDescription>
+			</CardHeader>
 
+			<CardContent className="space-y-3">
 				{/* Location and Experience */}
 				<div className="flex items-center gap-4 text-sm">
 					{person.location && (
@@ -45,14 +49,14 @@ export function PersonCard({ person }: PersonCardProps) {
 								? person.skills.split(/[;,]/).map((skill) => (
 										<Badge
 											key={skill.trim()}
-											variant="default"
+											variant="secondary"
 											className="text-xs"
 										>
 											{skill.trim()}
 										</Badge>
 									))
 								: person.skills.map((skill) => (
-										<Badge key={skill} variant="default" className="text-xs">
+										<Badge key={skill} variant="secondary" className="text-xs">
 											{skill}
 										</Badge>
 									))}
@@ -71,14 +75,16 @@ export function PersonCard({ person }: PersonCardProps) {
 						</a>
 					</div>
 				)}
-			</div>
+			</CardContent>
 
-			{/* Relevance Score */}
-			<div className="flex items-center justify-between mt-4 pt-3 border-t">
-				<Badge variant="success">
+			<CardFooter className="border-t">
+				<Badge
+					variant="default"
+					className="bg-green-100 text-green-800 border-green-200"
+				>
 					Relevance: {(person.relevanceScore * 100).toFixed(1)}%
 				</Badge>
-			</div>
+			</CardFooter>
 		</Card>
 	);
 }

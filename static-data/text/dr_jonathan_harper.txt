@@ -1,5 +1,5 @@
-Dr. Jonathan Harper is a distinguished professor of computer science at MIT. He specializes in distributed systems and large-scale data processing. With over 18 years of experience, he has led numerous research projects and published over 70 papers in prestigious journals. His groundbreaking work on distributed databases contributed to the development of modern cloud computing systems. He holds a PhD from Stanford and has received multiple awards including the ACM SIGMOD Test of Time Award.
+Dr. Jonathan Harper is a distinguished professor of computer science at MIT in Cambridge, USA. He specializes in distributed systems, large-scale data processing, Apache Spark, Hadoop, Python, Java, and cloud databases. With 18 years of professional experience, he has led numerous research projects and published over 70 papers in prestigious journals. His groundbreaking work on distributed databases contributed to the development of modern cloud computing systems.
 
 Dr. Harper is also passionate about computer science education and has mentored dozens of graduate students. He frequently speaks at international conferences and has appeared in several documentaries about technology and computing. His current research focuses on scalable machine learning systems and their applications in scientific computing.
 
-Contact: jonathan.harper@mit.edu
+Email: jonathan.harper@mit.edu

@@ -1,8 +1,8 @@
-Elena Petrov is a senior software architect specializing in distributed systems and microservices. She began her career in St. Petersburg, Russia, and has 15 years of professional experience designing scalable architectures for global tech companies.
+Elena Petrov is a senior software architect from St. Petersburg, Russia, specializing in distributed systems, microservices, Kubernetes, Java, Python, and cloud-native architectures. She has 15 years of professional experience designing scalable architectures for global tech companies.
 
-Her expertise includes cloud-native architectures and system design patterns. Elena has led major refactoring projects and is known for her ability to modernize legacy systems. She currently serves as a principal architect at a leading tech firm and mentors developers internationally.
+Her expertise includes system design patterns, Docker, AWS, and Azure cloud platforms. Elena has led major refactoring projects and is known for her ability to modernize legacy systems. She currently serves as a principal architect at a leading tech firm and mentors developers internationally.
 
-Contact: elena.petrov@softwarearch.com
+Email: elena.petrov@softwarearch.com
 
 Thomas Anderson is a cybersecurity expert and ethical hacker. With 12 years in information security, he has conducted penetration testing for Fortune 500 companies and government agencies. His expertise spans network security, web application security, and incident response.
 

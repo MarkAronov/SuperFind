@@ -12,9 +12,12 @@ src/output/
 # Environment variables
 .env
 .env.local
-.env.development
-.env.test
-.env.production
+
+# Keep production templates for deployment
+# .env.production
+# .env.development
+# frontend/.env.production
+# frontend/.env.development
 
 # IDE/Editor files
 .vscode/settings.json

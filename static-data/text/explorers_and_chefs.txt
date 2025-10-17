@@ -1,23 +1,23 @@
-Amelia Foster is a senior cloud architect with over 15 years of experience designing scalable cloud infrastructures. She has architected systems that handle millions of users and holds certifications for AWS, Azure, and GCP. Amelia started her career as a systems administrator and transitioned to cloud architecture during the early days of cloud computing.
+Amelia Foster is a senior cloud architect from Seattle, USA specializing in AWS, Azure, GCP, cloud security, infrastructure automation, scalable architecture, and systems design. 15 years of professional experience designing scalable cloud infrastructures. She has architected systems that handle millions of users and holds certifications for AWS, Azure, and GCP. Amelia started her career as a systems administrator and transitioned to cloud architecture during the early days of cloud computing.
 
 She is actively involved in cloud security initiatives and serves on the board of the Cloud Security Alliance. Amelia has received numerous awards for her contributions to cloud architecture and diversity in tech.
 
-Contact: amelia.foster@cloudarchitect.com
+Email: amelia.foster@cloudarchitect.com
 
-Dr. James Wilson is a data engineer who specializes in big data processing and analytics platforms. With 14 years of experience, he has built data pipelines for major tech companies and research institutions. His work focuses on real-time data processing and machine learning infrastructure.
+Dr. James Wilson is a data engineer from San Francisco, USA who specializes in big data processing, analytics platforms, real-time data processing, machine learning infrastructure, Apache Spark, Hadoop, Kafka, and data pipeline architecture. 14 years of professional experience building data pipelines for major tech companies and research institutions. His work focuses on real-time data processing and machine learning infrastructure.
 
 Dr. Wilson has developed data platforms that process petabytes of data daily. He holds a PhD in Computer Science and has published over 50 papers on data systems. He is passionate about data education and frequently gives talks about modern data architecture.
 
-Contact: james.wilson@dataengineering.com
+Email: james.wilson@dataengineering.com
 
-Sophia Rodriguez is a technical lead and engineering manager who oversees development teams at a major tech company. With 12 years in software engineering, she has led the development of several successful products and built high-performing engineering teams. Her expertise spans full-stack development and team leadership.
+Sophia Rodriguez is a technical lead and engineering manager from Austin, USA who oversees development teams at a major tech company specializing in full-stack development, team leadership, JavaScript, TypeScript, React, Node.js, Python, and engineering management. 12 years of professional experience in software engineering, leading the development of several successful products and building high-performing engineering teams. Her expertise spans full-stack development and team leadership.
 
 Sophia started as a junior developer and worked her way up through the ranks. She is committed to fostering inclusive engineering cultures and supports diversity initiatives. She also runs internal training programs where she teaches software engineering best practices.
 
-Contact: sophia.rodriguez@techlead.com
+Email: sophia.rodriguez@techlead.com
 
-Michael Thompson is a DevOps engineer specializing in infrastructure automation and continuous deployment. With 10 years of experience, he has implemented CI/CD pipelines and automated infrastructure for global companies. His work has improved deployment speed and system reliability across multiple organizations.
+Michael Thompson is a DevOps engineer from Denver, USA specializing in infrastructure automation, continuous deployment, CI/CD pipelines, Jenkins, GitLab CI, Kubernetes, Docker, Terraform, Ansible, and monitoring systems. 10 years of professional experience implementing CI/CD pipelines and automated infrastructure for global companies. His work has improved deployment speed and system reliability across multiple organizations.
 
 Michael combines infrastructure engineering with process improvement, working with teams to adopt DevOps best practices. He has received recognition for his automation work and serves as a consultant to several tech companies.
 
-Contact: michael.thompson@devopsengineer.com
+Email: michael.thompson@devopsengineer.com

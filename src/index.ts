@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import aiRouter from "./ai/ai.routes";
 import { initializeAIService } from "./ai/ai.services";
 import { createBestAvailable } from "./ai/providers/provider-factory";
@@ -90,6 +91,40 @@ async function initializeApplication(): Promise<ProcessedFile[]> {
 }
 
 const app = new Hono();
+
+// Enable CORS for frontend (development and production)
+const allowedOrigins = [
+	"http://localhost:5173", // Local development
+	"http://localhost:3000", // Local backend
+];
+
+// Add production frontend URL if in production
+if (process.env.NODE_ENV === "production" && process.env.FRONTEND_URL) {
+	allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
+app.use(
+	"/*",
+	cors({
+		origin: (origin) => {
+			// Allow requests with no origin (like mobile apps or curl)
+			if (!origin) return "*";
+			// Check if origin is in allowed list
+			if (allowedOrigins.some((allowed) => origin.startsWith(allowed))) {
+				return origin;
+			}
+			// Allow any vercel.app domain in production
+			if (
+				process.env.NODE_ENV === "production" &&
+				origin.includes(".vercel.app")
+			) {
+				return origin;
+			}
+			return allowedOrigins[0];
+		},
+		credentials: true,
+	}),
+);
 
 // Initialize the system on startup
 let isInitialized = false;

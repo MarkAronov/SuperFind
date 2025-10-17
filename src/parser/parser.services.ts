@@ -58,19 +58,31 @@ async function extractAndStoreEntities(
 	if (Array.isArray(processedData)) {
 		for (const item of processedData) {
 			if (item && typeof item === "object") {
-				const personContent = createPersonContent(item);
-				const entityId = `person_${item.name?.replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
+				// Enhance person data with better extraction
+				const enhancedItem = enhancePersonData(item, originalContent);
+
+				// Validate person has required fields
+				const validation = validatePersonData(enhancedItem);
+				if (!validation.isValid) {
+					console.log(
+						`        ⚠ Skipping ${enhancedItem.name || "Unknown"}: missing required fields: ${validation.missingFields.join(", ")}`,
+					);
+					continue; // Skip invalid entries
+				}
+
+				const personContent = createPersonContent(enhancedItem);
+				const entityId = `person_${enhancedItem.name?.toString().replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
 
 				const entityMetadata = {
 					...baseMetadata,
 					entityType: "person",
 					entityId,
-					personName: item.name,
-					role: item.role,
-					location: item.location,
-					skills: item.skills,
-					experience: item.experience_years,
-					email: item.email,
+					personName: enhancedItem.name,
+					role: enhancedItem.role,
+					location: enhancedItem.location,
+					skills: enhancedItem.skills,
+					experience: enhancedItem.experience_years,
+					email: enhancedItem.email,
 				};
 
 				// Check if this specific person already exists using content hash
@@ -79,7 +91,7 @@ async function extractAndStoreEntities(
 
 				if (existsResult.success && existsResult.data) {
 					console.log(
-						`        ⚬ Person ${item.name || "Unknown"} already exists (MD5: ${personMD5})`,
+						`        ⚬ Person ${enhancedItem.name || "Unknown"} already exists (MD5: ${personMD5})`,
 					);
 					entities.push({
 						id: entityId,
@@ -94,7 +106,7 @@ async function extractAndStoreEntities(
 				// Store each person as separate vector
 				const storeResult = await storeDocument(
 					personContent,
-					item,
+					enhancedItem,
 					entityMetadata,
 					"people", // Use separate collection for people
 				);
@@ -119,20 +131,33 @@ async function extractAndStoreEntities(
 	}
 	// Handle single entity objects (like text files)
 	else if (processedData && typeof processedData === "object") {
-		const personContent = originalContent; // Use original content for text files
 		const personData = processedData as Record<string, unknown>;
-		const entityId = `person_${personData.name?.toString()?.replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
+
+		// Enhance person data with better extraction from original content
+		const enhancedData = enhancePersonData(personData, originalContent);
+
+		// Validate person has required fields
+		const validation = validatePersonData(enhancedData);
+		if (!validation.isValid) {
+			console.log(
+				`        ⚠ Skipping ${enhancedData.name || "Unknown"}: missing required fields: ${validation.missingFields.join(", ")}`,
+			);
+			return entities; // Return empty entities list
+		}
+
+		const personContent = originalContent; // Use original content for text files
+		const entityId = `person_${enhancedData.name?.toString()?.replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
 
 		const entityMetadata = {
 			...baseMetadata,
 			entityType: "person",
 			entityId,
-			personName: personData.name,
-			role: personData.role,
-			location: personData.location,
-			skills: personData.skills,
-			experience: personData.experience,
-			email: personData.email,
+			personName: enhancedData.name,
+			role: enhancedData.role,
+			location: enhancedData.location,
+			skills: enhancedData.skills,
+			experience: enhancedData.experience,
+			email: enhancedData.email,
 		};
 
 		// Check if this specific person already exists using content hash
@@ -142,13 +167,13 @@ async function extractAndStoreEntities(
 		let storeResult: { success: boolean; error?: string };
 		if (existsResult.success && existsResult.data) {
 			console.log(
-				`        ⚬ Person ${personData.name || "Unknown"} already exists (MD5: ${personMD5})`,
+				`        ⚬ Person ${enhancedData.name || "Unknown"} already exists (MD5: ${personMD5})`,
 			);
 			storeResult = { success: true }; // Mark as successful since it already exists
 		} else {
 			storeResult = await storeDocument(
 				personContent,
-				processedData,
+				enhancedData,
 				entityMetadata,
 				"people",
 			);
@@ -184,8 +209,198 @@ function createPersonContent(person: Record<string, unknown>): string {
 	const skills = person.skills || "No skills listed";
 	const experience =
 		person.experience_years || person.experience || "Unknown experience";
+	const email = person.email || "";
 
-	return `${name} is a ${role} from ${location}. Skills: ${skills}. Experience: ${experience} years.`;
+	let content = `${name} is a ${role} from ${location}. Skills: ${skills}. Experience: ${experience} years.`;
+	if (email) {
+		content += ` Email: ${email}`;
+	}
+	return content;
+}
+
+/**
+ * Validate person data has required fields
+ */
+function validatePersonData(person: Record<string, unknown>): {
+	isValid: boolean;
+	missingFields: string[];
+} {
+	const requiredFields = ["name", "location", "role"];
+	const missingFields: string[] = [];
+
+	for (const field of requiredFields) {
+		const value = person[field];
+		if (
+			!value ||
+			value === "Unknown" ||
+			value === "Unknown location" ||
+			value === "Unknown role" ||
+			value === ""
+		) {
+			missingFields.push(field);
+		}
+	}
+
+	// Also check if skills or experience is completely missing
+	const hasSkills =
+		person.skills &&
+		person.skills !== "No skills listed" &&
+		person.skills !== "";
+	const hasExperience =
+		person.experience_years &&
+		person.experience_years !== "Unknown experience" &&
+		person.experience_years !== 0;
+
+	if (!hasSkills) {
+		missingFields.push("skills");
+	}
+	if (!hasExperience) {
+		missingFields.push("experience");
+	}
+
+	return {
+		isValid: missingFields.length === 0,
+		missingFields,
+	};
+}
+
+/**
+ * Extract location from various text patterns
+ */
+function extractLocationFromText(text: string): string | null {
+	// Pattern 1: "from City, Country"
+	let match = text.match(/from\s+([A-Z][a-zA-Z\s]+(?:,\s*[A-Z][a-zA-Z\s]+)?)/i);
+	if (match) return match[1].trim();
+
+	// Pattern 2: "in City, Country"
+	match = text.match(/\bin\s+([A-Z][a-zA-Z\s]+,\s*[A-Z][a-zA-Z\s]+)/i);
+	if (match) return match[1].trim();
+
+	// Pattern 3: "career in City, Country" or "career in Country"
+	match = text.match(
+		/career\s+in\s+([A-Z][a-zA-Z\s]+(?:,\s*[A-Z][a-zA-Z\s]+)?)/i,
+	);
+	if (match) return match[1].trim();
+
+	// Pattern 4: "Location: City, Country"
+	match = text.match(/location:\s*([A-Z][a-zA-Z\s,]+?)(?:\.|;|\n|$)/i);
+	if (match) return match[1].trim();
+
+	// Pattern 5: "based in City/Country"
+	match = text.match(/based\s+in\s+([A-Z][a-zA-Z\s,]+?)(?:\.|;|\n|$)/i);
+	if (match) return match[1].trim();
+
+	// Pattern 6: "lives in City/Country"
+	match = text.match(/lives?\s+in\s+([A-Z][a-zA-Z\s,]+?)(?:\.|;|\n|$)/i);
+	if (match) return match[1].trim();
+
+	// Pattern 7: "works in City/Country"
+	match = text.match(/works?\s+in\s+([A-Z][a-zA-Z\s,]+?)(?:\.|;|\n|$)/i);
+	if (match) return match[1].trim();
+
+	return null;
+}
+
+/**
+ * Extract skills from text patterns
+ */
+function extractSkillsFromText(text: string): string | null {
+	// Pattern 1: "Skills: ..."
+	let match = text.match(/skills?:\s*([^.\n]+)/i);
+	if (match) return match[1].trim();
+
+	// Pattern 2: "specializes in ..."
+	match = text.match(
+		/specializes?\s+in\s+([^.\n]+?)(?:\s+with|\s+and has|\.|$)/i,
+	);
+	if (match) return match[1].trim();
+
+	// Pattern 3: "expertise in ..."
+	match = text.match(/expertise\s+in\s+([^.\n]+?)(?:\s+and|\.|$)/i);
+	if (match) return match[1].trim();
+
+	return null;
+}
+
+/**
+ * Extract experience years from text
+ */
+function extractExperienceFromText(text: string): number | null {
+	// Pattern 1: "X years of experience"
+	let match = text.match(
+		/(\d+)\s+years?\s+of\s+(?:professional\s+)?experience/i,
+	);
+	if (match) return Number.parseInt(match[1]);
+
+	// Pattern 2: "Experience: X years"
+	match = text.match(/experience:\s*(\d+)\s*years?/i);
+	if (match) return Number.parseInt(match[1]);
+
+	// Pattern 3: "with X years"
+	match = text.match(/with\s+(\d+)\s+years/i);
+	if (match) return Number.parseInt(match[1]);
+
+	return null;
+}
+
+/**
+ * Enhance person data with better extraction from text
+ */
+function enhancePersonData(
+	person: Record<string, unknown>,
+	originalText?: string,
+): Record<string, unknown> {
+	const enhanced = { ...person };
+
+	if (!originalText) return enhanced;
+
+	// Extract location if missing
+	if (
+		!enhanced.location ||
+		enhanced.location === "Unknown location" ||
+		enhanced.location === ""
+	) {
+		const extractedLocation = extractLocationFromText(originalText);
+		if (extractedLocation) {
+			enhanced.location = extractedLocation;
+		}
+	}
+
+	// Extract skills if missing
+	if (
+		!enhanced.skills ||
+		enhanced.skills === "No skills listed" ||
+		enhanced.skills === ""
+	) {
+		const extractedSkills = extractSkillsFromText(originalText);
+		if (extractedSkills) {
+			enhanced.skills = extractedSkills;
+		}
+	}
+
+	// Extract experience if missing
+	if (
+		!enhanced.experience_years ||
+		enhanced.experience_years === "Unknown experience" ||
+		enhanced.experience_years === 0
+	) {
+		const extractedExp = extractExperienceFromText(originalText);
+		if (extractedExp) {
+			enhanced.experience_years = extractedExp;
+		}
+	}
+
+	// Extract email if missing
+	if (!enhanced.email) {
+		const emailMatch = originalText.match(
+			/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b/,
+		);
+		if (emailMatch) {
+			enhanced.email = emailMatch[1];
+		}
+	}
+
+	return enhanced;
 }
 
 /**

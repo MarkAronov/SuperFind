@@ -1,17 +1,17 @@
-Victoria Chang is a product manager specializing in AI and machine learning products. She leads product teams at a major tech company developing enterprise AI solutions. With 11 years in product management, she has launched over 20 AI products and built teams from startup to scale.
+Victoria Chang is a product manager from San Francisco, USA, specializing in AI, machine learning products, product strategy, agile methodologies, and data-driven decision making. She leads product teams at a major tech company developing enterprise AI solutions. With 11 years of professional experience in product management, she has launched over 20 AI products and built teams from startup to scale.
 
 Victoria holds a degree in Computer Science from Stanford and previously worked as a software engineer. She is known for her user-centric product approach and her ability to bridge technical and business requirements. She mentors product managers and speaks at industry conferences about AI product strategy.
 
-Contact: victoria.chang@productmgmt.com
+Email: victoria.chang@productmgmt.com
 
-David Kim is a site reliability engineer specializing in large-scale distributed systems. His work focuses on ensuring high availability and performance of cloud infrastructure. With 14 years of experience, he has worked at major tech companies managing systems that serve millions of users.
+David Kim is a site reliability engineer from Seattle, USA, specializing in large-scale distributed systems, Kubernetes, Terraform, Python, Go, monitoring tools, and cloud infrastructure. His work focuses on ensuring high availability and performance of cloud platforms. With 14 years of professional experience, he has worked at major tech companies managing systems that serve millions of users.
 
-David holds multiple cloud certifications and has led incident response teams during major outages. He is known for his expertise in monitoring and automation, using his skills to prevent system failures. He contributes to open source projects and teaches SRE best practices.
+David holds multiple cloud certifications (AWS, GCP, Azure) and has led incident response teams during major outages. He is known for his expertise in observability, automation, and chaos engineering. He contributes to open source projects and teaches SRE best practices.
 
-Contact: david.kim@sreengineer.com
+Email: david.kim@sreengineer.com
 
-Dr. Robert Chen is a security researcher and penetration tester. With 15 years of experience in cybersecurity, he has discovered critical vulnerabilities in widely-used software and conducted security assessments for government agencies. His expertise includes web application security and network penetration testing.
+Dr. Robert Chen is a security researcher and penetration tester from Austin, USA, with expertise in ethical hacking, vulnerability assessment, Burp Suite, Metasploit, Python, and network security. With 15 years of professional experience in cybersecurity, he has discovered critical vulnerabilities in widely-used software and conducted security assessments for government agencies.
 
 Dr. Chen holds a PhD in Computer Science and has published extensively in security conferences. He is frequently called upon as a security consultant and has trained development teams in secure coding practices. His research has helped improve security standards across the industry.
 
-Contact: robert.chen@securityresearch.com
+Email: robert.chen@securityresearch.com

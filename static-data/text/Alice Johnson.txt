@@ -1,1 +1,3 @@
-Alice Johnson is a seasoned ML Engineer based in New York City. She specializes in PyTorch, TensorFlow, and NLP, with 6+ years of experience building scalable AI pipelines. Alice previously worked at OpenAI and developed several internal LLM tools for enterprise clients. She loves experimenting with transformer architectures and has hands-on experience with GCP and Kubernetes for model deployment.
+Alice Johnson is a seasoned ML Engineer based in New York City, USA. She specializes in PyTorch, TensorFlow, Python, NLP, and transformer architectures, with 6 years of professional experience building scalable AI pipelines. Alice previously worked at OpenAI and developed several internal LLM tools for enterprise clients. She has hands-on experience with GCP, Kubernetes, and Docker for model deployment.
+
+Email: alice.johnson@mltech.com

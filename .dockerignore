@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Development files
+*.log
+*.md
+.git/
+.github/
+.vscode/
+
+# Build outputs
+dist/
+build/
+frontend/dist/
+
+# Static data (will be loaded from external source)
+static-data/
+
+# Test files
+*.test.ts
+*.spec.ts
+__tests__/
+
+# Documentation
+*.md
+docs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Other
+data/
+frontend/

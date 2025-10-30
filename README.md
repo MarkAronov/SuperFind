@@ -1,6 +1,6 @@
 <div align="center">
 
-# SuperFind
+# SkillVector
 
 ### Intelligent Semantic Search API with Vector Database & RAG
 
@@ -160,7 +160,7 @@ GET /health
 ### Project Structure
 
 ```
-SuperFind/
+SkillVector/
 ├── src/
 │   ├── ai/                    # AI routes and services
 │   │   ├── ai.routes.ts       # Search endpoints
@@ -461,7 +461,7 @@ OpenAI · Qdrant · Bun · React · shadcn/ui · Vercel · Render  - Export resu
 
 ## Contributing
 
-Contributions are welcome! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to SuperFind.
+Contributions are welcome! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to SkillVector.
 
 ---
 

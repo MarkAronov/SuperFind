@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { SearchResult } from "@/types/api";
+
+import type { SearchResult } from "@/types/search.types";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 

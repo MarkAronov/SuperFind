@@ -7,6 +7,10 @@ import {
 	logCurrentConfiguration,
 	validateEnvironment,
 } from "./config/env.config";
+import {
+	createLangChainVectorStore,
+	initQdrant,
+} from "./database/qdrant.services";
 import parserApp from "./parser/parser.routes";
 import {
 	processFiles,
@@ -14,10 +18,6 @@ import {
 	storeProcessedData,
 } from "./parser/parser.services";
 import { checkApplicationHealth } from "./services/health.services";
-import {
-	createLangChainVectorStore,
-	initQdrant,
-} from "./vector/qdrant.services";
 
 interface ProcessedFile {
 	fileName: string;

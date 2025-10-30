@@ -1,0 +1,8 @@
+{
+	"role": "DevOps Engineer",
+	"location": "Seattle, USA",
+	"skills": ["Docker", "Kubernetes"],
+	"experience_years": 6,
+	"email": "no.name@example.com",
+	"description": "DevOps engineer with expertise in container orchestration and cloud infrastructure"
+}

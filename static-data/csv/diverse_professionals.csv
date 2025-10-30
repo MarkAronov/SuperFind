@@ -1,4 +1,4 @@
-name,location,role,skills,experience_years,email
-Victoria Chen,San Diego, USA,Software Architect,System Design; Microservices; Cloud Architecture; Leadership,11,victoria.chen@softwarearch.com
-Sebastian Thompson,Las Vegas, USA,Game Developer,Unity; C#; Game Physics; 3D Modeling,4,sebastian.thompson@gamedev.com
-Zoe Park,Raleigh, USA,Electrical Engineer,Circuit Design; PCB Layout; Embedded Systems; IoT,4,zoe.park@electreng.com
+name,location,role,skills,experience_years,email,description
+Victoria Chen,San Diego, USA,Software Architect,System Design; Microservices; Cloud Architecture; Leadership,11,victoria.chen@softwarearch.com,Senior software architect with extensive experience in designing scalable microservices and cloud-native applications
+Sebastian Thompson,Las Vegas, USA,Game Developer,Unity; C#; Game Physics; 3D Modeling,4,sebastian.thompson@gamedev.com,Creative game developer focused on Unity-based game development and realistic physics simulations
+Zoe Park,Raleigh, USA,Electrical Engineer,Circuit Design; PCB Layout; Embedded Systems; IoT,4,zoe.park@electreng.com,Electrical engineer specializing in IoT devices and embedded systems with PCB design expertise

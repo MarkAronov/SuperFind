@@ -1,3 +1,3 @@
-name,location,role,skills,experience_years,email
-Mason Chen,Tucson, USA,Network Engineer,Cisco; Network Security; VPN; Firewall Configuration,6,mason.chen@networkeng.com
-Logan Brown,Stockton, USA,IT Support Specialist,Help Desk; Windows; macOS; Troubleshooting,3,logan.brown@itsupport.com
+name,location,role,skills,experience_years,email,description
+Mason Chen,Tucson, USA,Network Engineer,Cisco; Network Security; VPN; Firewall Configuration,6,mason.chen@networkeng.com,Experienced network engineer specializing in enterprise security infrastructure and VPN solutions
+Logan Brown,Stockton, USA,IT Support Specialist,Help Desk; Windows; macOS; Troubleshooting,3,logan.brown@itsupport.com,IT support professional with expertise in cross-platform troubleshooting and user assistance

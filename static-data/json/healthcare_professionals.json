@@ -11,6 +11,7 @@
 		],
 		"experience_years": 12,
 		"email": "michael.reynolds@healthinformatics.au",
+		"description": "Health informatics specialist with expertise in clinical decision support systems and healthcare data integration",
 		"specialization": "Clinical Decision Support Systems",
 		"systems_implemented": 15,
 		"certifications": ["CCHI", "HL7 Certified"]
@@ -27,6 +28,7 @@
 		],
 		"experience_years": 9,
 		"email": "sofia.papadopoulos@medsoftware.gr",
+		"description": "Medical software developer specializing in HIPAA-compliant telemedicine platforms and patient portals",
 		"specialization": "Telemedicine Platforms",
 		"projects_completed": 8,
 		"languages": ["JavaScript", "Python", "SQL"]
@@ -43,6 +45,7 @@
 		],
 		"experience_years": 10,
 		"email": "rajesh.kumar@biomedeng.in",
+		"description": "Biomedical engineer with multiple patents in wearable medical devices and IoT healthcare solutions",
 		"specialization": "Wearable Medical Devices",
 		"patents": 5,
 		"technologies": ["Arduino", "Raspberry Pi", "Bluetooth LE"]
@@ -54,6 +57,7 @@
 		"skills": ["Healthcare Analytics", "SQL", "Python", "Machine Learning"],
 		"experience_years": 7,
 		"email": "anna.kowalski@healthdata.pl",
+		"description": "Healthcare data analyst focused on predictive analytics and machine learning for healthcare outcomes",
 		"specialization": "Predictive Healthcare Analytics",
 		"projects_led": 12,
 		"languages": ["Python", "R", "SQL"]

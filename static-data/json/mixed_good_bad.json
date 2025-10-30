@@ -1,0 +1,70 @@
+[
+	{
+		"name": "Carlos Mendez",
+		"location": "Mexico City, Mexico",
+		"role": "Cloud Architect",
+		"skills": ["AWS", "Azure", "GCP", "Terraform", "Infrastructure as Code"],
+		"experience_years": 9,
+		"email": "carlos.mendez@cloudarch.mx",
+		"description": "Cloud architect with expertise in multi-cloud infrastructure and infrastructure as code practices",
+		"certifications": ["AWS Solutions Architect", "Azure Expert"]
+	},
+	{
+		"name": "",
+		"location": "Berlin, Germany",
+		"role": "Backend Developer",
+		"skills": ["Java", "Spring Boot", "Microservices"],
+		"experience_years": 5,
+		"email": "empty.name@backend.de",
+		"description": "Backend developer specializing in Java microservices architecture"
+	},
+	{
+		"name": "Priya Sharma",
+		"location": "Mumbai, India",
+		"role": "QA Engineer",
+		"skills": ["Test Automation", "Selenium", "Cypress", "Jest", "API Testing"],
+		"experience_years": 6,
+		"email": "priya.sharma@qa.in",
+		"description": "QA engineer specializing in test automation frameworks and continuous testing practices",
+		"specialization": "Test Automation"
+	},
+	{
+		"location": "Toronto, Canada",
+		"role": "Frontend Developer",
+		"skills": ["React", "TypeScript", "CSS"],
+		"experience_years": 4,
+		"email": "no.name@frontend.ca",
+		"description": "Frontend developer with expertise in React and TypeScript"
+	},
+	{
+		"name": "Ahmed Hassan",
+		"location": "Dubai, UAE",
+		"role": "Security Engineer",
+		"skills": [
+			"Penetration Testing",
+			"Security Audits",
+			"Cryptography",
+			"CISSP"
+		],
+		"experience_years": 10,
+		"email": "ahmed.hassan@security.ae",
+		"description": "Security engineer with advanced certifications in penetration testing and cybersecurity",
+		"certifications": ["CISSP", "CEH", "OSCP"]
+	},
+	{
+		"name": "Lisa Wang",
+		"location": "Singapore",
+		"skills": [],
+		"experience_years": 7,
+		"email": "lisa.wang@tech.sg",
+		"description": "Technology professional with years of industry experience"
+	},
+	{
+		"name": "David Miller",
+		"location": "London, UK",
+		"role": "Data Engineer",
+		"skills": ["Python", "Spark", "Airflow", "ETL"],
+		"email": "david.miller@data.uk",
+		"description": "Data engineer focused on ETL pipelines and big data processing"
+	}
+]

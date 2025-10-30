@@ -1,12 +1,14 @@
-import { promises as fs } from "fs";
+import { promises as fs } from "node:fs";
+import * as path from "node:path";
 import * as Papa from "papaparse";
-import * as path from "path";
 import { convertTextToJson } from "../ai/ai.services";
 import {
 	documentExistsByMD5,
 	generateMD5,
 	storeDocument,
-} from "../vector/qdrant.services";
+} from "../database/qdrant.services";
+import type { Person, PersonMetadata } from "../types/person.types";
+import { normalizePerson, validatePerson } from "../types/person.types";
 
 /**
  * Comprehensive file parser service - handles CSV, JSON, and Text parsing
@@ -44,6 +46,14 @@ interface ProcessedFile {
 // In-memory storage for processed data (could be replaced with database)
 let processedDataStore: ProcessedFile[] = [];
 
+// Run-level context to track duplicates and bad entries
+interface RunContext {
+	dupes: number; // number of duplicate person entries encountered
+	bads: number; // number of invalid person entries encountered
+	maxDupes: number; // maximum allowed duplicates across the run
+	maxBads: number; // maximum allowed bad entries across the run
+}
+
 /**
  * Extract individual entities from processed data and store each as separate vector
  */
@@ -51,6 +61,7 @@ async function extractAndStoreEntities(
 	originalContent: string,
 	processedData: object,
 	baseMetadata: Record<string, unknown>,
+	context: RunContext,
 ): Promise<EntityResult[]> {
 	const entities: EntityResult[] = [];
 
@@ -59,7 +70,7 @@ async function extractAndStoreEntities(
 		for (const item of processedData) {
 			if (item && typeof item === "object") {
 				// Enhance person data with better extraction
-				const enhancedItem = enhancePersonData(item, originalContent);
+				const enhancedItem = enhancePersonData(item as Person, originalContent);
 
 				// Validate person has required fields
 				const validation = validatePersonData(enhancedItem);
@@ -73,15 +84,15 @@ async function extractAndStoreEntities(
 				const personContent = createPersonContent(enhancedItem);
 				const entityId = `person_${enhancedItem.name?.toString().replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
 
-				const entityMetadata = {
+				const entityMetadata: PersonMetadata = {
 					...baseMetadata,
-					entityType: "person",
+					entityType: "person" as const,
 					entityId,
-					personName: enhancedItem.name,
+					personName: enhancedItem.name || "Unknown",
 					role: enhancedItem.role,
 					location: enhancedItem.location,
 					skills: enhancedItem.skills,
-					experience: enhancedItem.experience_years,
+					experience: enhancedItem.experience,
 					email: enhancedItem.email,
 				};
 
@@ -90,6 +101,15 @@ async function extractAndStoreEntities(
 				const existsResult = await documentExistsByMD5(personMD5, "people");
 
 				if (existsResult.success && existsResult.data) {
+					// Count and optionally cap duplicates
+					context.dupes += 1;
+					if (context.dupes > context.maxDupes) {
+						// Skip adding more duplicate entries beyond the cap
+						console.log(
+							`        ⚬ Skipping duplicate beyond cap (>${context.maxDupes}): ${enhancedItem.name || "Unknown"}`,
+						);
+						continue;
+					}
 					console.log(
 						`        ⚬ Person ${enhancedItem.name || "Unknown"} already exists (MD5: ${personMD5})`,
 					);
@@ -134,25 +154,35 @@ async function extractAndStoreEntities(
 		const personData = processedData as Record<string, unknown>;
 
 		// Enhance person data with better extraction from original content
-		const enhancedData = enhancePersonData(personData, originalContent);
+		const enhancedData = enhancePersonData(
+			personData as Person,
+			originalContent,
+		);
 
 		// Validate person has required fields
 		const validation = validatePersonData(enhancedData);
 		if (!validation.isValid) {
-			console.log(
-				`        ⚠ Skipping ${enhancedData.name || "Unknown"}: missing required fields: ${validation.missingFields.join(", ")}`,
-			);
+			context.bads += 1;
+			if (context.bads <= context.maxBads) {
+				console.log(
+					`        ⚠ Skipping ${enhancedData.name || "Unknown"}: missing required fields: ${validation.missingFields.join(", ")}`,
+				);
+			} else {
+				console.log(
+					`        ⚠ Skipping invalid entry beyond bad cap (>${context.maxBads}): ${enhancedData.name || "Unknown"}`,
+				);
+			}
 			return entities; // Return empty entities list
 		}
 
 		const personContent = originalContent; // Use original content for text files
 		const entityId = `person_${enhancedData.name?.toString()?.replace(/\s+/g, "_")?.toLowerCase() || Date.now()}`;
 
-		const entityMetadata = {
+		const entityMetadata: PersonMetadata = {
 			...baseMetadata,
-			entityType: "person",
+			entityType: "person" as const,
 			entityId,
-			personName: enhancedData.name,
+			personName: enhancedData.name || "Unknown",
 			role: enhancedData.role,
 			location: enhancedData.location,
 			skills: enhancedData.skills,
@@ -202,14 +232,31 @@ async function extractAndStoreEntities(
 /**
  * Create human-readable content for a person entity
  */
+function getString(
+	obj: Record<string, unknown>,
+	key: string,
+	fallback: string,
+): string {
+	const v = obj[key];
+	return typeof v === "string" && v.trim().length > 0 ? v : fallback;
+}
+
 function createPersonContent(person: Record<string, unknown>): string {
-	const name = person.name || "Unknown";
-	const role = person.role || "Unknown role";
-	const location = person.location || "Unknown location";
-	const skills = person.skills || "No skills listed";
+	const name = getString(person, "name", "Unknown");
+	const role = getString(person, "role", "Unknown role");
+	const location = getString(person, "location", "Unknown location");
+	const skillsVal = person.skills;
+	const skills = Array.isArray(skillsVal)
+		? skillsVal.join(", ")
+		: typeof skillsVal === "string" && skillsVal.trim().length > 0
+			? skillsVal
+			: "No skills listed";
+	const expVal = person.experience ?? person.experience_years;
 	const experience =
-		person.experience_years || person.experience || "Unknown experience";
-	const email = person.email || "";
+		typeof expVal === "number" || typeof expVal === "string"
+			? expVal
+			: "Unknown experience";
+	const email = getString(person, "email", "");
 
 	let content = `${name} is a ${role} from ${location}. Skills: ${skills}. Experience: ${experience} years.`;
 	if (email) {
@@ -219,48 +266,17 @@ function createPersonContent(person: Record<string, unknown>): string {
 }
 
 /**
- * Validate person data has required fields
+ * Validate person data has required fields using shared type validation
  */
 function validatePersonData(person: Record<string, unknown>): {
 	isValid: boolean;
 	missingFields: string[];
 } {
-	const requiredFields = ["name", "location", "role"];
-	const missingFields: string[] = [];
-
-	for (const field of requiredFields) {
-		const value = person[field];
-		if (
-			!value ||
-			value === "Unknown" ||
-			value === "Unknown location" ||
-			value === "Unknown role" ||
-			value === ""
-		) {
-			missingFields.push(field);
-		}
-	}
-
-	// Also check if skills or experience is completely missing
-	const hasSkills =
-		person.skills &&
-		person.skills !== "No skills listed" &&
-		person.skills !== "";
-	const hasExperience =
-		person.experience_years &&
-		person.experience_years !== "Unknown experience" &&
-		person.experience_years !== 0;
-
-	if (!hasSkills) {
-		missingFields.push("skills");
-	}
-	if (!hasExperience) {
-		missingFields.push("experience");
-	}
-
+	// Use the shared validation function
+	const result = validatePerson(person);
 	return {
-		isValid: missingFields.length === 0,
-		missingFields,
+		isValid: result.isValid,
+		missingFields: result.missingFields,
 	};
 }
 
@@ -348,15 +364,17 @@ function extractExperienceFromText(text: string): number | null {
  */
 function enhancePersonData(
 	person: Record<string, unknown>,
-	originalText?: string,
-): Record<string, unknown> {
-	const enhanced = { ...person };
+	originalText: string,
+): Person {
+	// Normalize the person data first
+	const enhanced: Person = normalizePerson({
+		...(person as unknown as Person),
+	});
 
-	if (!originalText) return enhanced;
-
-	// Extract location if missing
+	// Extract location if missing or generic
 	if (
 		!enhanced.location ||
+		enhanced.location === "Unknown" ||
 		enhanced.location === "Unknown location" ||
 		enhanced.location === ""
 	) {
@@ -380,13 +398,12 @@ function enhancePersonData(
 
 	// Extract experience if missing
 	if (
-		!enhanced.experience_years ||
-		enhanced.experience_years === "Unknown experience" ||
-		enhanced.experience_years === 0
+		!enhanced.experience ||
+		(typeof enhanced.experience === "number" && enhanced.experience === 0)
 	) {
 		const extractedExp = extractExperienceFromText(originalText);
-		if (extractedExp) {
-			enhanced.experience_years = extractedExp;
+		if (extractedExp !== null) {
+			enhanced.experience = extractedExp;
 		}
 	}
 
@@ -584,6 +601,7 @@ const extractKeysFromInterface = (interfaceString: string): string[] => {
  */
 export async function processFile(
 	file: FileInfo,
+	context?: RunContext,
 ): Promise<ProcessedFile | null> {
 	try {
 		// Generate MD5 hash of the original file content
@@ -653,6 +671,12 @@ export async function processFile(
 		}
 
 		// Extract and store individual entities instead of entire file
+		const runContext: RunContext = context ?? {
+			dupes: 0,
+			bads: 0,
+			maxDupes: 3,
+			maxBads: 7,
+		};
 		const entityResults = await extractAndStoreEntities(
 			file.content,
 			processedData,
@@ -662,6 +686,7 @@ export async function processFile(
 				dataType: file.type,
 				processedAt: new Date().toISOString(),
 			},
+			runContext,
 		);
 
 		if (entityResults.length === 0) {
@@ -706,13 +731,19 @@ export async function processFiles(
 	files: FileInfo[],
 ): Promise<ProcessedFile[]> {
 	const processedFiles: ProcessedFile[] = [];
+	// Create a shared run context to enforce caps across the whole run
+	const context: RunContext = { dupes: 0, bads: 0, maxDupes: 3, maxBads: 7 };
 
 	for (const file of files) {
-		const result = await processFile(file);
+		const result = await processFile(file, context);
 		if (result) {
 			processedFiles.push(result);
 		}
 	}
+
+	console.log(
+		`    ⏺ Run summary: processed ${processedFiles.length} files, duplicates encountered: ${context.dupes}, bad entries encountered: ${context.bads} (caps dupes<=${context.maxDupes}, bads<=${context.maxBads})`,
+	);
 
 	return processedFiles;
 }

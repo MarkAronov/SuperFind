@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { SearchResult } from "@/types/api";
+import type { PersonSearchResult, SearchResult } from "@/types/search.types";
 import { Card } from "../atoms/Card";
 import { PersonCard } from "../molecules/PersonCard";
 
@@ -10,14 +10,14 @@ interface SearchResultsProps {
 
 export function SearchResults({ data, isLoading }: SearchResultsProps) {
 	// Parse people from sources if people array doesn't exist
-	const people = useMemo(() => {
+	const people = useMemo((): PersonSearchResult[] => {
 		if (data.people && data.people.length > 0) {
 			return data.people;
 		}
 
 		// Fallback: parse from sources
 		if (data.sources && data.sources.length > 0) {
-			return data.sources.map((source) => {
+			return data.sources.map((source): PersonSearchResult => {
 				const content = source.content;
 
 				// Try to parse as JSON first
@@ -26,16 +26,12 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 					if (jsonMatch) {
 						const parsed = JSON.parse(jsonMatch[0]);
 						return {
-							name: parsed.name || "Unknown",
-							location: parsed.location || "",
-							role: parsed.role || "",
-							skills: Array.isArray(parsed.skills)
-								? parsed.skills.join("; ")
-								: parsed.skills || "",
-							experience_years: parsed.experience_years || 0,
-							email: parsed.email || "",
-							relevanceScore: source.relevanceScore || 0.8,
-							rawContent: content,
+							id: source.id || Math.random().toString(),
+							score: source.relevanceScore || 0.8,
+							person,
+							metadata: {
+								rawContent: content,
+							},
 						};
 					}
 				} catch {
@@ -59,16 +55,20 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 				);
 
 				return {
-					name: nameMatch?.[1]?.trim() || "Unknown",
-					location: locationMatch?.[1]?.trim() || "",
-					role: roleMatch?.[1]?.trim() || "",
-					skills: skillsMatch?.[1]?.trim().replace(/\s*;\s*/g, "; ") || "",
-					experience_years: expMatch?.[1]
-						? Number.parseInt(expMatch[1], 10)
-						: 0,
-					email: emailMatch?.[1]?.trim() || "",
-					relevanceScore: source.relevanceScore || 0.8,
-					rawContent: content,
+					id: source.id || Math.random().toString(),
+					score: source.relevanceScore || 0.8,
+					person: {
+						name: nameMatch?.[1]?.trim() || "Unknown",
+						location: locationMatch?.[1]?.trim() || "Unknown",
+						role: roleMatch?.[1]?.trim() || "Unknown",
+						skills:
+							skillsMatch?.[1]?.trim().replace(/\s*;\s*/g, "; ") || "Unknown",
+						experience: expMatch?.[1] ? Number.parseInt(expMatch[1], 10) : 0,
+						email: emailMatch?.[1]?.trim(),
+					},
+					metadata: {
+						rawContent: content,
+					},
 				};
 			});
 		}
@@ -82,48 +82,45 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 
 		// Filter out any undefined/null entries and people without names
 		const validPeople = people.filter(
-			(person) => person?.name && person.name !== "Unknown",
+			(item) => item?.person?.name && item.person.name !== "Unknown",
 		);
 
 		const seen = new Map<string, (typeof validPeople)[0]>();
 
-		for (const person of validPeople) {
+		for (const item of validPeople) {
 			// Create a normalized hash from name only (case-insensitive)
-			const personKey = person.name.toLowerCase().trim();
+			const personKey = item.person.name.toLowerCase().trim();
 
 			// If we've seen this person, keep the one with more complete data
 			const existing = seen.get(personKey);
 			if (existing) {
 				// Count non-empty fields
 				const existingScore = [
-					existing.email,
-					existing.location,
-					existing.role,
-					existing.skills,
+					existing.person.email,
+					existing.person.location,
+					existing.person.role,
+					existing.person.skills,
 				].filter((f) => f && f.length > 0).length;
 				const newScore = [
-					person.email,
-					person.location,
-					person.role,
-					person.skills,
+					item.person.email,
+					item.person.location,
+					item.person.role,
+					item.person.skills,
 				].filter((f) => f && f.length > 0).length;
 
 				// Keep the one with more data, or higher relevance score if tied
 				if (
 					newScore > existingScore ||
-					(newScore === existingScore &&
-						person.relevanceScore > existing.relevanceScore)
+					(newScore === existingScore && item.score > existing.score)
 				) {
-					seen.set(personKey, person);
+					seen.set(personKey, item);
 				}
 			} else {
-				seen.set(personKey, person);
+				seen.set(personKey, item);
 			}
 		}
 
-		return Array.from(seen.values()).sort(
-			(a, b) => b.relevanceScore - a.relevanceScore,
-		);
+		return Array.from(seen.values()).sort((a, b) => b.score - a.score);
 	}, [people]);
 
 	if (isLoading) {
@@ -172,8 +169,8 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 
 				{uniquePeople.length > 0 ? (
 					<div className="grid gap-4">
-						{uniquePeople.map((person, index) => (
-							<PersonCard key={`${person.name}-${index}`} person={person} />
+						{uniquePeople.map((item, index) => (
+							<PersonCard key={`${item.person.name}-${index}`} person={item} />
 						))}
 					</div>
 				) : (

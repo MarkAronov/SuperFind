@@ -11,6 +11,7 @@
 		],
 		"experience_years": 12,
 		"email": "sarah.chen@airesearch.ca",
+		"description": "AI research scientist with extensive publications in computer vision and deep learning from University of Toronto",
 		"specialization": "Computer Vision",
 		"publications": 45,
 		"phd_university": "University of Toronto"
@@ -27,6 +28,7 @@
 		],
 		"experience_years": 10,
 		"email": "ahmed.hassan@cybersec.eg",
+		"description": "Certified cybersecurity expert specializing in enterprise security with experience at major tech companies",
 		"certifications": ["CISSP", "CEH", "OSCP"],
 		"specialization": "Enterprise Security",
 		"companies_worked": ["Google", "Microsoft"]
@@ -38,6 +40,7 @@
 		"skills": ["Solidity", "Smart Contracts", "Web3", "Ethereum"],
 		"experience_years": 7,
 		"email": "maria.santos@blockchain.br",
+		"description": "Blockchain developer focused on DeFi protocols and NFT marketplaces across multiple blockchain platforms",
 		"projects": ["DeFi Protocol", "NFT Marketplace"],
 		"languages": ["Solidity", "JavaScript", "Python"],
 		"blockchains": ["Ethereum", "Polygon", "Binance Smart Chain"]
@@ -54,6 +57,7 @@
 		],
 		"experience_years": 14,
 		"email": "james.oconnor@datascience.ie",
+		"description": "Data science lead with extensive publications and expertise in predictive analytics for financial services",
 		"specialization": "Predictive Analytics",
 		"publications": 28,
 		"industry_experience": "Financial Services"
@@ -65,6 +69,7 @@
 		"skills": ["Quantum Algorithms", "Qiskit", "Python", "Linear Algebra"],
 		"experience_years": 9,
 		"email": "ling.chen@quantum.cn",
+		"description": "Quantum computing engineer researching quantum machine learning in collaboration with IBM and Google",
 		"research_focus": "Quantum Machine Learning",
 		"publications": 23,
 		"collaborations": ["IBM Quantum", "Google Quantum AI"]
@@ -81,6 +86,7 @@
 		],
 		"experience_years": 11,
 		"email": "carlos.mendoza@mobiledev.ar",
+		"description": "Mobile app architect specializing in cross-platform development with millions of users reached",
 		"platforms": ["iOS", "Android"],
 		"apps_developed": 15,
 		"users_reached": "5M+"

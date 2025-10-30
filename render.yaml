@@ -1,10 +1,10 @@
-# Render.com Blueprint for SuperFind Backend
+# Render.com Blueprint for SkillVector Backend
 # This file configures automatic deployment to Render
 
 services:
   # Backend API Service
   - type: web
-    name: superfind-api
+    name: skillvector-api
     runtime: docker
     plan: free
     branch: main
@@ -20,7 +20,7 @@ services:
       
       # Frontend URL for CORS
       - key: FRONTEND_URL
-        value: https://superfind.vercel.app  # Update this with your actual Vercel URL
+        value: https://skillvector.vercel.app  # Update this with your actual Vercel URL
       
       # OpenAI Configuration
       - key: OPENAI_API_KEY

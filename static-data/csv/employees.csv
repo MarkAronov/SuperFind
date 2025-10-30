@@ -1,6 +1,6 @@
-name,location,role,skills,experience_years,email
-Alice Chen,New York, USA,ML Engineer,PyTorch; NLP; TensorFlow,4,alice.chen@mlengineer.com
-Bob Smith,San Diego, USA,Frontend Developer,React; TypeScript,5,bob.smith@frontenddev.com
-Charlie Wilson,Austin, USA,Backend Developer,Node.js; Express; MongoDB,6,charlie.wilson@backenddev.com
-Diana Rodriguez,Seattle, USA,DevOps Engineer,Docker; Kubernetes; CI/CD,7,diana.rodriguez@devopseng.com
-Edward Kim,Denver, USA,Full Stack Developer,React; Node.js; PostgreSQL,4,edward.kim@fullstackdev.com
+name,location,role,skills,experience_years,email,description
+Alice Chen,New York, USA,ML Engineer,PyTorch; NLP; TensorFlow,4,alice.chen@mlengineer.com,Machine learning engineer specializing in natural language processing and deep learning frameworks
+Bob Smith,San Diego, USA,Frontend Developer,React; TypeScript,5,bob.smith@frontenddev.com,Frontend developer with strong expertise in React and TypeScript for building modern web applications
+Charlie Wilson,Austin, USA,Backend Developer,Node.js; Express; MongoDB,6,charlie.wilson@backenddev.com,Backend developer focused on building scalable APIs using Node.js and NoSQL databases
+Diana Rodriguez,Seattle, USA,DevOps Engineer,Docker; Kubernetes; CI/CD,7,diana.rodriguez@devopseng.com,DevOps engineer experienced in containerization and continuous integration/deployment pipelines
+Edward Kim,Denver, USA,Full Stack Developer,React; Node.js; PostgreSQL,4,edward.kim@fullstackdev.com,Full stack developer proficient in modern JavaScript stack with relational database expertise

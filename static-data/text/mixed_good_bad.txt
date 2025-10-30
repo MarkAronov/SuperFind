@@ -1,0 +1,20 @@
+Marcus Thompson is a talented Backend Developer from Austin, Texas. He has extensive knowledge of Node.js, Express, MongoDB, and REST APIs.
+
+Contact: marcus.thompson@backend.dev
+
+---
+
+Sarah Kim works as a UI Designer in San Francisco. Her skills include Figma, Adobe Creative Suite, and Design Systems, with 4 years of experience in the field.
+
+Email: sarah.kim@design.io
+
+---
+
+This is a person who specializes in blockchain technology and smart contracts. They work with Solidity, Ethereum, and Web3.js. Based in Switzerland with 6 years of experience in cryptocurrency development.
+
+---
+
+Alex Rivera is a Machine Learning Engineer from Barcelona, Spain. Expertise in scikit-learn, deep learning, computer vision, and neural networks. Has published research papers on AI ethics.
+
+Contact: alex.rivera@ml.es
+Experience: 8 years

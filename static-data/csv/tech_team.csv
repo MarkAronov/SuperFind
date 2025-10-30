@@ -1,21 +1,21 @@
-name,location,role,skills,experience_years,email
-Sarah Mitchell,San Francisco, USA,Senior Software Engineer,React; Node.js; TypeScript; GraphQL,6,sarah.mitchell@techcorp.com
-David Chen,Seattle, USA,DevOps Engineer,Docker; Kubernetes; AWS; Terraform,4,david.chen@cloudtech.com
-Emma Rodriguez,Austin, USA,Product Manager,Agile; Scrum; Analytics; User Research,8,emma.rodriguez@productlabs.com
-James Wilson,Boston, USA,Data Scientist,Python; Machine Learning; SQL; Tableau,5,james.wilson@dataworks.com
-Lisa Park,Denver, USA,UX Designer,Figma; Adobe Creative Suite; User Testing; Prototyping,7,lisa.park@designstudio.com
-Michael Brown,Chicago, USA,Backend Developer,Java; Spring Boot; PostgreSQL; Redis,9,michael.brown@backendpro.com
-Anna Johnson,Portland, USA,Frontend Developer,JavaScript; Vue.js; CSS; Webpack,3,anna.johnson@frontenddev.com
-Robert Davis,Miami, USA,Full Stack Developer,MERN Stack; Python; Django; MongoDB,6,robert.davis@fullstackinc.com
-Jennifer Garcia,Atlanta, USA,QA Engineer,Selenium; Cypress; API Testing; Jenkins,4,jennifer.garcia@qatest.com
-Thomas Anderson,Minneapolis, USA,Security Engineer,Cybersecurity; Penetration Testing; AWS Security; Compliance,7,thomas.anderson@securityfirst.com
-Karen Lee,Seattle, USA,Technical Writer,Docs as Code; Markdown; API Documentation; Technical Communication,5,karen.lee@techdocs.com
-Steven Martinez,Austin, USA,Database Administrator,PostgreSQL; MySQL; Oracle; Performance Tuning,8,steven.martinez@dbadmin.com
-Rachel Thompson,San Francisco, USA,Mobile Developer,React Native; iOS; Android; Flutter,4,rachel.thompson@mobiledev.com
-Christopher White,Boston, USA,Cloud Architect,AWS; Azure; GCP; Infrastructure as Code,10,chris.white@cloudarch.com
-Michelle Davis,Denver, USA,Scrum Master,Agile Methodologies; Team Leadership; JIRA; Confluence,6,michelle.davis@agileteam.com
-Andrew Garcia,Chicago, USA,AI/ML Engineer,Python; TensorFlow; PyTorch; Computer Vision,5,andrew.garcia@aiml.com
-Jessica Wilson,Portland, USA,Business Analyst,Requirements Gathering; SQL; Excel; Process Modeling,7,jessica.wilson@bizanalyst.com
-Daniel Rodriguez,Miami, USA,Site Reliability Engineer,Monitoring; Incident Response; Linux; Automation,6,daniel.rodriguez@srepro.com
-Amanda Chen,Atlanta, USA,Technical Lead,Team Management; Code Reviews; Mentoring; Architecture,9,amanda.chen@techlead.com
-Kevin Park,Minneapolis, USA,Blockchain Developer,Solidity; Web3; Smart Contracts; DeFi,3,kevin.park@blockchaindev.com
+name,location,role,skills,experience_years,email,description
+Sarah Mitchell,San Francisco, USA,Senior Software Engineer,React; Node.js; TypeScript; GraphQL,6,sarah.mitchell@techcorp.com,Senior software engineer with expertise in modern web technologies and GraphQL API development
+David Chen,Seattle, USA,DevOps Engineer,Docker; Kubernetes; AWS; Terraform,4,david.chen@cloudtech.com,DevOps engineer specializing in cloud infrastructure automation and container orchestration
+Emma Rodriguez,Austin, USA,Product Manager,Agile; Scrum; Analytics; User Research,8,emma.rodriguez@productlabs.com,Experienced product manager skilled in agile methodologies and data-driven decision making
+James Wilson,Boston, USA,Data Scientist,Python; Machine Learning; SQL; Tableau,5,james.wilson@dataworks.com,Data scientist with strong background in statistical analysis and machine learning model development
+Lisa Park,Denver, USA,UX Designer,Figma; Adobe Creative Suite; User Testing; Prototyping,7,lisa.park@designstudio.com,UX designer focused on user-centered design and creating intuitive digital experiences
+Michael Brown,Chicago, USA,Backend Developer,Java; Spring Boot; PostgreSQL; Redis,9,michael.brown@backendpro.com,Senior backend developer with extensive experience in Java enterprise applications and database optimization
+Anna Johnson,Portland, USA,Frontend Developer,JavaScript; Vue.js; CSS; Webpack,3,anna.johnson@frontenddev.com,Frontend developer specializing in Vue.js and modern JavaScript build tools
+Robert Davis,Miami, USA,Full Stack Developer,MERN Stack; Python; Django; MongoDB,6,robert.davis@fullstackinc.com,Full stack developer proficient in MERN stack and Python-based web frameworks
+Jennifer Garcia,Atlanta, USA,QA Engineer,Selenium; Cypress; API Testing; Jenkins,4,jennifer.garcia@qatest.com,QA engineer with expertise in test automation and continuous integration testing
+Thomas Anderson,Minneapolis, USA,Security Engineer,Cybersecurity; Penetration Testing; AWS Security; Compliance,7,thomas.anderson@securityfirst.com,Security engineer focused on cloud security and penetration testing for enterprise systems
+Karen Lee,Seattle, USA,Technical Writer,Docs as Code; Markdown; API Documentation; Technical Communication,5,karen.lee@techdocs.com,Technical writer skilled in creating clear documentation for APIs and software products
+Steven Martinez,Austin, USA,Database Administrator,PostgreSQL; MySQL; Oracle; Performance Tuning,8,steven.martinez@dbadmin.com,Database administrator with deep expertise in performance tuning and database optimization
+Rachel Thompson,San Francisco, USA,Mobile Developer,React Native; iOS; Android; Flutter,4,rachel.thompson@mobiledev.com,Mobile developer experienced in cross-platform app development with React Native and Flutter
+Christopher White,Boston, USA,Cloud Architect,AWS; Azure; GCP; Infrastructure as Code,10,chris.white@cloudarch.com,Cloud architect with extensive experience designing multi-cloud solutions and infrastructure
+Michelle Davis,Denver, USA,Scrum Master,Agile Methodologies; Team Leadership; JIRA; Confluence,6,michelle.davis@agileteam.com,Certified Scrum Master skilled in facilitating agile teams and removing development blockers
+Andrew Garcia,Chicago, USA,AI/ML Engineer,Python; TensorFlow; PyTorch; Computer Vision,5,andrew.garcia@aiml.com,AI/ML engineer specializing in computer vision and deep learning applications
+Jessica Wilson,Portland, USA,Business Analyst,Requirements Gathering; SQL; Excel; Process Modeling,7,jessica.wilson@bizanalyst.com,Business analyst with strong analytical skills and experience in process improvement
+Daniel Rodriguez,Miami, USA,Site Reliability Engineer,Monitoring; Incident Response; Linux; Automation,6,daniel.rodriguez@srepro.com,Site reliability engineer focused on system monitoring and automated incident response
+Amanda Chen,Atlanta, USA,Technical Lead,Team Management; Code Reviews; Mentoring; Architecture,9,amanda.chen@techlead.com,Technical lead with strong leadership skills and expertise in software architecture
+Kevin Park,Minneapolis, USA,Blockchain Developer,Solidity; Web3; Smart Contracts; DeFi,3,kevin.park@blockchaindev.com,Blockchain developer specializing in smart contract development and decentralized finance applications

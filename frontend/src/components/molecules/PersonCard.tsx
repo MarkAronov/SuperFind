@@ -1,4 +1,4 @@
-import type { Person } from "@/types/api";
+import type { PersonSearchResult } from "@/types/search.types";
 import { Badge } from "../atoms/Badge";
 import {
 	Card,
@@ -10,7 +10,7 @@ import {
 } from "../atoms/Card";
 
 interface PersonCardProps {
-	person: Person;
+	person: PersonSearchResult;
 }
 
 export function PersonCard({ person }: PersonCardProps) {
@@ -32,14 +32,13 @@ export function PersonCard({ person }: PersonCardProps) {
 							<span>{person.location}</span>
 						</div>
 					)}
-					{person.experience_years > 0 && (
+					{person.experience_years && Number(person.experience_years) > 0 && (
 						<div className="flex items-center gap-1">
 							<span className="text-gray-500">💼</span>
 							<span>{person.experience_years} years</span>
 						</div>
 					)}
-				</div>
-
+				</div>{" "}
 				{/* Skills */}
 				{person.skills && (
 					<div>
@@ -63,7 +62,6 @@ export function PersonCard({ person }: PersonCardProps) {
 						</div>
 					</div>
 				)}
-
 				{/* Email */}
 				{person.email && (
 					<div className="text-sm">

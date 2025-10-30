@@ -1,17 +1,11 @@
-import type { Document as LangChainDocument } from "@langchain/core/documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
-import {
-	createLangChainVectorStore,
-	initQdrant,
-} from "../vector/qdrant.services";
 import type {
 	AIProvider,
 	SearchResult,
 	TextToJsonResult,
 	VectorStore,
 } from "./ai.interface";
-import { createProvider, getPresets } from "./providers/provider-factory";
 
 /**
  * Main AI Service - handles the 2 core tasks using LangChain:

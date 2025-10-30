@@ -11,6 +11,7 @@
 		],
 		"experience_years": 8,
 		"email": "yuki.nakamura@uxdesign.jp",
+		"description": "UX/UI designer with a passion for creating intuitive mobile experiences and user-centered design solutions",
 		"specialization": "Mobile App Design",
 		"projects_completed": 45,
 		"tools": ["Figma", "Sketch", "Adobe XD", "InVision"]
@@ -27,6 +28,7 @@
 		],
 		"experience_years": 12,
 		"email": "antonio.silva@gamedesign.pt",
+		"description": "Award-winning game designer specializing in narrative-driven adventure and RPG games with compelling player experiences",
 		"games_developed": 8,
 		"awards": [
 			"Independent Games Festival Nomination",
@@ -46,6 +48,7 @@
 		],
 		"experience_years": 10,
 		"email": "fatima.alzahra@digitalart.ae",
+		"description": "Digital artist specializing in concept art for games with expertise in 3D modeling and visual effects",
 		"specialization": "Concept Art for Games",
 		"projects_completed": 23,
 		"software": ["Blender", "Photoshop", "After Effects", "ZBrush"]
@@ -62,6 +65,7 @@
 		],
 		"experience_years": 9,
 		"email": "bjorn.larsen@productdesign.dk",
+		"description": "Product designer focused on SaaS products and design systems for major tech companies",
 		"specialization": "SaaS Product Design",
 		"products_designed": 15,
 		"clients": ["Microsoft", "Google", "Spotify"]
@@ -73,6 +77,7 @@
 		"skills": ["Creative Coding", "Interactive Design", "p5.js", "Processing"],
 		"experience_years": 7,
 		"email": "meiling.wong@creativetech.sg",
+		"description": "Creative technologist creating interactive installations using creative coding and emerging technologies",
 		"specialization": "Interactive Installations",
 		"projects_completed": 12,
 		"technologies": ["JavaScript", "WebGL", "Arduino", "Raspberry Pi"]

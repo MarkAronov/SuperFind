@@ -6,6 +6,7 @@
 		"skills": ["Big Data", "Apache Spark", "Python", "SQL"],
 		"experience_years": 10,
 		"email": "elena.vasquez@dataeng.es",
+		"description": "Data engineer with expertise in real-time data processing and big data technologies",
 		"education": "MSc in Computer Science",
 		"projects": 25,
 		"specialization": "Real-time Data Processing"
@@ -17,6 +18,7 @@
 		"skills": ["AWS", "Azure", "Terraform", "Microservices"],
 		"experience_years": 13,
 		"email": "marcus.johnson@cloudarch.co.uk",
+		"description": "Cloud solutions architect specializing in multi-cloud infrastructure and microservices architecture",
 		"education": "MSc in Cloud Computing",
 		"certifications": ["AWS Solutions Architect", "Azure Solutions Architect"],
 		"specialization": "Multi-cloud Architecture"
@@ -33,6 +35,7 @@
 		],
 		"experience_years": 7,
 		"email": "priya.patel@aiethics.in",
+		"description": "AI ethics researcher with a PhD focusing on algorithmic bias and responsible AI policy development",
 		"education": "PhD in Computer Science",
 		"publications": 28,
 		"specialization": "Algorithmic Bias"
@@ -49,6 +52,7 @@
 		],
 		"experience_years": 10,
 		"email": "hiroshi.tanaka@robotics.jp",
+		"description": "Robotics engineer with multiple patents in humanoid robotics and advanced control systems",
 		"education": "PhD in Robotics",
 		"patents": 8,
 		"specialization": "Humanoid Robotics"
@@ -60,6 +64,7 @@
 		"skills": ["Unity", "Unreal Engine", "C#", "3D Modeling"],
 		"experience_years": 6,
 		"email": "isabella.rossi@arvr.it",
+		"description": "AR/VR developer creating immersive experiences for training simulations and retail applications",
 		"education": "MSc in Computer Graphics",
 		"projects": ["VR Training Simulators", "AR Retail Apps"],
 		"specialization": "Immersive Experiences"

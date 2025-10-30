@@ -3,8 +3,8 @@
  * Following best practices for service health checks
  */
 
+import { qdrantStatus } from "../database/qdrant.services";
 import { getDataStoreStats } from "../parser/parser.services";
-import { qdrantStatus } from "../vector/qdrant.services";
 
 export interface HealthStatus {
 	status: "healthy" | "degraded" | "unhealthy";

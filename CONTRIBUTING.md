@@ -1,6 +1,6 @@
-# Contributing to SuperFind
+# Contributing to SkillVector
 
-Thank you for your interest in contributing to SuperFind! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to SkillVector! This document provides guidelines and instructions for contributing to the project.
 
 ## Code of Conduct
 
@@ -17,8 +17,8 @@ Please be respectful and inclusive in all interactions. We're committed to provi
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/MarkAronov/SuperFind.git
-   cd SuperFind
+   git clone https://github.com/MarkAronov/SkillVector.git
+   cd SkillVector
    ```
 
 2. **Install dependencies**
@@ -146,5 +146,5 @@ Please be respectful and inclusive in all interactions. We're committed to provi
 
 ## License
 
-By contributing to SuperFind, you agree that your contributions will be licensed under the same license as the project (MIT License).
+By contributing to SkillVector, you agree that your contributions will be licensed under the same license as the project (MIT License).
 

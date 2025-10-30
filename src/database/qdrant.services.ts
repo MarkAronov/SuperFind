@@ -1,8 +1,9 @@
+import { createHash } from "node:crypto";
 import { Document } from "@langchain/core/documents";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { QdrantClient } from "@qdrant/js-client-rest";
-import { createHash } from "crypto";
 import type { VectorStore } from "../ai/ai.interface";
+// Note: Using generic types here to match the original implementation
 import {
 	createEmbeddingProvider,
 	type EmbeddingConfig,
@@ -503,6 +504,7 @@ export async function documentExistsByMD5(
 
 /**
  * Store processed document in Qdrant with MD5 hash
+ * Now uses typed Person data for better consistency
  * Note: This function assumes duplicate checking has already been performed
  */
 export async function storeDocument(

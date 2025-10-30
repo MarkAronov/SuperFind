@@ -1,5 +1,5 @@
 {
-	"name": "superfind",
+	"name": "skillvector",
 	"scripts": {
 		"start": "bun src/index.ts",
 		"dev": "bun run --hot src/index.ts",

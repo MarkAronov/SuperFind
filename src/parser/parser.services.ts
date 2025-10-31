@@ -9,50 +9,21 @@ import {
 } from "../database/qdrant.services";
 import type { Person, PersonMetadata } from "../types/person.types";
 import { normalizePerson, validatePerson } from "../types/person.types";
+import type {
+	CsvRow,
+	EntityResult,
+	FileInfo,
+	ProcessedFile,
+	RunContext,
+} from "./parser.types";
 
 /**
  * Comprehensive file parser service - handles CSV, JSON, and Text parsing
  * for both uploaded files and static files
  */
 
-// Type definitions
-type CsvRow = Record<string, string>;
-
-interface EntityResult {
-	id: string;
-	content: string;
-	entityType: "person" | "organization" | "location";
-	storedInQdrant: boolean;
-	metadata: Record<string, unknown>;
-}
-
-interface FileInfo {
-	path: string;
-	name: string;
-	type: "csv" | "json" | "text";
-	content: string;
-}
-
-export interface ProcessedFile {
-	fileName: string;
-	filePath: string;
-	dataType: "csv" | "json" | "text";
-	md5Hash: string;
-	alreadyExists: boolean;
-	storedInQdrant: boolean;
-	processedData?: object;
-}
-
 // In-memory storage for processed data (could be replaced with database)
 let processedDataStore: ProcessedFile[] = [];
-
-// Run-level context to track duplicates and bad entries
-interface RunContext {
-	dupes: number; // number of duplicate person entries encountered
-	bads: number; // number of invalid person entries encountered
-	maxDupes: number; // maximum allowed duplicates across the run
-	maxBads: number; // maximum allowed bad entries across the run
-}
 
 /**
  * Extract individual entities from processed data and store each as separate vector
@@ -540,8 +511,6 @@ export const parseJSON = (jsonContent: string): object => {
 		throw new Error("Invalid JSON content");
 	}
 };
-
-
 
 /**
  * Extract property keys from TypeScript interface string

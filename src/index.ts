@@ -16,8 +16,8 @@ import {
 	processFiles,
 	scanStaticDataFolder,
 	storeProcessedData,
-	type ProcessedFile,
 } from "./parser/parser.services";
+import type { ProcessedFile } from "./parser/parser.types";
 import { checkApplicationHealth } from "./services/health.services";
 
 /**

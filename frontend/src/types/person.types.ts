@@ -38,5 +38,3 @@ export interface PersonSearchResult {
 		entityId?: string;
 	};
 }
-
-

@@ -33,7 +33,7 @@ interface FileInfo {
 	content: string;
 }
 
-interface ProcessedFile {
+export interface ProcessedFile {
 	fileName: string;
 	filePath: string;
 	dataType: "csv" | "json" | "text";

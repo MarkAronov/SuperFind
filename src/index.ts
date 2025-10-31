@@ -16,18 +16,9 @@ import {
 	processFiles,
 	scanStaticDataFolder,
 	storeProcessedData,
+	type ProcessedFile,
 } from "./parser/parser.services";
 import { checkApplicationHealth } from "./services/health.services";
-
-interface ProcessedFile {
-	fileName: string;
-	filePath: string;
-	dataType: "csv" | "json" | "text";
-	md5Hash: string;
-	alreadyExists: boolean;
-	storedInQdrant: boolean;
-	processedData?: object;
-}
 
 /**
  * Initialize external services (Qdrant, databases, etc.)

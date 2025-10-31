@@ -541,42 +541,7 @@ export const parseJSON = (jsonContent: string): object => {
 	}
 };
 
-/**
- * Convert text to JSON using dynamic AI service with interface-driven keys
- * @param textContent - Raw text content to parse
- * @param targetInterface - TypeScript interface string defining the expected JSON structure
- * @param extractionHint - Optional hint about what data to extract (e.g., "people", "contacts")
- */
-export const convertTextToJSON = async (
-	textContent: string,
-	targetInterface: string,
-	extractionHint?: string,
-): Promise<object> => {
-	try {
-		// Use the AI service to convert text to JSON
-		const result = await convertTextToJson(
-			textContent,
-			targetInterface,
-			extractionHint,
-		);
 
-		if (result.success && result.data) {
-			return result.data;
-		} else {
-			throw new Error(result.error || "AI conversion failed");
-		}
-	} catch (error) {
-		console.error("        ✗ AI text extraction error:", error);
-
-		// Fallback: create empty object with expected keys
-		const interfaceKeys = extractKeysFromInterface(targetInterface);
-		const fallback: Record<string, string> = {};
-		for (const key of interfaceKeys) {
-			fallback[key] = "";
-		}
-		return fallback;
-	}
-};
 
 /**
  * Extract property keys from TypeScript interface string
@@ -658,11 +623,27 @@ export async function processFile(
 					}
 				`;
 
-				processedData = await convertTextToJSON(
-					file.content,
-					personInterface,
-					"person profile information",
-				);
+				try {
+					const result = await convertTextToJson(
+						file.content,
+						personInterface,
+						"person profile information",
+					);
+					if (result.success && result.data) {
+						processedData = result.data;
+					} else {
+						throw new Error(result.error || "AI conversion failed");
+					}
+				} catch (error) {
+					console.error("        ✗ AI text extraction error:", error);
+					// Fallback: create empty object with expected keys
+					const keys = extractKeysFromInterface(personInterface);
+					const fallback: Record<string, string> = {};
+					for (const key of keys) {
+						fallback[key] = "";
+					}
+					processedData = fallback;
+				}
 				break;
 			}
 			default:

@@ -9,6 +9,7 @@ import {
 } from "../database/qdrant.services";
 import type { Person, PersonMetadata } from "../types/person.types";
 import { normalizePerson, validatePerson } from "../types/person.types";
+import { extractKeysFromInterface } from "../utils/interface-parser";
 import type {
 	CsvRow,
 	EntityResult,
@@ -511,25 +512,6 @@ export const parseJSON = (jsonContent: string): object => {
 		throw new Error("Invalid JSON content");
 	}
 };
-
-/**
- * Extract property keys from TypeScript interface string
- * e.g., "interface Person { name: string; email: string; }" -> ["name", "email"]
- */
-const extractKeysFromInterface = (interfaceString: string): string[] => {
-	const propertyRegex = /(\w+)(?:\?)?\s*:/g;
-	const keys: string[] = [];
-	let match: RegExpExecArray | null;
-
-	while (true) {
-		match = propertyRegex.exec(interfaceString);
-		if (match === null) break;
-		keys.push(match[1]);
-	}
-
-	return keys;
-};
-
 /**
  * Processes a single file based on its type using existing parsers
  */

@@ -54,8 +54,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/MarkAronov/SuperFind.git
-cd SuperFind
+git clone https://github.com/MarkAronov/SkillVector.git
+cd SkillVector
 
 # Install dependencies
 bun install

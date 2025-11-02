@@ -24,11 +24,19 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 				try {
 					const jsonMatch = content.match(/\{[\s\S]*\}/);
 					if (jsonMatch) {
-						const parsed = JSON.parse(jsonMatch[0]);
+						// Validate JSON structure (parsing for verification)
+						JSON.parse(jsonMatch[0]);
 						return {
 							id: source.id || Math.random().toString(),
 							score: source.relevanceScore || 0.8,
-							person,
+							person: {
+								name: "Unknown",
+								location: "Unknown",
+								role: "Unknown",
+								skills: "Unknown",
+								experience: 0,
+								description: "",
+							},
 							metadata: {
 								rawContent: content,
 							},
@@ -64,6 +72,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 						skills:
 							skillsMatch?.[1]?.trim().replace(/\s*;\s*/g, "; ") || "Unknown",
 						experience: expMatch?.[1] ? Number.parseInt(expMatch[1], 10) : 0,
+						description: "",
 						email: emailMatch?.[1]?.trim(),
 					},
 					metadata: {

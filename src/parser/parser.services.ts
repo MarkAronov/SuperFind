@@ -9,50 +9,22 @@ import {
 } from "../database/qdrant.services";
 import type { Person, PersonMetadata } from "../types/person.types";
 import { normalizePerson, validatePerson } from "../types/person.types";
+import { extractKeysFromInterface } from "../utils/interface-parser";
+import type {
+	CsvRow,
+	EntityResult,
+	FileInfo,
+	ProcessedFile,
+	RunContext,
+} from "./parser.types";
 
 /**
  * Comprehensive file parser service - handles CSV, JSON, and Text parsing
  * for both uploaded files and static files
  */
 
-// Type definitions
-type CsvRow = Record<string, string>;
-
-interface EntityResult {
-	id: string;
-	content: string;
-	entityType: "person" | "organization" | "location";
-	storedInQdrant: boolean;
-	metadata: Record<string, unknown>;
-}
-
-interface FileInfo {
-	path: string;
-	name: string;
-	type: "csv" | "json" | "text";
-	content: string;
-}
-
-interface ProcessedFile {
-	fileName: string;
-	filePath: string;
-	dataType: "csv" | "json" | "text";
-	md5Hash: string;
-	alreadyExists: boolean;
-	storedInQdrant: boolean;
-	processedData?: object;
-}
-
 // In-memory storage for processed data (could be replaced with database)
 let processedDataStore: ProcessedFile[] = [];
-
-// Run-level context to track duplicates and bad entries
-interface RunContext {
-	dupes: number; // number of duplicate person entries encountered
-	bads: number; // number of invalid person entries encountered
-	maxDupes: number; // maximum allowed duplicates across the run
-	maxBads: number; // maximum allowed bad entries across the run
-}
 
 /**
  * Extract individual entities from processed data and store each as separate vector
@@ -540,62 +512,6 @@ export const parseJSON = (jsonContent: string): object => {
 		throw new Error("Invalid JSON content");
 	}
 };
-
-/**
- * Convert text to JSON using dynamic AI service with interface-driven keys
- * @param textContent - Raw text content to parse
- * @param targetInterface - TypeScript interface string defining the expected JSON structure
- * @param extractionHint - Optional hint about what data to extract (e.g., "people", "contacts")
- */
-export const convertTextToJSON = async (
-	textContent: string,
-	targetInterface: string,
-	extractionHint?: string,
-): Promise<object> => {
-	try {
-		// Use the AI service to convert text to JSON
-		const result = await convertTextToJson(
-			textContent,
-			targetInterface,
-			extractionHint,
-		);
-
-		if (result.success && result.data) {
-			return result.data;
-		} else {
-			throw new Error(result.error || "AI conversion failed");
-		}
-	} catch (error) {
-		console.error("        ✗ AI text extraction error:", error);
-
-		// Fallback: create empty object with expected keys
-		const interfaceKeys = extractKeysFromInterface(targetInterface);
-		const fallback: Record<string, string> = {};
-		for (const key of interfaceKeys) {
-			fallback[key] = "";
-		}
-		return fallback;
-	}
-};
-
-/**
- * Extract property keys from TypeScript interface string
- * e.g., "interface Person { name: string; email: string; }" -> ["name", "email"]
- */
-const extractKeysFromInterface = (interfaceString: string): string[] => {
-	const propertyRegex = /(\w+)(?:\?)?\s*:/g;
-	const keys: string[] = [];
-	let match: RegExpExecArray | null;
-
-	while (true) {
-		match = propertyRegex.exec(interfaceString);
-		if (match === null) break;
-		keys.push(match[1]);
-	}
-
-	return keys;
-};
-
 /**
  * Processes a single file based on its type using existing parsers
  */
@@ -658,11 +574,27 @@ export async function processFile(
 					}
 				`;
 
-				processedData = await convertTextToJSON(
-					file.content,
-					personInterface,
-					"person profile information",
-				);
+				try {
+					const result = await convertTextToJson(
+						file.content,
+						personInterface,
+						"person profile information",
+					);
+					if (result.success && result.data) {
+						processedData = result.data;
+					} else {
+						throw new Error(result.error || "AI conversion failed");
+					}
+				} catch (error) {
+					console.error("        ✗ AI text extraction error:", error);
+					// Fallback: create empty object with expected keys
+					const keys = extractKeysFromInterface(personInterface);
+					const fallback: Record<string, string> = {};
+					for (const key of keys) {
+						fallback[key] = "";
+					}
+					processedData = fallback;
+				}
 				break;
 			}
 			default:

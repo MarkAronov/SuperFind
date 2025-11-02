@@ -8,21 +8,6 @@
 import type { Person } from "./person.types";
 
 /**
- * Search API Response
- * Returned when performing a search query against the backend
- */
-export interface SearchResult {
-	success: boolean;
-	query: string;
-	answer?: string; // Optional - may not be present in error cases
-	people?: PersonSearchResult[]; // Optional - may not be present in error cases
-	sources?: Source[]; // Optional - may not be present in error cases
-	timestamp: string;
-	error?: string; // Optional - present in error cases
-	details?: string; // Optional - present in error cases
-}
-
-/**
  * Person search result with relevance score
  * Contains the person data and search-specific metadata
  */
@@ -40,6 +25,21 @@ export interface PersonSearchResult {
 		rawContent?: string;
 		[key: string]: unknown;
 	};
+}
+
+/**
+ * Search API Response
+ * Returned when performing a search query against the backend
+ */
+export interface SearchResult {
+	success: boolean;
+	query: string;
+	answer?: string; // Optional - may not be present in error cases
+	people?: PersonSearchResult[]; // Optional - may not be present in error cases
+	sources?: Source[]; // Optional - may not be present in error cases
+	timestamp: string;
+	error?: string; // Optional - present in error cases
+	details?: string; // Optional - present in error cases
 }
 
 /**

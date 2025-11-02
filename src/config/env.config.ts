@@ -1,5 +1,5 @@
 /**
- * Environment configuration helper for SuperFind
+ * Environment configuration helper for SkillVector
  */
 
 /**

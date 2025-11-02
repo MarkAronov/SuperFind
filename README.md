@@ -19,8 +19,6 @@
 
 </div>
 
----
-
 ## Features
 
 ### Core Capabilities
@@ -43,7 +41,6 @@
 - **Health Monitoring**: Built-in health check endpoints
 - **Environment Config**: Secure credential management
 
----
 
 ## Quick Start
 
@@ -57,8 +54,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/MarkAronov/SuperFind.git
-cd SuperFind
+git clone https://github.com/MarkAronov/SkillVector.git
+cd SkillVector
 
 # Install dependencies
 bun install
@@ -81,7 +78,6 @@ bun run dev
 
 Access the app at `http://localhost:5173`
 
----
 
 ## API Usage- [Bun](https://bun.sh) 1.0+
 
@@ -136,7 +132,6 @@ curl "http://localhost:3000/api/search?query=senior+backend+developer&limit=10&o
 GET /health
 ```
 
----
 
 ## Architecture
 
@@ -157,28 +152,6 @@ GET /health
 4. **AI Generation** → LLM generates answer using retrieved context (RAG)
 5. **Response** → JSON with answer, sources, and pagination metadata
 
-### Project Structure
-
-```
-SkillVector/
-├── src/
-│   ├── ai/                    # AI routes and services
-│   │   ├── ai.routes.ts       # Search endpoints
-│   │   ├── ai.services.ts     # RAG logic
-│   │   └── providers/         # AI provider implementations
-│   ├── vector/                # Vector database services
-│   │   ├── qdrant.services.ts # Qdrant integration
-│   │   └── embedding-factory.ts
-│   ├── parser/                # Data parsing services
-│   └── config/                # Environment configuration
-├── static-data/               # Sample datasets
-│   ├── csv/                   # CSV files
-│   ├── json/                  # JSON files
-│   └── text/                  # Text files
-└── frontend/                  # React frontend (optional)
-```
-
----
 
 ## Configuration
 
@@ -200,8 +173,6 @@ EMBEDDING_MODEL=text-embedding-3-large
 VITE_API_URL=http://localhost:3000  # or production URL
 ```
 
----
-
 ## Deployment
 
 ### Free Tier Stack ($0/month + OpenAI usage)
@@ -212,62 +183,12 @@ VITE_API_URL=http://localhost:3000  # or production URL
 | Render | 750hrs/month | Backend API |
 | Vercel | 100GB bandwidth | Frontend |
 
-### Steps
-
-**1. Qdrant Cloud**
-```bash
-# https://cloud.qdrant.io/ - Create cluster
-# Get: Cluster URL + API Key
-# Upload data locally with cloud credentials
-```
-
-**2. Render Backend**
-```bash
-# https://render.com/ - New Blueprint
-# Connect GitHub repo, select render.yaml
-# Add env vars:
-#   OPENAI_API_KEY
-#   QDRANT_HOST
-#   QDRANT_API_KEY
-#   FRONTEND_URL
-```
-
-**3. Vercel Frontend**
-```bash
-# Update frontend/.env.production with Render URL
-git push
-
-# https://vercel.com/ - Import repo
-# Root: frontend
-# Framework: Vite
-# Env: VITE_API_URL=<render-url>
-```
-
-**4. Update CORS**
-```typescript
-// src/index.ts - Add Vercel URL to CORS origins
-git push  // Render auto-redeploys
-```
-
 ### Verification
 
 ```bash
 curl https://<app>.onrender.com/health
 curl "https://<app>.onrender.com/api/search?query=developer"
 ```
-
----
-
-## Search Examples
-
-```
-"python developer"
-"backend engineer from Europe"
-"senior developer with 10 years experience"
-"AI researcher with machine learning skills"
-```
-
----
 
 ## Limitations
 
@@ -284,199 +205,10 @@ curl "https://<app>.onrender.com/api/search?query=developer"
 - Hosting: $0/month
 - OpenAI API: ~$1-5/month (usage-based)
 
----
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Backend won't start | Verify env vars, check Qdrant connection |
-| CORS errors | Add frontend URL to CORS config |
-| No search results | Confirm data uploaded, check Qdrant dashboard |
-| Slow first request | Normal (Render hibernation), ~30s cold start |
-
----
-
-## Roadmap & Future Enhancements
-
-### High Priority
-
-- [ ] **Authentication & Authorization**
-  - JWT-based authentication
-| No search results | Confirm data uploaded, check Qdrant dashboard |
-| Slow first request | Normal (Render hibernation), ~30s cold start |
-
----
-
-## Development
-
-```bash
-# Backend
-bun run dev           # Start with hot reload
-bun run lint          # Run linter
-bun run check         # Type check
-
-# Frontend
-cd frontend
-bun run dev           # Start dev server
-bun run build         # Production build
-bun run lint          # Run linter
-```
-
----
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `bun run dev` | Start development server with hot reload |
-| `bun start` | Start production server |
-| `bun run lint` | Lint code with Biome |
-| `bun run format` | Format code with Biome |
-| `bun run check` | Check code quality |
-| `bun run check:fix` | Auto-fix code quality issues |
-
----
-
-## Roadmap & Future Enhancements (Full List)
-
-### High Priority
-
-- [ ] **Authentication & Authorization**
-  - JWT-based authentication
-  - API key management
-  - Rate limiting per user
-  - Role-based access control (RBAC)
-
-- [ ] **Advanced Search Features**
-  - Hybrid search (vector + keyword/BM25)
-  - Metadata filtering (location, skills, experience level)
-  - Faceted search with filters
-  - Search suggestions/autocomplete
-  - Search history tracking
-
-- [ ] **Performance Optimizations**
-  - Response caching (Redis)
-  - Query result caching
-  - Embedding caching for common queries
-  - Database connection pooling
-  - CDN integration for static assets
-
-### Medium Priority
-
-- [ ] **Frontend Enhancements**
-
-MIT  - Advanced search UI with filters
-
-  - Real-time search (debounced)
-
-## Acknowledgments  - Infinite scroll pagination
-
-  - Search result highlighting
-
-OpenAI · Qdrant · Bun · React · shadcn/ui · Vercel · Render  - Export results (CSV, JSON, PDF)
-
-  - Dark mode support
-
-- [ ] **Data Management**
-  - Admin dashboard for data management
-  - Bulk upload/import (CSV, JSON, Excel)
-  - Data deduplication
-  - Automated data refresh/sync
-  - Data versioning and rollback
-
-- [ ] **Analytics & Monitoring**
-  - Search analytics dashboard
-  - Query performance metrics
-  - User behavior tracking
-  - Error logging and alerting (Sentry)
-  - Prometheus + Grafana integration
-
-### Advanced Features
-- [ ] **Multi-Modal Search**
-  - Image-based search
-  - Voice search integration
-  - PDF/document search
-  - Code search capabilities
-
-- [ ] **Machine Learning Enhancements**
-  - Custom fine-tuned embeddings
-  - Personalized search ranking
-  - A/B testing for search algorithms
-  - Semantic clustering/categorization
-  - Query intent classification
-
-- [ ] **Scalability**
-  - Kubernetes deployment configs
-  - Load balancing
-  - Multi-region Qdrant clusters
-  - Horizontal scaling support
-  - Microservices architecture
-
-### Experimental
-- [ ] **Conversational Search**
-  - Multi-turn conversations
-  - Context-aware follow-up queries
-  - Chat history persistence
-  - Streaming responses (SSE)
-
-- [ ] **Integration Ecosystem**
-  - Slack/Discord bot integration
-  - Chrome extension
-  - VS Code extension
-  - REST API SDK libraries (Python, JS, Go)
-  - Webhooks for events
-
-- [ ] **Enterprise Features**
-  - Multi-tenancy support
-  - Custom embedding models per tenant
-  - SLA monitoring
-  - Audit logs
-  - Data residency compliance
-
-### Developer Experience
-
-- [ ] **Testing & Quality**
-  - Unit test coverage (Jest/Vitest)
-  - Integration tests
-  - E2E tests (Playwright)
-  - Performance benchmarks
-  - Load testing scripts
-
-- [ ] **Documentation**
-  - Interactive API documentation (Swagger/OpenAPI)
-  - Video tutorials
-  - Blog post series
-  - Code examples repository
-  - Contribution guidelines
-
-- [ ] **DevOps**
-  - CI/CD pipeline (GitHub Actions)
-  - Automated deployments
-  - Database migration scripts
-  - Docker Compose for local dev
-  - Infrastructure as Code (Terraform)
-
----
-
 ## Contributing
-
 Contributions are welcome! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to SkillVector.
 
----
-
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Acknowledgments
-
-- [Qdrant](https://qdrant.tech/) - High-performance vector database
-- [LangChain](https://js.langchain.com/) - LLM orchestration framework
-- [OpenAI](https://openai.com/) - Embeddings and language models
-- [Hono](https://hono.dev/) - Ultrafast web framework
-- [Bun](https://bun.sh/) - JavaScript runtime
 
 </div>

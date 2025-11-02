@@ -66,7 +66,7 @@ export interface PersonMetadata {
 	location: string;
 	skills: string | string[];
 	experience: string | number;
-	email: string;
+	email?: string;
 
 	// File source metadata (optional)
 	fileName?: string;

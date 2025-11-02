@@ -17,17 +17,8 @@ import {
 	scanStaticDataFolder,
 	storeProcessedData,
 } from "./parser/parser.services";
+import type { ProcessedFile } from "./parser/parser.types";
 import { checkApplicationHealth } from "./services/health.services";
-
-interface ProcessedFile {
-	fileName: string;
-	filePath: string;
-	dataType: "csv" | "json" | "text";
-	md5Hash: string;
-	alreadyExists: boolean;
-	storedInQdrant: boolean;
-	processedData?: object;
-}
 
 /**
  * Initialize external services (Qdrant, databases, etc.)
@@ -138,7 +129,7 @@ const runInitialization = async (): Promise<void> => {
 	initializationPromise = (async () => {
 		try {
 			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-			console.log("🚀 SuperFind - Starting initialization...");
+			console.log("🚀 SkillVector - Starting initialization...");
 			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
 			// Step 0: Log current configuration
@@ -171,7 +162,7 @@ const runInitialization = async (): Promise<void> => {
 
 			isInitialized = true;
 			console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-			console.log("✅ SuperFind initialization completed successfully!");
+			console.log("✅ SkillVector initialization completed successfully!");
 			console.log(
 				`🌐 Server running at: http://localhost:${process.env.PORT || 3000}`,
 			);
@@ -180,7 +171,7 @@ const runInitialization = async (): Promise<void> => {
 			console.error(
 				"\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
 			);
-			console.error("❌ SuperFind initialization failed!");
+			console.error("❌ SkillVector initialization failed!");
 			console.error("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 			console.error(error);
 		}
@@ -194,7 +185,7 @@ runInitialization();
 
 app.get("/", (c) => {
 	return c.json({
-		message: "SuperFind API",
+		message: "SkillVector API",
 		status: "running",
 		version: "1.0.0",
 		initialized: isInitialized,

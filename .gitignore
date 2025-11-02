@@ -106,3 +106,6 @@ data/*.sqlite
 
 # Documentation (keep only README.md)
 !README.md
+
+# Local ignored readme for personal notes / TODOs
+LOCAL_README.md

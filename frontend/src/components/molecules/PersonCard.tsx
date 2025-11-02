@@ -14,38 +14,39 @@ interface PersonCardProps {
 }
 
 export function PersonCard({ person }: PersonCardProps) {
+	const p = person.person;
 	return (
 		<Card className="hover:shadow-lg transition-shadow cursor-pointer">
 			<CardHeader>
-				<CardTitle className="text-lg">{person.name || "Unknown"}</CardTitle>
+				<CardTitle className="text-lg">{p.name || "Unknown"}</CardTitle>
 				<CardDescription className="text-sm">
-					{person.role || "No role specified"}
+					{p.role || "No role specified"}
 				</CardDescription>
 			</CardHeader>
 
 			<CardContent className="space-y-3">
 				{/* Location and Experience */}
 				<div className="flex items-center gap-4 text-sm">
-					{person.location && (
+					{p.location && (
 						<div className="flex items-center gap-1">
 							<span className="text-gray-500">📍</span>
-							<span>{person.location}</span>
+							<span>{p.location}</span>
 						</div>
 					)}
-					{person.experience_years && Number(person.experience_years) > 0 && (
+					{p.experience_years && Number(p.experience_years) > 0 && (
 						<div className="flex items-center gap-1">
 							<span className="text-gray-500">💼</span>
-							<span>{person.experience_years} years</span>
+							<span>{p.experience_years} years</span>
 						</div>
 					)}
 				</div>{" "}
 				{/* Skills */}
-				{person.skills && (
+				{p.skills && (
 					<div>
 						<p className="text-xs text-gray-500 mb-1">Skills:</p>
 						<div className="flex flex-wrap gap-1">
-							{typeof person.skills === "string"
-								? person.skills.split(/[;,]/).map((skill) => (
+							{typeof p.skills === "string"
+								? p.skills.split(/[;,]/).map((skill: string) => (
 										<Badge
 											key={skill.trim()}
 											variant="secondary"
@@ -54,7 +55,7 @@ export function PersonCard({ person }: PersonCardProps) {
 											{skill.trim()}
 										</Badge>
 									))
-								: person.skills.map((skill) => (
+								: p.skills.map((skill: string) => (
 										<Badge key={skill} variant="secondary" className="text-xs">
 											{skill}
 										</Badge>
@@ -63,13 +64,13 @@ export function PersonCard({ person }: PersonCardProps) {
 					</div>
 				)}
 				{/* Email */}
-				{person.email && (
+				{p.email && (
 					<div className="text-sm">
 						<a
-							href={`mailto:${person.email}`}
+							href={`mailto:${p.email}`}
 							className="text-blue-600 hover:text-blue-800 hover:underline"
 						>
-							{person.email}
+							{p.email}
 						</a>
 					</div>
 				)}
@@ -80,7 +81,7 @@ export function PersonCard({ person }: PersonCardProps) {
 					variant="default"
 					className="bg-green-100 text-green-800 border-green-200"
 				>
-					Relevance: {(person.relevanceScore * 100).toFixed(1)}%
+					Relevance: {(person.score * 100).toFixed(1)}%
 				</Badge>
 			</CardFooter>
 		</Card>

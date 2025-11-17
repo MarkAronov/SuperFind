@@ -4,12 +4,13 @@ import {
 	extractKeysFromInterface,
 	parseAndValidateJson,
 } from "../utils/interface-parser";
+import { log } from "../utils/logger";
 import type {
 	AIProvider,
 	SearchResult,
 	TextToJsonResult,
 	VectorStore,
-} from "./ai.interface";
+} from "./types";
 
 /**
  * Main AI Service - handles the 2 core tasks using LangChain:
@@ -124,12 +125,16 @@ export const searchAndAnswer = async (
 			};
 		}
 
-		console.log(`        → Retrieved ${documentsWithScores.length} candidates`);
+		log(
+			"AI_CANDIDATES_RETRIEVED",
+			{ count: documentsWithScores.length.toString() },
+			2,
+		);
 
 		// Log first score to understand the scoring format
 		if (documentsWithScores.length > 0) {
 			const firstScore = documentsWithScores[0][1];
-			console.log(`        → Sample score: ${firstScore} (raw from Qdrant)`);
+			log("AI_SAMPLE_SCORE", { score: firstScore.toString() }, 2);
 		}
 
 		// Convert documents to search sources format
@@ -257,8 +262,13 @@ Response:`);
 			.filter((idx) => idx >= 0 && idx < sources.length)
 			.map((idx) => sources[idx]);
 
-		console.log(
-			`        → AI filtered ${sources.length} → ${filteredSources.length} results`,
+		log(
+			"AI_FILTERED_RESULTS",
+			{
+				before: sources.length.toString(),
+				after: filteredSources.length.toString(),
+			},
+			2,
 		);
 
 		// Return all sources if AI found nothing (fallback)
@@ -274,7 +284,7 @@ Response:`);
 			filteredSources,
 		};
 	} catch (error) {
-		console.warn(`        ⚠ AI filtering error:`, error);
+		log("AI_FILTERING_ERROR", { error: String(error) }, 2);
 		return {
 			answer: "Found several candidates matching your search.",
 			filteredSources: sources, // Fallback: return all
@@ -362,7 +372,7 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(`        → AI Search request: ${query}`);
+		log("AI_SEARCH_REQUEST", { query }, 2);
 
 		// Use the AI service with AI-powered filtering
 		const result = await searchAndAnswer(query, 20);
@@ -377,7 +387,7 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		console.log(`        ✓ Found ${result.sources.length} relevant results`);
+		log("AI_SEARCH_RESULTS", { count: result.sources.length.toString() }, 2);
 
 		// Parse person data from each source
 		const people = result.sources.map((source) => {
@@ -398,7 +408,7 @@ export const handleSearchRequest = async (
 			timestamp: new Date().toISOString(),
 		};
 	} catch (error) {
-		console.error("        ✗ AI search error:", error);
+		log("AI_SEARCH_ERROR", { error: String(error) }, 2);
 		return {
 			success: false,
 			query,

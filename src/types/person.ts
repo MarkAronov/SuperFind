@@ -124,4 +124,4 @@ export {
 	isValidPerson,
 	normalizePerson,
 	validatePerson,
-} from "./person.validators";
+} from "./person-validators";

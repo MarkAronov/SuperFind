@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
-import { handleSearchRequest } from "./ai.services";
+import { handleSearchRequest } from "./index";
 
 const AIRouter = new Hono();
 

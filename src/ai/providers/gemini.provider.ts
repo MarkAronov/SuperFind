@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import type { AIProvider, CompletionOptions } from "../ai.interface.js";
+import type { AIProvider, CompletionOptions } from "../types";
 
 /**
  * Google Gemini Provider Implementation using LangChain

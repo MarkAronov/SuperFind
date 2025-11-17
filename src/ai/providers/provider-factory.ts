@@ -1,4 +1,5 @@
-import type { AIProvider } from "../ai.interface.js";
+import { log } from "../../utils/logger";
+import type { AIProvider } from "../types";
 import { createAnthropicProvider } from "./anthropic.provider.js";
 import { createGeminiProvider } from "./gemini.provider.js";
 import { createHuggingFaceProvider } from "./huggingface.provider.js";
@@ -196,7 +197,7 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
 			return provider;
 		} catch {
-			console.log("        → OpenAI not available, trying Anthropic...");
+			log("PROVIDER_TRYING_ANTHROPIC", {}, 2);
 		}
 	}
 
@@ -205,10 +206,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createAnthropic();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("        ✓ Using Anthropic Claude");
+			log("PROVIDER_USING_ANTHROPIC", {}, 2);
 			return provider;
 		} catch {
-			console.log("        → Anthropic not available, trying Gemini...");
+			log("PROVIDER_TRYING_GEMINI", {}, 2);
 		}
 	}
 
@@ -217,10 +218,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createGemini();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("        ✓ Using Google Gemini");
+			log("PROVIDER_USING_GEMINI", {}, 2);
 			return provider;
 		} catch {
-			console.log("        → Gemini not available, trying Hugging Face...");
+			log("PROVIDER_TRYING_HF", {}, 2);
 		}
 	}
 
@@ -229,10 +230,10 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 		try {
 			const provider = createHuggingFace();
 			await provider.generateCompletion("Hello", { maxTokens: 1 });
-			console.log("        ✓ Using Hugging Face");
+			log("PROVIDER_USING_HF", {}, 2);
 			return provider;
 		} catch {
-			console.log("        → Hugging Face not available, trying Ollama...");
+			log("PROVIDER_TRYING_OLLAMA", {}, 2);
 		}
 	}
 
@@ -244,7 +245,7 @@ export const createBestAvailable = async (): Promise<AIProvider> => {
 			const provider = createOllama(model);
 			// Test with a simple completion to see if model is available
 			await provider.generateCompletion("test", { maxTokens: 1 });
-			console.log(`        ✓ Using Ollama with model: ${model}`);
+			log("PROVIDER_USING_OLLAMA", { model }, 2);
 			return provider;
 		} catch {
 			// Model not available, try next one

@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { ChatOpenAI } from "@langchain/openai";
-import type { AIProvider, CompletionOptions } from "../ai.interface.js";
+import type { AIProvider, CompletionOptions } from "../types";
 
 /**
  * OpenAI Provider Implementation using LangChain

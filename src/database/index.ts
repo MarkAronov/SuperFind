@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { Document } from "@langchain/core/documents";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { QdrantClient } from "@qdrant/js-client-rest";
-import type { VectorStore } from "../ai/ai.interface";
+import type { VectorStore } from "../ai/types";
+import { log } from "../utils/logger";
 // Note: Using generic types here to match the original implementation
 import {
 	createEmbeddingProvider,
@@ -10,7 +11,7 @@ import {
 	getBestAvailableEmbedding,
 	getEmbeddingDimensions,
 } from "./embedding-factory";
-import type { CollectionStatus, QdrantResponse } from "./qdrant.interfaces";
+import type { CollectionStatus, QdrantResponse } from "./types";
 
 // Global Qdrant client instance
 let qdrantClient: QdrantClient | null = null;
@@ -21,32 +22,37 @@ let currentEmbeddingConfig: EmbeddingConfig | null = null;
 /**
  * Initialize embeddings provider with automatic best-available selection
  */
-function initEmbeddings(config?: EmbeddingConfig) {
+const initEmbeddings = (config?: EmbeddingConfig) => {
 	if (!embeddingProvider) {
 		const embeddingConfig = config || getBestAvailableEmbedding();
 		embeddingProvider = createEmbeddingProvider(embeddingConfig);
 		currentEmbeddingConfig = embeddingConfig;
-		console.log(
-			`        ✓ Using ${embeddingConfig.provider} embeddings (${embeddingConfig.model})`,
+		log(
+			"DB_EMBEDDING_PROVIDER",
+			{
+				provider: embeddingConfig.provider,
+				model: embeddingConfig.model,
+			},
+			2,
 		);
 	}
 	return embeddingProvider;
-}
+};
 
 /**
  * Generate a unique ID for documents
  */
-function generateId(): string {
+const generateId = (): string => {
 	return `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
+};
 
 /**
  * Ensure a collection exists in Qdrant
  */
-async function ensureCollectionExists(
+const ensureCollectionExists = async (
 	collectionName: string,
 	embeddingConfig?: EmbeddingConfig,
-): Promise<void> {
+): Promise<void> => {
 	if (!qdrantClient) {
 		throw new Error("Qdrant client not initialized");
 	}
@@ -66,16 +72,21 @@ async function ensureCollectionExists(
 				distance: "Cosine",
 			},
 		});
-		console.log(
-			`        → Created collection: ${collectionName} (${dimensions}D vectors)`,
+		log(
+			"DB_COLLECTION_CREATED",
+			{
+				collection: collectionName,
+				dimensions: dimensions.toString(),
+			},
+			2,
 		);
 	}
-}
+};
 
 /**
  * Initialize connection to Qdrant
  */
-export async function initQdrant(): Promise<QdrantResponse<boolean>> {
+export const initQdrant = async (): Promise<QdrantResponse<boolean>> => {
 	try {
 		const host = process.env.QDRANT_HOST || "localhost";
 		const port = Number(process.env.QDRANT_PORT) || 6333;
@@ -91,7 +102,7 @@ export async function initQdrant(): Promise<QdrantResponse<boolean>> {
 		await qdrantClient.getCollections();
 
 		isConnected = true;
-		console.log(`        ✓ Connected to Qdrant at ${host}:${port}`);
+		log("DB_CONNECTED", { host, port: port.toString() }, 2);
 
 		return {
 			success: true,
@@ -106,13 +117,13 @@ export async function initQdrant(): Promise<QdrantResponse<boolean>> {
 				error instanceof Error ? error.message : "Failed to connect to Qdrant",
 		};
 	}
-}
+};
 
 /**
  * REST function with switch case for different tasks
  * Works with OpenAI and Ollama
  */
-export async function qdrantRest(
+export const qdrantRest = async (
 	action: "store" | "search" | "delete" | "update",
 	params: {
 		// For store
@@ -134,7 +145,7 @@ export async function qdrantRest(
 		// Provider selection
 		provider?: "openai" | "ollama";
 	},
-): Promise<QdrantResponse<unknown>> {
+): Promise<QdrantResponse<unknown>> => {
 	if (!qdrantClient || !isConnected) {
 		return {
 			success: false,
@@ -169,9 +180,7 @@ export async function qdrantRest(
 							params.collection,
 						);
 						if (existsResult.success && existsResult.data) {
-							console.log(
-								`        ⚬ Document already exists (MD5: ${contentMD5}) - skipping storage`,
-							);
+							log("DB_DOCUMENT_EXISTS", { md5: contentMD5 }, 2);
 							return {
 								success: true,
 								data: { id: "existing", stored: false, duplicate: true },
@@ -209,9 +218,7 @@ export async function qdrantRest(
 						],
 					});
 
-					console.log(
-						`        → Document stored successfully with ID: ${pointId}`,
-					);
+					log("DB_DOCUMENT_STORED", { id: pointId }, 2);
 					return {
 						success: true,
 						data: { id: pointId, stored: true },
@@ -267,8 +274,10 @@ export async function qdrantRest(
 						score: result.score || 0,
 					}));
 
-					console.log(
-						`        → Search completed: found ${formattedResults.length} results`,
+					log(
+						"DB_SEARCH_COMPLETE",
+						{ count: formattedResults.length.toString() },
+						2,
 					);
 					return {
 						success: true,
@@ -299,9 +308,7 @@ export async function qdrantRest(
 						points: [params.documentId],
 					});
 
-					console.log(
-						`        → Document deleted successfully: ${params.documentId}`,
-					);
+					log("DB_DOCUMENT_DELETED", { id: params.documentId }, 2);
 					return {
 						success: true,
 						data: { deleted: true, id: params.documentId },
@@ -358,9 +365,7 @@ export async function qdrantRest(
 						],
 					});
 
-					console.log(
-						`        → Document updated successfully: ${params.documentId}`,
-					);
+					log("DB_DOCUMENT_UPDATED", { id: params.documentId }, 2);
 					return {
 						success: true,
 						data: { updated: true, id: params.documentId },
@@ -388,18 +393,18 @@ export async function qdrantRest(
 			error: error instanceof Error ? error.message : "Operation failed",
 		};
 	}
-}
+};
 
 /**
  * Get Qdrant status and health information
  */
-export async function qdrantStatus(): Promise<
+export const qdrantStatus = async (): Promise<
 	QdrantResponse<{
 		connected: boolean;
 		collections: CollectionStatus[];
 		clusterInfo?: unknown;
 	}>
-> {
+> => {
 	try {
 		if (!qdrantClient || !isConnected) {
 			return {
@@ -442,22 +447,22 @@ export async function qdrantStatus(): Promise<
 			error: error instanceof Error ? error.message : "Status check failed",
 		};
 	}
-}
+};
 
 /**
  * Generate MD5 hash of file content
  */
-export function generateMD5(content: string): string {
+export const generateMD5 = (content: string): string => {
 	return createHash("md5").update(content).digest("hex");
-}
+};
 
 /**
  * Check if a document with given MD5 hash already exists in Qdrant
  */
-export async function documentExistsByMD5(
+export const documentExistsByMD5 = async (
 	md5Hash: string,
 	collection = "documents",
-): Promise<QdrantResponse<boolean>> {
+): Promise<QdrantResponse<boolean>> => {
 	if (!qdrantClient || !isConnected) {
 		return {
 			success: false,
@@ -482,8 +487,14 @@ export async function documentExistsByMD5(
 
 		const exists = scrollResult.points.length > 0;
 
-		console.log(
-			`        → MD5 check: Document with hash ${md5Hash} ${exists ? "exists" : "does not exist"} in collection ${collection}`,
+		log(
+			"DB_MD5_CHECK",
+			{
+				md5: md5Hash,
+				exists: exists.toString(),
+				collection,
+			},
+			2,
 		);
 
 		return {
@@ -500,19 +511,19 @@ export async function documentExistsByMD5(
 					: "Document existence check failed",
 		};
 	}
-}
+};
 
 /**
  * Store processed document in Qdrant with MD5 hash
  * Now uses typed Person data for better consistency
  * Note: This function assumes duplicate checking has already been performed
  */
-export async function storeDocument(
+export const storeDocument = async (
 	content: string,
 	processedData: object,
 	metadata: Record<string, unknown>,
 	collection = "documents",
-): Promise<QdrantResponse<{ id: string | number; md5: string }>> {
+): Promise<QdrantResponse<{ id: string | number; md5: string }>> => {
 	if (!qdrantClient || !isConnected) {
 		return {
 			success: false,
@@ -542,8 +553,13 @@ export async function storeDocument(
 			};
 		}
 
-		console.log(
-			`        → Storing document for ${metadata.personName || "Unknown"} with content: "${content.substring(0, 100)}..."`,
+		log(
+			"DB_STORING_DOCUMENT",
+			{
+				name: (metadata.personName as string) || "Unknown",
+				preview: content.substring(0, 100),
+			},
+			2,
 		);
 
 		// Create simple payload with only primitive values
@@ -594,8 +610,14 @@ export async function storeDocument(
 				},
 			],
 		});
-		console.log(
-			`        → Document stored successfully: ${documentId} with MD5 ${md5Hash} in collection ${collection}`,
+		log(
+			"DB_DOCUMENT_STORE_SUCCESS",
+			{
+				id: documentId.toString(),
+				md5: md5Hash,
+				collection,
+			},
+			2,
 		);
 
 		return {
@@ -609,7 +631,7 @@ export async function storeDocument(
 			error: error instanceof Error ? error.message : "Document storage failed",
 		};
 	}
-}
+};
 
 /**
  * Create LangChain vector store implementation using Qdrant
@@ -632,16 +654,16 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 			},
 		);
 
-		console.log("        ✓ LangChain Qdrant vector store created successfully");
+		log("DB_VECTORSTORE_CREATED", {}, 2);
 		return vectorStore as VectorStore;
 	} catch (error) {
-		console.error("        ✗ Failed to create LangChain vector store:", error);
-		console.warn("        ⚠ Using fallback mock vector store");
+		log("DB_VECTORSTORE_FAILED", { error: String(error) }, 2);
+		log("DB_USING_FALLBACK", {}, 2);
 
 		// Create a mock implementation that satisfies the VectorStore interface
 		const mockVectorStore = {
 			async similaritySearch(query: string, k = 5) {
-				console.log(`        → Fallback search for: ${query}`);
+				log("DB_FALLBACK_SEARCH", { query }, 2);
 				return [
 					new Document({
 						pageContent: `Sample content related to: ${query}`,
@@ -654,12 +676,10 @@ export const createLangChainVectorStore = async (): Promise<VectorStore> => {
 				].slice(0, k);
 			},
 			async addDocuments(documents: Document[]) {
-				console.log(
-					`        → Fallback: Would add ${documents.length} documents`,
-				);
+				log("DB_FALLBACK_ADD", { count: documents.length.toString() }, 2);
 			},
 			async delete() {
-				console.log("        → Fallback: Would delete documents");
+				log("DB_FALLBACK_DELETE", {}, 2);
 			},
 		};
 

@@ -3,16 +3,12 @@
  * Separate from types to keep the types file clean and focused on type definitions
  */
 
-import type {
-	Person,
-	PersonValidationResult,
-	ValidatedPerson,
-} from "./person.types";
+import type { Person, PersonValidationResult, ValidatedPerson } from "./person";
 
 /**
  * Type guard to check if data has minimum required person fields
  */
-export function isValidPerson(data: unknown): data is ValidatedPerson {
+export const isValidPerson = (data: unknown): data is ValidatedPerson => {
 	if (!data || typeof data !== "object") {
 		return false;
 	}
@@ -47,12 +43,12 @@ export function isValidPerson(data: unknown): data is ValidatedPerson {
 		hasExperience &&
 		hasDescription
 	);
-}
+};
 
 /**
  * Validate person data and return validation result
  */
-export function validatePerson(data: unknown): PersonValidationResult {
+export const validatePerson = (data: unknown): PersonValidationResult => {
 	const result: PersonValidationResult = {
 		isValid: false,
 		missingFields: [],
@@ -135,13 +131,13 @@ export function validatePerson(data: unknown): PersonValidationResult {
 	}
 
 	return result;
-}
+};
 
 /**
  * Normalize person data to ensure consistent field names
  * Handles variations like "experience_years" vs "experience"
  */
-export function normalizePerson(data: Person): Person {
+export const normalizePerson = (data: Person): Person => {
 	const normalized: Person = { ...data };
 
 	// Normalize experience fields
@@ -176,4 +172,4 @@ export function normalizePerson(data: Person): Person {
 	}
 
 	return normalized;
-}
+};

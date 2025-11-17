@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { processFileUpload } from "./parser.services";
+import { log } from "../utils/logger";
+import { getDataStoreStats, processFileUpload } from "./";
 
 /**
  * Consolidated parser routes - single upload endpoint for all file types
@@ -48,7 +49,7 @@ parserApp.post("/upload", async (c) => {
 			);
 		}
 	} catch (error) {
-		console.error("Upload error:", error);
+		log("PARSER_UPLOAD_ERROR", { error: String(error) });
 		return c.json(
 			{
 				success: false,

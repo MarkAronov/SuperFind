@@ -1,49 +1,47 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import aiRouter from "./ai/ai.routes";
-import { initializeAIService } from "./ai/ai.services";
+import { initializeAIService } from "./ai";
 import { createBestAvailable } from "./ai/providers/provider-factory";
+import aiRouter from "./ai/routes";
 import {
 	logCurrentConfiguration,
 	validateEnvironment,
 } from "./config/env.config";
-import {
-	createLangChainVectorStore,
-	initQdrant,
-} from "./database/qdrant.services";
-import parserApp from "./parser/parser.routes";
+import { createLangChainVectorStore, initQdrant } from "./database";
 import {
 	processFiles,
 	scanStaticDataFolder,
 	storeProcessedData,
-} from "./parser/parser.services";
-import type { ProcessedFile } from "./parser/parser.types";
-import { checkApplicationHealth } from "./services/health.services";
+} from "./parser";
+import parserApp from "./parser/routes";
+import type { ProcessedFile } from "./parser/types";
+import { checkApplicationHealth } from "./services/health";
+import { log, separator } from "./utils/logger";
 
 /**
  * Initialize external services (Qdrant, databases, etc.)
  */
-async function initializeExternalServices(): Promise<void> {
-	console.log("\n[3] Initializing external services...");
+const initializeExternalServices = async (): Promise<void> => {
+	log("STEP_INIT_SERVICES");
 
 	// Initialize Qdrant vector database
 	const qdrantResult = await initQdrant();
 	if (qdrantResult.success) {
-		console.log("    ✓ Qdrant initialized successfully");
+		log("DB_INIT_SUCCESS", {}, 1);
 	} else {
-		console.warn(`    ⚠ Qdrant initialization failed: ${qdrantResult.error}`);
+		log("DB_INIT_FAILED", { error: qdrantResult.error || "Unknown error" }, 1);
 	}
-}
+};
 
 /**
  * Load and process static data files
  */
-async function loadStaticData(): Promise<ProcessedFile[]> {
-	console.log("\n[4] Loading static data files...");
+const loadStaticData = async (): Promise<ProcessedFile[]> => {
+	log("STEP_LOAD_DATA");
 
 	// Scan for files in static-data folder
 	const files = await scanStaticDataFolder();
-	console.log(`    → Found ${files.length} files to process`);
+	log("PARSER_FILES_FOUND", { count: files.length.toString() }, 1);
 
 	// Process all files
 	const processedFiles = await processFiles(files);
@@ -51,35 +49,37 @@ async function loadStaticData(): Promise<ProcessedFile[]> {
 	// Log results
 	for (const file of processedFiles) {
 		if (file.alreadyExists) {
-			console.log(`    ⚬ Already exists: ${file.fileName}`);
+			log("PARSER_FILE_EXISTS", { fileName: file.fileName }, 1);
 		} else {
-			console.log(`    ✓ Processed: ${file.fileName}`);
+			log("PARSER_FILE_PROCESSED", { fileName: file.fileName }, 1);
 		}
 	}
 
 	return processedFiles;
-}
+};
 
 /**
  * Main application initialization function
  */
-async function initializeApplication(): Promise<ProcessedFile[]> {
+const initializeApplication = async (): Promise<ProcessedFile[]> => {
 	try {
-		console.log("\n[3] Loading and processing static data...");
+		log("STEP_PROCESS_DATA");
 
 		// Load and process static data
 		const processedFiles = await loadStaticData();
 
-		console.log(
-			`\n    ✓ Data processing complete! Processed ${processedFiles.length} files`,
+		log(
+			"DATA_PROCESSING_COMPLETE",
+			{ count: processedFiles.length.toString() },
+			1,
 		);
 
 		return processedFiles;
 	} catch (error) {
-		console.error("\n    ✗ Data processing failed:", error);
+		log("DATA_PROCESSING_FAILED", { error: String(error) });
 		throw error;
 	}
-}
+};
 
 const app = new Hono();
 
@@ -128,17 +128,17 @@ const runInitialization = async (): Promise<void> => {
 
 	initializationPromise = (async () => {
 		try {
-			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-			console.log("🚀 SkillVector - Starting initialization...");
-			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+			separator();
+			log("APP_START");
+			separator();
 
 			// Step 0: Log current configuration
 			logCurrentConfiguration();
 			const envValidation = validateEnvironment();
 			if (!envValidation.valid) {
-				console.error("\n❌ Environment validation failed:");
+				log("CONFIG_VALIDATION_FAILED");
 				envValidation.errors.forEach((error) =>
-					console.error(`    ✗ ${error}`),
+					log("CONFIG_ERROR", { error }, 1),
 				);
 				throw new Error("Environment configuration invalid");
 			}
@@ -147,33 +147,44 @@ const runInitialization = async (): Promise<void> => {
 			await initializeExternalServices();
 
 			// Step 2: Initialize AI Service (now that Qdrant is ready)
-			console.log("\n[1] Initializing AI service...");
+			log("STEP_INIT_AI");
 			const aiProvider = await createBestAvailable();
 			const aiVectorStore = await createLangChainVectorStore();
 			initializeAIService(aiProvider, aiVectorStore);
-			console.log(`    ✓ AI service initialized with ${aiProvider.name}`);
+			log("AI_PROVIDER_INITIALIZED", { provider: aiProvider.name }, 1);
 
 			// Step 3: Initialize application (data processing)
 			const processedFiles = await initializeApplication();
 
 			// Step 4: Store processed data
-			console.log("\n[4] Storing processed data...");
+			log("STEP_STORE_DATA");
 			storeProcessedData(processedFiles);
 
 			isInitialized = true;
-			console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-			console.log("✅ SkillVector initialization completed successfully!");
-			console.log(
-				`🌐 Server running at: http://localhost:${process.env.PORT || 3000}`,
-			);
-			console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+			separator();
+			log("APP_READY");
+
+			// Determine the actual server URL based on environment
+			const port = process.env.PORT || 3000;
+			const serverUrl = process.env.RENDER_EXTERNAL_URL
+				? process.env.RENDER_EXTERNAL_URL
+				: process.env.NODE_ENV === "production" && process.env.BACKEND_URL
+					? process.env.BACKEND_URL
+					: `http://localhost:${port}`;
+
+			log("SERVER_URL", { url: serverUrl }, 1);
+			separator();
 		} catch (error) {
-			console.error(
-				"\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-			);
-			console.error("❌ SkillVector initialization failed!");
-			console.error("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-			console.error(error);
+			separator();
+			log("APP_START_FAILED");
+			separator();
+			// Log raw error for debugging (outside logger system for critical failures)
+			if (error instanceof Error) {
+				console.error(`Error: ${error.message}`);
+				console.error(error.stack);
+			} else {
+				console.error(error);
+			}
 		}
 	})();
 

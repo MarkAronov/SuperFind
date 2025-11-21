@@ -159,6 +159,57 @@ export const getString = (
 };
 
 /**
+ * Parse minimal person data from a raw content string
+ */
+export const parsePersonFromContent = (
+	content: string,
+): Record<string, unknown> => {
+	const person: Record<string, unknown> = {
+		name: "",
+		location: "",
+		role: "",
+		skills: "",
+		experience_years: 0,
+		email: "",
+	};
+
+	const nameMatch =
+		content.match(/^([A-Z][a-zA-Z\s.'-]+)(?:\s+is|\s+from|,)/i) ||
+		content.match(/name[:\s]+([A-Z][a-zA-Z\s.'-]+)/i);
+	if (nameMatch) person.name = nameMatch[1].trim();
+
+	const locationMatch =
+		content.match(/location[:\s]+([^,\n]+)/i) ||
+		content.match(/from\s+([A-Z][a-zA-Z\s,]+?)(?:\.|,|\s+is|\s+role)/i);
+	if (locationMatch) person.location = locationMatch[1].trim();
+
+	const roleMatch =
+		content.match(/role[:\s]+([^,\n]+)/i) ||
+		content.match(/is\s+a[n]?\s+([A-Z][a-zA-Z\s]+?)(?:\.|,|\s+from|\s+with)/i);
+	if (roleMatch) person.role = roleMatch[1].trim();
+
+	const skillsMatch = content.match(/skills?[:\s]+([^,\n]+(?:;[^,\n]+)*)/i);
+	if (skillsMatch) person.skills = skillsMatch[1].trim();
+
+	const expMatch =
+		content.match(/experience[_\s]*years?[:\s]+(\d+)/i) ||
+		content.match(/(\d+)\s+years?\s+(?:of\s+)?experience/i);
+	if (expMatch) person.experience_years = Number.parseInt(expMatch[1], 10);
+
+	const emailMatch =
+		content.match(
+			/email[:\s]+([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i,
+		) ||
+		content.match(
+			/contact[:\s]+([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i,
+		) ||
+		content.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+	if (emailMatch) person.email = emailMatch[1].trim();
+
+	return person;
+};
+
+/**
  * Create human-readable content for a person entity
  */
 export const createPersonContent = (

@@ -48,6 +48,4 @@ export interface ProcessedFile {
 export interface RunContext {
 	dupes: number; // number of duplicate person entries encountered
 	bads: number; // number of invalid person entries encountered
-	maxDupes: number; // maximum allowed duplicates across the run
-	maxBads: number; // maximum allowed bad entries across the run
 }

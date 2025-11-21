@@ -106,8 +106,6 @@ export const processFile = async (
 		const runContext: RunContext = context ?? {
 			dupes: 0,
 			bads: 0,
-			maxDupes: 3,
-			maxBads: 7,
 		};
 		const entityResults = await extractAndStoreEntities(
 			file.content,
@@ -169,8 +167,8 @@ export const processFiles = async (
 	files: FileInfo[],
 ): Promise<ProcessedFile[]> => {
 	const processedFiles: ProcessedFile[] = [];
-	// Create a shared run context to enforce caps across the whole run
-	const context: RunContext = { dupes: 0, bads: 0, maxDupes: 3, maxBads: 7 };
+	// Shared run context to track duplicates/invalid records across entire run
+	const context: RunContext = { dupes: 0, bads: 0 };
 
 	for (const file of files) {
 		const result = await processFile(file, context);
@@ -182,11 +180,9 @@ export const processFiles = async (
 	log(
 		"PARSER_RUN_SUMMARY",
 		{
-			count: processedFiles.length.toString(),
+			filesCount: processedFiles.length.toString(),
 			dupes: context.dupes.toString(),
 			bads: context.bads.toString(),
-			maxDupes: context.maxDupes.toString(),
-			maxBads: context.maxBads.toString(),
 		},
 		1,
 	);

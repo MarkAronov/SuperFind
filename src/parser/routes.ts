@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { log } from "../utils/logger";
-import { getDataStoreStats, processFileUpload } from "./";
+import { processFileUpload } from "./";
 
 /**
  * Consolidated parser routes - single upload endpoint for all file types

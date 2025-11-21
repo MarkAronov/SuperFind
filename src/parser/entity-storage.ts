@@ -37,6 +37,7 @@ export const extractAndStoreEntities = async (
 				// Validate person has required fields
 				const validation = validatePersonData(enhancedItem);
 				if (!validation.isValid) {
+					context.bads += 1;
 					log(
 						"PARSER_PERSON_SKIPPED",
 						{
@@ -68,36 +69,16 @@ export const extractAndStoreEntities = async (
 				const existsResult = await documentExistsByMD5(personMD5, "people");
 
 				if (existsResult.success && existsResult.data) {
-					// Count and optionally cap duplicates
 					context.dupes += 1;
-					if (context.dupes > context.maxDupes) {
-						// Skip adding more duplicate entries beyond the cap
-						log(
-							"PARSER_DUPLICATE_CAPPED",
-							{
-								name: enhancedItem.name || "Unknown",
-								max: context.maxDupes.toString(),
-							},
-							2,
-						);
-						continue;
-					}
 					log(
-						"PARSER_PERSON_EXISTS",
+						"PARSER_DUPLICATE_SKIPPED",
 						{
 							name: enhancedItem.name || "Unknown",
 							md5: personMD5,
 						},
 						2,
 					);
-					entities.push({
-						id: entityId,
-						content: personContent,
-						entityType: "person",
-						storedInQdrant: true, // Already exists
-						metadata: entityMetadata,
-					});
-					continue; // Skip to next person
+					continue; // Skip duplicates entirely
 				}
 
 				// Store each person as separate vector
@@ -145,25 +126,14 @@ export const extractAndStoreEntities = async (
 		const validation = validatePersonData(enhancedData);
 		if (!validation.isValid) {
 			context.bads += 1;
-			if (context.bads <= context.maxBads) {
-				log(
-					"PARSER_PERSON_SKIPPED",
-					{
-						name: enhancedData.name || "Unknown",
-						fields: validation.missingFields.join(", "),
-					},
-					2,
-				);
-			} else {
-				log(
-					"PARSER_INVALID_CAPPED",
-					{
-						name: enhancedData.name || "Unknown",
-						max: context.maxBads.toString(),
-					},
-					2,
-				);
-			}
+			log(
+				"PARSER_PERSON_SKIPPED",
+				{
+					name: enhancedData.name || "Unknown",
+					fields: validation.missingFields.join(", "),
+				},
+				2,
+			);
 			return entities; // Return empty entities list
 		}
 
@@ -188,15 +158,16 @@ export const extractAndStoreEntities = async (
 
 		let storeResult: { success: boolean; error?: string };
 		if (existsResult.success && existsResult.data) {
+			context.dupes += 1;
 			log(
-				"PARSER_PERSON_EXISTS",
+				"PARSER_DUPLICATE_SKIPPED",
 				{
 					name: enhancedData.name || "Unknown",
 					md5: personMD5,
 				},
 				2,
 			);
-			storeResult = { success: true }; // Mark as successful since it already exists
+			return entities;
 		} else {
 			storeResult = await storeDocument(
 				personContent,

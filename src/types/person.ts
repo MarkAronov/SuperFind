@@ -18,8 +18,8 @@ export interface Person {
 	experience: string | number;
 	description: string;
 
-	// Contact information (optional but important)
-	email?: string;
+	// Contact information (REQUIRED email, optional phone)
+	email: string;
 	phone?: string;
 
 	// Location details (optional)
@@ -66,7 +66,7 @@ export interface PersonMetadata {
 	location: string;
 	skills: string | string[];
 	experience: string | number;
-	email?: string;
+	email: string;
 
 	// File source metadata (optional)
 	fileName?: string;

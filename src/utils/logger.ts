@@ -66,11 +66,53 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "💾",
 		template: "[4] Storing processed data...",
 	},
+	STEP_PROCESS_DATA: {
+		level: "info",
+		category: "INIT",
+		icon: "⚙️",
+		template: "[5] Processing collected data...",
+	},
 	ENV_VALIDATION_FAILED: {
 		level: "error",
 		category: "CONFIG",
 		icon: "❌",
 		template: "Environment validation failed:",
+	},
+	CONFIG_VALIDATION_FAILED: {
+		level: "error",
+		category: "CONFIG",
+		icon: "❌",
+		template: "Configuration validation failed",
+	},
+	CONFIG_ERROR: {
+		level: "error",
+		category: "CONFIG",
+		icon: "❌",
+		template: "Configuration error: {error}",
+	},
+	DATA_PROCESSING_FAILED: {
+		level: "error",
+		category: "INIT",
+		icon: "❌",
+		template: "Data processing failed: {error}",
+	},
+	APP_READY: {
+		level: "success",
+		category: "INIT",
+		icon: "✅",
+		template: "Application ready!",
+	},
+	APP_START_FAILED: {
+		level: "error",
+		category: "INIT",
+		icon: "❌",
+		template: "Application start failed!",
+	},
+	SERVER_URL: {
+		level: "info",
+		category: "INIT",
+		icon: "🌐",
+		template: "Server URL: {url}",
 	},
 
 	// AI messages
@@ -80,11 +122,35 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "✓",
 		template: "AI service initialized with {provider}",
 	},
+	AI_PROVIDER_INITIALIZED: {
+		level: "success",
+		category: "AI",
+		icon: "✓",
+		template: "AI provider initialized: {provider}",
+	},
 	AI_SEARCH_REQUEST: {
 		level: "debug",
 		category: "AI",
 		icon: "→",
 		template: "AI Search request: {query}",
+	},
+	AI_SEARCH_RESULTS: {
+		level: "debug",
+		category: "AI",
+		icon: "→",
+		template: "Retrieved {count} search results",
+	},
+	AI_SAMPLE_SCORE: {
+		level: "debug",
+		category: "AI",
+		icon: "→",
+		template: "Sample relevance score: {score}",
+	},
+	AI_FILTERED_RESULTS: {
+		level: "debug",
+		category: "AI",
+		icon: "→",
+		template: "Filtered from {before} to {after} results",
 	},
 	AI_SEARCH_SUCCESS: {
 		level: "success",
@@ -154,6 +220,66 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "⚠",
 		template: "Using fallback mock vector store",
 	},
+	DB_DOCUMENT_EXISTS: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "⚬",
+		template: "Document already exists (MD5: {md5})",
+	},
+	DB_DOCUMENT_STORED: {
+		level: "success",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Document stored with ID: {id}",
+	},
+	DB_DOCUMENT_DELETED: {
+		level: "success",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Document deleted: {id}",
+	},
+	DB_DOCUMENT_UPDATED: {
+		level: "success",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Document updated: {id}",
+	},
+	DB_VECTORSTORE_CREATED: {
+		level: "success",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Vector store created successfully",
+	},
+	DB_VECTORSTORE_FAILED: {
+		level: "error",
+		category: "DATABASE",
+		icon: "✗",
+		template: "Vector store creation failed: {error}",
+	},
+	DB_USING_FALLBACK: {
+		level: "warning",
+		category: "DATABASE",
+		icon: "⚠",
+		template: "Using fallback in-memory vector store",
+	},
+	DB_FALLBACK_SEARCH: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "Fallback search: {query}",
+	},
+	DB_FALLBACK_ADD: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "Fallback add: {count} documents",
+	},
+	DB_FALLBACK_DELETE: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "Fallback delete operation",
+	},
 
 	// Parser messages
 	PARSER_FILES_FOUND: {
@@ -167,6 +293,24 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		category: "PARSER",
 		icon: "⚬",
 		template: "Already exists: {fileName}",
+	},
+	PARSER_FILE_EXISTS_MD5: {
+		level: "debug",
+		category: "PARSER",
+		icon: "⚬",
+		template: "File {fileName} already exists (MD5: {md5})",
+	},
+	PARSER_AI_EXTRACTION_ERROR: {
+		level: "error",
+		category: "PARSER",
+		icon: "✗",
+		template: "AI extraction error: {error}",
+	},
+	PARSER_DIR_READ_ERROR: {
+		level: "error",
+		category: "PARSER",
+		icon: "✗",
+		template: "Error reading directory {path}: {error}",
 	},
 	PARSER_FILE_PROCESSED: {
 		level: "success",
@@ -196,7 +340,7 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		level: "debug",
 		category: "PARSER",
 		icon: "⚬",
-		template: "Skipping duplicate beyond cap (>{maxDupes}): {name}",
+		template: "Skipping duplicate entry (MD5: {md5}): {name}",
 	},
 	PARSER_DUPLICATE_EXISTS: {
 		level: "debug",
@@ -240,7 +384,7 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		category: "PARSER",
 		icon: "⏺",
 		template:
-			"Run summary: processed {filesCount} files, duplicates encountered: {dupes}, bad entries encountered: {bads} (caps dupes<={maxDupes}, bads<={maxBads})",
+			"Run summary: processed {filesCount} files, duplicates skipped: {dupes}, invalid entries skipped: {bads}",
 	},
 	PARSER_SCAN_ERROR: {
 		level: "error",
@@ -299,6 +443,54 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 	},
 
 	// Provider messages
+	PROVIDER_TRYING_ANTHROPIC: {
+		level: "debug",
+		category: "PROVIDER",
+		icon: "→",
+		template: "Trying Anthropic provider...",
+	},
+	PROVIDER_USING_ANTHROPIC: {
+		level: "success",
+		category: "PROVIDER",
+		icon: "✓",
+		template: "Using Anthropic Claude",
+	},
+	PROVIDER_TRYING_GEMINI: {
+		level: "debug",
+		category: "PROVIDER",
+		icon: "→",
+		template: "Trying Google Gemini provider...",
+	},
+	PROVIDER_USING_GEMINI: {
+		level: "success",
+		category: "PROVIDER",
+		icon: "✓",
+		template: "Using Google Gemini",
+	},
+	PROVIDER_TRYING_HF: {
+		level: "debug",
+		category: "PROVIDER",
+		icon: "→",
+		template: "Trying Hugging Face provider...",
+	},
+	PROVIDER_USING_HF: {
+		level: "success",
+		category: "PROVIDER",
+		icon: "✓",
+		template: "Using Hugging Face",
+	},
+	PROVIDER_TRYING_OLLAMA: {
+		level: "debug",
+		category: "PROVIDER",
+		icon: "→",
+		template: "Trying Ollama provider...",
+	},
+	PROVIDER_USING_OLLAMA: {
+		level: "success",
+		category: "PROVIDER",
+		icon: "✓",
+		template: "Using Ollama: {model}",
+	},
 	PROVIDER_OPENAI_UNAVAILABLE: {
 		level: "debug",
 		category: "PROVIDER",

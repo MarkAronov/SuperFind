@@ -36,6 +36,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 								skills: "Unknown",
 								experience: 0,
 								description: "",
+								email: "",
 							},
 							metadata: {
 								rawContent: content,
@@ -73,7 +74,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 							skillsMatch?.[1]?.trim().replace(/\s*;\s*/g, "; ") || "Unknown",
 						experience: expMatch?.[1] ? Number.parseInt(expMatch[1], 10) : 0,
 						description: "",
-						email: emailMatch?.[1]?.trim(),
+						email: emailMatch?.[1]?.trim() || "",
 					},
 					metadata: {
 						rawContent: content,

@@ -96,6 +96,12 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "❌",
 		template: "Data processing failed: {error}",
 	},
+	DATA_PROCESSING_COMPLETE: {
+		level: "success",
+		category: "INIT",
+		icon: "✅",
+		template: "Data processing completed successfully",
+	},
 	APP_READY: {
 		level: "success",
 		category: "INIT",
@@ -189,6 +195,30 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		category: "DATABASE",
 		icon: "✓",
 		template: "Connected to Qdrant at {host}:{port}",
+	},
+	DB_EMBEDDING_PROVIDER: {
+		level: "info",
+		category: "DATABASE",
+		icon: "→",
+		template: "Embedding provider: {provider}",
+	},
+	DB_CHECK_WARNING: {
+		level: "warning",
+		category: "DATABASE",
+		icon: "⚠",
+		template: "Database check warning: {error}",
+	},
+	DB_STORING_DOCUMENT: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "Storing document in collection: {collection}",
+	},
+	DB_DOCUMENT_STORE_SUCCESS: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Document stored successfully",
 	},
 	DB_INIT_SUCCESS: {
 		level: "success",

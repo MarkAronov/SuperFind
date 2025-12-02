@@ -89,7 +89,8 @@ export function useTheme() {
 		// Cycle through: system -> light -> dark -> system
 		if (currentTheme === "system") setThemeInternal("light");
 		else if (currentTheme === "light") setThemeInternal("dark");
-		else setThemeInternal("system");
+		else if (currentTheme === "dark") setThemeInternal("system");
+		else throw new Error(`Unknown theme: ${currentTheme}`);
 	}, []);
 
 	// Re-apply theme when component mounts (for SSR/hydration)

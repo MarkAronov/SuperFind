@@ -262,6 +262,24 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "⚬",
 		template: "Document already exists (MD5: {md5})",
 	},
+	DB_COLLECTION_CREATED: {
+		level: "success",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Collection {collection} created with {dimensions} dimensions",
+	},
+	DB_SEARCH_COMPLETE: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "Search completed with {count} results",
+	},
+	DB_MD5_CHECK: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "MD5 check for {md5}: {exists} in {collection}",
+	},
 	DB_DOCUMENT_STORED: {
 		level: "success",
 		category: "DATABASE",

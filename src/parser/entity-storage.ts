@@ -101,7 +101,7 @@ export const extractAndStoreEntities = async (
 					log("PARSER_PERSON_STORED", { name: item.name || "Unknown" }, 2);
 				} else {
 					log(
-						"PARSER_PERSON_STORE_FAILED",
+						"PARSER_PERSON_FAILED",
 						{
 							name: item.name || "Unknown",
 							error: storeResult.error || "Unknown error",

@@ -19,6 +19,7 @@ export default defineConfig({
 			output: {
 				manualChunks: {
 					// Scalar is huge - isolate it
+					// To further reduce initial bundle size, ensure @scalar/api-reference-react is lazy loaded in the app code (e.g., using React.lazy or dynamic import)
 					scalar: ["@scalar/api-reference-react"],
 					// React ecosystem
 					"react-vendor": ["react", "react-dom"],

@@ -29,13 +29,13 @@ export function PersonCard({ person }: PersonCardProps) {
 				<div className="flex items-center gap-4 text-sm">
 					{p.location && (
 						<div className="flex items-center gap-1">
-							<span className="text-gray-500">📍</span>
+							<span className="text-muted-foreground">📍</span>
 							<span>{p.location}</span>
 						</div>
 					)}
 					{p.experience_years && Number(p.experience_years) > 0 && (
 						<div className="flex items-center gap-1">
-							<span className="text-gray-500">💼</span>
+							<span className="text-muted-foreground">💼</span>
 							<span>{p.experience_years} years</span>
 						</div>
 					)}
@@ -43,7 +43,7 @@ export function PersonCard({ person }: PersonCardProps) {
 				{/* Skills */}
 				{p.skills && (
 					<div>
-						<p className="text-xs text-gray-500 mb-1">Skills:</p>
+						<p className="text-xs text-muted-foreground mb-1">Skills:</p>
 						<div className="flex flex-wrap gap-1">
 							{typeof p.skills === "string"
 								? p.skills.split(/[;,]/).map((skill: string) => (
@@ -68,7 +68,7 @@ export function PersonCard({ person }: PersonCardProps) {
 					<div className="text-sm">
 						<a
 							href={`mailto:${p.email}`}
-							className="text-blue-600 hover:text-blue-800 hover:underline"
+							className="text-primary hover:text-blue-800 hover:underline"
 						>
 							{p.email}
 						</a>
@@ -79,7 +79,7 @@ export function PersonCard({ person }: PersonCardProps) {
 			<CardFooter className="border-t">
 				<Badge
 					variant="default"
-					className="bg-green-100 text-green-800 border-green-200"
+					className="bg-success/10 text-success border-success/30"
 				>
 					Relevance: {(person.score * 100).toFixed(1)}%
 				</Badge>

@@ -5,7 +5,7 @@
 /**
  * Get all current model configurations from environment
  */
-export function getCurrentModelConfig() {
+export const getCurrentModelConfig = () => {
 	return {
 		ai_models: {
 			openai: process.env.OPENAI_MODEL || "gpt-4o-mini",
@@ -40,17 +40,23 @@ export function getCurrentModelConfig() {
 			protocol: process.env.QDRANT_PROTOCOL || "http",
 			has_api_key: !!process.env.QDRANT_API_KEY,
 		},
+		options: {
+			skip_static_data: process.env.SKIP_STATIC_DATA === "true",
+		},
 	};
-}
+};
+
+import { logSection, separator } from "../utils/logger";
 
 /**
  * Log current configuration at startup
  */
-export function logCurrentConfiguration() {
+export const logCurrentConfiguration = () => {
 	const config = getCurrentModelConfig();
 
-	console.log("\n📋 Current Model Configuration:");
-	console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+	separator();
+	logSection("Current Model Configuration");
+	separator();
 
 	// Available AI Providers
 	console.log("\n🤖 Available AI Providers:");
@@ -77,15 +83,21 @@ export function logCurrentConfiguration() {
 		`    API Key: ${config.qdrant.has_api_key ? "✅ Configured" : "❌ Not set"}`,
 	);
 
-	console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+	// Startup Options
+	console.log("\n⚙️  Startup Options:");
+	console.log(
+		`    Skip Static Data: ${config.options.skip_static_data ? "✅ Yes" : "❌ No"}`,
+	);
+
+	separator();
 
 	return config;
-}
+};
 
 /**
  * Validate required environment variables
  */
-export function validateEnvironment(): { valid: boolean; errors: string[] } {
+export const validateEnvironment = (): { valid: boolean; errors: string[] } => {
 	const errors: string[] = [];
 	const config = getCurrentModelConfig();
 
@@ -108,4 +120,4 @@ export function validateEnvironment(): { valid: boolean; errors: string[] } {
 		valid: errors.length === 0,
 		errors,
 	};
-}
+};

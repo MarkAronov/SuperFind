@@ -86,7 +86,7 @@ export const EMBEDDING_PRESETS: Record<string, EmbeddingConfig> = {
 /**
  * Create embedding provider based on configuration
  */
-export function createEmbeddingProvider(config: EmbeddingConfig) {
+export const createEmbeddingProvider = (config: EmbeddingConfig) => {
 	switch (config.provider) {
 		case "openai-small":
 		case "openai-large":
@@ -119,12 +119,12 @@ export function createEmbeddingProvider(config: EmbeddingConfig) {
 		default:
 			throw new Error(`Unsupported embedding provider: ${config.provider}`);
 	}
-}
+};
 
 /**
  * Get recommended embedding model based on available API keys
  */
-export function getBestAvailableEmbedding(): EmbeddingConfig {
+export const getBestAvailableEmbedding = (): EmbeddingConfig => {
 	// Auto-select best available embedding model based on API keys
 
 	if (process.env.OPENAI_API_KEY) {
@@ -137,11 +137,13 @@ export function getBestAvailableEmbedding(): EmbeddingConfig {
 
 	// Fall back to local Ollama if available (free but requires local setup)
 	return EMBEDDING_PRESETS["ollama-mxbai"];
-} /**
+};
+
+/**
  * Get embedding model details for Qdrant collection configuration
  */
-export function getEmbeddingDimensions(config: EmbeddingConfig): number {
+export const getEmbeddingDimensions = (config: EmbeddingConfig): number => {
 	return (
 		config.dimensions || EMBEDDING_PRESETS[config.provider]?.dimensions || 1536
 	);
-}
+};

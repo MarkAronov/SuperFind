@@ -3,12 +3,15 @@
 	"scripts": {
 		"start": "bun src/index.ts",
 		"dev": "bun run --hot src/index.ts",
+		"dev:quick": "SKIP_STATIC_DATA=true bun run --hot src/index.ts",
 		"lint": "biome lint ./src",
 		"format": "biome format ./src --write",
 		"check": "biome check ./src",
 		"check:fix": "biome check ./src --fix",
 		"check:format": "biome format ./src --check",
-		"check:format:fix": "biome format ./src --check --write"
+		"check:format:fix": "biome format ./src --check --write",
+		"csv:validate": "node scripts/validate-csv.js",
+		"csv:normalize": "node scripts/normalize-csv.js --inplace"
 	},
 	"dependencies": {
 		"@huggingface/inference": "^4.8.0",
@@ -28,6 +31,8 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.1.4",
 		"@types/bun": "latest",
-		"@types/papaparse": "^5.3.16"
+		"@types/papaparse": "^5.3.16",
+		"csv-parse": "^6.1.0",
+		"csv-stringify": "^6.6.0"
 	}
 }

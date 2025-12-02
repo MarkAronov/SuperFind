@@ -457,6 +457,58 @@ export const generateMD5 = (content: string): string => {
 };
 
 /**
+ * Retrieve all documents from a collection (no vector search required)
+ */
+export const getAllDocuments = async (
+	collection = "people",
+	limit = 100,
+): Promise<QdrantResponse<unknown[]>> => {
+	if (!qdrantClient || !isConnected) {
+		return {
+			success: false,
+			error: "Qdrant not initialized. Call initQdrant() first.",
+		};
+	}
+
+	try {
+		// Use scroll to retrieve all documents without vector search
+		const scrollResult = await qdrantClient.scroll(collection, {
+			limit,
+			with_payload: true,
+			with_vector: false, // Don't need vectors, just the data
+		});
+
+		// Format results similar to search results
+		const formattedResults = scrollResult.points.map((point) => ({
+			id: point.id,
+			content: point.payload?.content || "",
+			metadata: point.payload || {},
+		}));
+
+		log(
+			"DB_ALL_DOCUMENTS_RETRIEVED",
+			{
+				count: formattedResults.length.toString(),
+				collection,
+			},
+			2,
+		);
+
+		return {
+			success: true,
+			data: formattedResults,
+			message: `Retrieved ${formattedResults.length} documents from ${collection}`,
+		};
+	} catch (error) {
+		return {
+			success: false,
+			error:
+				error instanceof Error ? error.message : "Failed to retrieve documents",
+		};
+	}
+};
+
+/**
  * Check if a document with given MD5 hash already exists in Qdrant
  */
 export const documentExistsByMD5 = async (

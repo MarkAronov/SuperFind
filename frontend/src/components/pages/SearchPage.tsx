@@ -62,6 +62,23 @@ export function SearchPage() {
 
 				{/* Search Results */}
 				{data && <SearchResults data={data} isLoading={isLoading} />}
+
+				{/* Hint for browse all - subtle Easter egg */}
+				{!query && (
+					<div className="mt-8 text-center">
+						<p className="text-xs text-muted-foreground/50">
+							Tip: Visit{" "}
+							<button
+								type="button"
+								onClick={() => navigate({ to: "/people" })}
+								className="underline hover:text-muted-foreground/70 transition-colors"
+							>
+								/people
+							</button>{" "}
+							to see everyone
+						</p>
+					</div>
+				)}
 			</div>
 		</PageTemplate>
 	);

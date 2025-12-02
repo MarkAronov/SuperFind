@@ -268,6 +268,12 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "✓",
 		template: "Document stored with ID: {id}",
 	},
+	DB_ALL_DOCUMENTS_RETRIEVED: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "→",
+		template: "Retrieved {count} documents from {collection}",
+	},
 	DB_DOCUMENT_DELETED: {
 		level: "success",
 		category: "DATABASE",

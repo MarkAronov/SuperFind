@@ -62,6 +62,12 @@ const TermsPage = lazy(() =>
 const ApiPage = lazy(() =>
 	import("./pages/ApiPage").then((m) => ({ default: m.ApiPage })),
 );
+// Hidden route - browse all people
+const BrowsePage = lazy(() =>
+	import("./components/pages/BrowsePage").then((m) => ({
+		default: m.BrowsePage,
+	})),
+);
 
 // Root route
 const rootRoute = createRootRoute();
@@ -143,6 +149,13 @@ const cookiesRoute = createRoute({
 	component: CookiesPage,
 });
 
+// Hidden route - browse all people (not in nav)
+const browseRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/people",
+	component: BrowsePage,
+});
+
 // Create route tree
 const routeTree = rootRoute.addChildren([
 	indexRoute,
@@ -157,6 +170,7 @@ const routeTree = rootRoute.addChildren([
 	privacyRoute,
 	termsRoute,
 	cookiesRoute,
+	browseRoute,
 ]);
 
 // Create router

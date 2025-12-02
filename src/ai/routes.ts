@@ -1,5 +1,6 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
+import { getAllDocuments } from "../database";
 import { handleSearchRequest } from "./index";
 
 const AIRouter = new Hono();
@@ -27,6 +28,29 @@ AIRouter.get("/search", async (c: Context) => {
 		answer: result.answer,
 		sources: result.sources,
 		timestamp: result.timestamp,
+	});
+});
+
+// Get route for retrieving all people from the database
+AIRouter.get("/people", async (c: Context) => {
+	const limitParam = c.req.query("limit");
+	const limit = limitParam ? Number.parseInt(limitParam, 10) : 100;
+
+	const result = await getAllDocuments("people", limit);
+
+	if (!result.success) {
+		return c.json(
+			{
+				error: result.error,
+			},
+			500,
+		);
+	}
+
+	return c.json({
+		success: true,
+		count: (result.data as unknown[]).length,
+		people: result.data,
 	});
 });
 

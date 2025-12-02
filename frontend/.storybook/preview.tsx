@@ -9,8 +9,8 @@ import {
 	createRouter,
 	Outlet,
 } from "@tanstack/react-router";
-import * as ReactDOM from "react-dom";
 import type { ReactNode } from "react";
+import * as ReactDOM from "react-dom";
 
 // Polyfill: Storybook and some add-ons expect ReactDOM.unmountComponentAtNode
 // which does not exist on the React 18/19 client root API. Provide a

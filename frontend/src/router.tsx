@@ -8,18 +8,60 @@ import { SearchPage } from "./components/pages/SearchPage";
 
 // Lazy load pages for code splitting
 // SearchPage is eagerly loaded since it's the main landing page
-const AboutPage = lazy(() => import("./components/pages/AboutPage").then(m => ({ default: m.AboutPage })));
-const ChangelogPage = lazy(() => import("./components/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
-const ContactPage = lazy(() => import("./components/pages/ContactPage").then(m => ({ default: m.ContactPage })));
-const CookiesPage = lazy(() => import("./components/pages/CookiesPage").then(m => ({ default: m.CookiesPage })));
-const FeaturesPage = lazy(() => import("./components/pages/FeaturesPage").then(m => ({ default: m.FeaturesPage })));
-const HowItWorksPage = lazy(() => import("./components/pages/HowItWorksPage").then(m => ({ default: m.HowItWorksPage })));
-const IntegrationsPage = lazy(() => import("./components/pages/IntegrationsPage").then(m => ({ default: m.IntegrationsPage })));
-const PrivacyPage = lazy(() => import("./components/pages/PrivacyPage").then(m => ({ default: m.PrivacyPage })));
-const SupportPage = lazy(() => import("./components/pages/SupportPage").then(m => ({ default: m.SupportPage })));
-const TermsPage = lazy(() => import("./components/pages/TermsPage").then(m => ({ default: m.TermsPage })));
+const AboutPage = lazy(() =>
+	import("./components/pages/AboutPage").then((m) => ({
+		default: m.AboutPage,
+	})),
+);
+const ChangelogPage = lazy(() =>
+	import("./components/pages/ChangelogPage").then((m) => ({
+		default: m.ChangelogPage,
+	})),
+);
+const ContactPage = lazy(() =>
+	import("./components/pages/ContactPage").then((m) => ({
+		default: m.ContactPage,
+	})),
+);
+const CookiesPage = lazy(() =>
+	import("./components/pages/CookiesPage").then((m) => ({
+		default: m.CookiesPage,
+	})),
+);
+const FeaturesPage = lazy(() =>
+	import("./components/pages/FeaturesPage").then((m) => ({
+		default: m.FeaturesPage,
+	})),
+);
+const HowItWorksPage = lazy(() =>
+	import("./components/pages/HowItWorksPage").then((m) => ({
+		default: m.HowItWorksPage,
+	})),
+);
+const IntegrationsPage = lazy(() =>
+	import("./components/pages/IntegrationsPage").then((m) => ({
+		default: m.IntegrationsPage,
+	})),
+);
+const PrivacyPage = lazy(() =>
+	import("./components/pages/PrivacyPage").then((m) => ({
+		default: m.PrivacyPage,
+	})),
+);
+const SupportPage = lazy(() =>
+	import("./components/pages/SupportPage").then((m) => ({
+		default: m.SupportPage,
+	})),
+);
+const TermsPage = lazy(() =>
+	import("./components/pages/TermsPage").then((m) => ({
+		default: m.TermsPage,
+	})),
+);
 // ApiPage is the largest chunk (Scalar) - definitely lazy load
-const ApiPage = lazy(() => import("./pages/ApiPage").then(m => ({ default: m.ApiPage })));
+const ApiPage = lazy(() =>
+	import("./pages/ApiPage").then((m) => ({ default: m.ApiPage })),
+);
 
 // Root route
 const rootRoute = createRootRoute();

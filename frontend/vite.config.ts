@@ -19,11 +19,11 @@ export default defineConfig({
 			output: {
 				manualChunks: {
 					// Scalar is huge - isolate it
-					"scalar": ["@scalar/api-reference-react"],
+					scalar: ["@scalar/api-reference-react"],
 					// React ecosystem
 					"react-vendor": ["react", "react-dom"],
 					// Router
-					"router": ["@tanstack/react-router", "@tanstack/react-query"],
+					router: ["@tanstack/react-router", "@tanstack/react-query"],
 					// UI utilities
 					"ui-utils": ["clsx", "tailwind-merge", "class-variance-authority"],
 				},

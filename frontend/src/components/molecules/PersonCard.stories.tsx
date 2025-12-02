@@ -20,7 +20,8 @@ const mockPerson: PersonSearchResult = {
 		experience_years: 8,
 		skills: ["React", "TypeScript", "Node.js", "GraphQL"],
 		email: "jane.doe@example.com",
-		description: "Experienced full-stack developer with a passion for building scalable web applications.",
+		description:
+			"Experienced full-stack developer with a passion for building scalable web applications.",
 		bio: "Experienced full-stack developer with a passion for building scalable web applications.",
 	},
 	score: 0.95,

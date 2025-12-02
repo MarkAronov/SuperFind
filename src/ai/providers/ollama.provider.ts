@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { ChatOllama } from "@langchain/ollama";
-import type { AIProvider, CompletionOptions } from "../ai.interface.js";
+import type { AIProvider, CompletionOptions } from "../types";
 
 /**
  * Ollama Provider Implementation using LangChain

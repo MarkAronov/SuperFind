@@ -1,0 +1,420 @@
+{
+	"openapi": "3.0.3",
+	"info": {
+		"title": "SkillVector API",
+		"version": "1.0.0",
+		"description": "AI-powered semantic search API for finding and querying professional profiles using vector embeddings and natural language processing.",
+		"contact": {
+			"name": "SkillVector Team",
+			"url": "https://github.com/MarkAronov/SkillVector"
+		},
+		"license": {
+			"name": "MIT",
+			"url": "https://opensource.org/licenses/MIT"
+		}
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3000",
+			"description": "Local development server"
+		},
+		{
+			"url": "https://api.skillvector.dev",
+			"description": "Production server"
+		}
+	],
+	"tags": [
+		{
+			"name": "AI",
+			"description": "AI-powered semantic search endpoints"
+		},
+		{
+			"name": "Parser",
+			"description": "File upload and parsing endpoints"
+		},
+		{
+			"name": "Health",
+			"description": "System health and status endpoints"
+		}
+	],
+	"paths": {
+		"/": {
+			"get": {
+				"tags": ["Health"],
+				"summary": "API root endpoint",
+				"description": "Returns basic API information and status",
+				"responses": {
+					"200": {
+						"description": "API information",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "SkillVector API"
+										},
+										"status": {
+											"type": "string",
+											"example": "running"
+										},
+										"version": {
+											"type": "string",
+											"example": "1.0.0"
+										},
+										"initialized": {
+											"type": "boolean",
+											"description": "Whether the application has completed initialization"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/health": {
+			"get": {
+				"tags": ["Health"],
+				"summary": "Health check endpoint",
+				"description": "Returns detailed health status of all services including database, AI provider, and vector store",
+				"responses": {
+					"200": {
+						"description": "Health check response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"status": {
+											"type": "string",
+											"enum": ["healthy", "degraded", "unhealthy"],
+											"example": "healthy"
+										},
+										"services": {
+											"type": "object",
+											"properties": {
+												"database": {
+													"type": "object",
+													"properties": {
+														"status": { "type": "string" },
+														"connected": { "type": "boolean" }
+													}
+												},
+												"ai": {
+													"type": "object",
+													"properties": {
+														"status": { "type": "string" },
+														"provider": { "type": "string" }
+													}
+												},
+												"vectorStore": {
+													"type": "object",
+													"properties": {
+														"status": { "type": "string" },
+														"initialized": { "type": "boolean" }
+													}
+												}
+											}
+										},
+										"initialized": {
+											"type": "boolean"
+										},
+										"timestamp": {
+											"type": "string",
+											"format": "date-time"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/ai/search": {
+			"get": {
+				"tags": ["AI"],
+				"summary": "Semantic search with AI-generated answers",
+				"description": "Performs semantic search over the vector database and returns an AI-generated answer with relevant sources",
+				"parameters": [
+					{
+						"name": "query",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"example": "Find developers with React experience"
+						},
+						"description": "Natural language search query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful search response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": ["success", "query"],
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": true
+										},
+										"query": {
+											"type": "string",
+											"example": "Find developers with React experience"
+										},
+										"answer": {
+											"type": "string",
+											"description": "AI-generated natural language answer",
+											"example": "Based on the available data, I found 3 developers with React experience..."
+										},
+										"sources": {
+											"type": "array",
+											"description": "Source documents used to generate the answer",
+											"items": {
+												"$ref": "#/components/schemas/Source"
+											}
+										},
+										"timestamp": {
+											"type": "string",
+											"format": "date-time"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request - missing or invalid query parameter",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/parser/upload": {
+			"post": {
+				"tags": ["Parser"],
+				"summary": "Upload and parse professional profiles",
+				"description": "Upload CSV, JSON, or text files containing professional profiles to be parsed and stored in the vector database",
+				"parameters": [
+					{
+						"name": "type",
+						"in": "query",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"enum": ["csv", "json", "text"]
+						},
+						"description": "File format type"
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"required": ["file"],
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary",
+										"description": "File containing professional profile data"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "File successfully parsed and processed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": true
+										},
+										"message": {
+											"type": "string",
+											"example": "File processed successfully"
+										},
+										"data": {
+											"type": "object",
+											"properties": {
+												"validCount": {
+													"type": "integer",
+													"description": "Number of valid persons parsed"
+												},
+												"invalidCount": {
+													"type": "integer",
+													"description": "Number of invalid records skipped"
+												},
+												"persons": {
+													"type": "array",
+													"items": {
+														"$ref": "#/components/schemas/Person"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request - invalid file type or missing file",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"example": false
+										},
+										"error": {
+											"type": "string"
+										},
+										"message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Person": {
+				"type": "object",
+				"required": ["name"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"example": "Dr. Sarah Chen"
+					},
+					"role": {
+						"type": "string",
+						"example": "Senior Software Engineer"
+					},
+					"company": {
+						"type": "string",
+						"example": "TechCorp Inc."
+					},
+					"location": {
+						"type": "string",
+						"example": "San Francisco, CA"
+					},
+					"email": {
+						"type": "string",
+						"format": "email",
+						"example": "sarah.chen@example.com"
+					},
+					"phone": {
+						"type": "string",
+						"example": "+1-555-0123"
+					},
+					"skills": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"example": ["React", "TypeScript", "Node.js", "Python"]
+					},
+					"experience": {
+						"type": "string",
+						"example": "8 years"
+					},
+					"education": {
+						"type": "string",
+						"example": "PhD in Computer Science, Stanford University"
+					},
+					"bio": {
+						"type": "string",
+						"example": "Passionate about building scalable web applications and AI-powered tools."
+					}
+				}
+			},
+			"Source": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Unique identifier for the source document"
+					},
+					"content": {
+						"type": "string",
+						"description": "Content excerpt from the source"
+					},
+					"metadata": {
+						"type": "object",
+						"additionalProperties": true,
+						"description": "Additional metadata about the source"
+					},
+					"relevanceScore": {
+						"type": "number",
+						"format": "float",
+						"minimum": 0,
+						"maximum": 1,
+						"description": "Relevance score (0-1) indicating match quality"
+					}
+				}
+			},
+			"Error": {
+				"type": "object",
+				"properties": {
+					"error": {
+						"type": "string",
+						"description": "Error message"
+					},
+					"details": {
+						"type": "string",
+						"description": "Additional error details"
+					}
+				}
+			}
+		}
+	}
+}

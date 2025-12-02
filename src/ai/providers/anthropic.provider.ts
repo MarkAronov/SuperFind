@@ -1,6 +1,6 @@
 import { ChatAnthropic } from "@langchain/anthropic";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import type { AIProvider, CompletionOptions } from "../ai.interface.js";
+import type { AIProvider, CompletionOptions } from "../types";
 
 /**
  * Anthropic Claude Provider Implementation using LangChain

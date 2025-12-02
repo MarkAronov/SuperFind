@@ -13,6 +13,32 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# Keep example file
+!.env.example
+
+# Lighthouse / Axe reports
+lighthouse/
+axe-*.json
+lighthouse-*.html
+lighthouse-*.json
+
+# Storybook
+storybook-static/
+.storybook/.cache/
+*storybook.log
+debug-storybook.log
+
+# Debug logs
+*.debug.log
+debug-*.log
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -36,6 +36,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 								skills: "Unknown",
 								experience: 0,
 								description: "",
+								email: "",
 							},
 							metadata: {
 								rawContent: content,
@@ -73,7 +74,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 							skillsMatch?.[1]?.trim().replace(/\s*;\s*/g, "; ") || "Unknown",
 						experience: expMatch?.[1] ? Number.parseInt(expMatch[1], 10) : 0,
 						description: "",
-						email: emailMatch?.[1]?.trim(),
+						email: emailMatch?.[1]?.trim() || "",
 					},
 					metadata: {
 						rawContent: content,
@@ -133,14 +134,16 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 	}, [people]);
 
 	if (isLoading) {
-		return <div className="mt-4 text-center text-gray-500">Searching...</div>;
+		return (
+			<div className="mt-4 text-center text-muted-foreground">Searching...</div>
+		);
 	}
 
 	// Show error if search failed
 	if (!data.success && data.error) {
 		return (
-			<Card className="mt-8 p-6 bg-red-50">
-				<h2 className="text-xl font-semibold mb-2 text-red-700">Error</h2>
+			<Card className="mt-8 p-6 border-red-200 text-red-700">
+				<h2 className="text-xl font-semibold mb-2">Error</h2>
 				<p className="text-red-600">{data.error}</p>
 				{data.details && (
 					<p className="text-sm text-red-500 mt-2">{data.details}</p>
@@ -153,9 +156,9 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 		<div className="mt-8 space-y-6">
 			{/* AI Answer Section */}
 			{data.answer && (
-				<Card className="p-6 bg-blue-50">
+				<Card className="p-6 border-primary/30">
 					<h2 className="text-xl font-semibold mb-2">AI Summary</h2>
-					<p className="text-gray-700 whitespace-pre-wrap">{data.answer}</p>
+					<p className="text-foreground whitespace-pre-wrap">{data.answer}</p>
 				</Card>
 			)}
 
@@ -166,7 +169,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 						<>
 							Found {uniquePeople.length} people
 							{uniquePeople.length !== people.length && (
-								<span className="text-sm text-gray-500 ml-2">
+								<span className="text-sm text-muted-foreground ml-2">
 									({people.length - uniquePeople.length} duplicates removed)
 								</span>
 							)}
@@ -183,7 +186,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 						))}
 					</div>
 				) : (
-					<Card className="p-6 text-center text-gray-500">
+					<Card className="p-6 text-center text-muted-foreground">
 						<p>No people found matching your search criteria.</p>
 						<p className="text-sm mt-2">Try adjusting your search terms.</p>
 					</Card>

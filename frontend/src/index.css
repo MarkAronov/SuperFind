@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+	--font-sans: "Outfit", system-ui, sans-serif;
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -23,14 +24,25 @@
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
 	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-warning-foreground: var(--warning-foreground);
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+	/* Brand colors for gradients */
+	--color-brand-primary: var(--brand-primary);
+	--color-brand-secondary: var(--brand-secondary);
+	--color-brand-accent: var(--brand-accent);
+	/* Chart colors */
 	--color-chart-1: var(--chart-1);
 	--color-chart-2: var(--chart-2);
 	--color-chart-3: var(--chart-3);
 	--color-chart-4: var(--chart-4);
 	--color-chart-5: var(--chart-5);
+	/* Sidebar colors */
 	--color-sidebar: var(--sidebar);
 	--color-sidebar-foreground: var(--sidebar-foreground);
 	--color-sidebar-primary: var(--sidebar-primary);
@@ -41,73 +53,142 @@
 	--color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ============================================
+   MIDNIGHT INDIGO PALETTE - Light Mode
+   ============================================ */
 :root {
 	--radius: 0.625rem;
-	--background: oklch(1 0 0);
-	--foreground: oklch(0.145 0 0);
-	--card: oklch(1 0 0);
-	--card-foreground: oklch(0.145 0 0);
-	--popover: oklch(1 0 0);
-	--popover-foreground: oklch(0.145 0 0);
-	--primary: oklch(0.205 0 0);
+
+	/* Core backgrounds */
+	--background: oklch(0.985 0.002 270);
+	--foreground: oklch(0.145 0.015 270);
+	--card: oklch(0.995 0.002 270);
+	--card-foreground: oklch(0.145 0.015 270);
+	--popover: oklch(0.995 0.002 270);
+	--popover-foreground: oklch(0.145 0.015 270);
+
+	/* Primary: Indigo #6366f1 */
+	--primary: oklch(0.585 0.233 264);
 	--primary-foreground: oklch(0.985 0 0);
-	--secondary: oklch(0.97 0 0);
-	--secondary-foreground: oklch(0.205 0 0);
-	--muted: oklch(0.97 0 0);
-	--muted-foreground: oklch(0.556 0 0);
-	--accent: oklch(0.97 0 0);
-	--accent-foreground: oklch(0.205 0 0);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.922 0 0);
-	--input: oklch(0.922 0 0);
-	--ring: oklch(0.708 0 0);
-	--chart-1: oklch(0.646 0.222 41.116);
-	--chart-2: oklch(0.6 0.118 184.704);
-	--chart-3: oklch(0.398 0.07 227.392);
-	--chart-4: oklch(0.828 0.189 84.429);
-	--chart-5: oklch(0.769 0.188 70.08);
-	--sidebar: oklch(0.985 0 0);
-	--sidebar-foreground: oklch(0.145 0 0);
-	--sidebar-primary: oklch(0.205 0 0);
+
+	/* Secondary: Violet #8b5cf6 */
+	--secondary: oklch(0.606 0.25 292);
+	--secondary-foreground: oklch(0.985 0 0);
+
+	/* Muted */
+	--muted: oklch(0.965 0.005 270);
+	--muted-foreground: oklch(0.45 0.02 270);
+
+	/* Accent: Pink #ec4899 */
+	--accent: oklch(0.656 0.241 354);
+	--accent-foreground: oklch(0.985 0 0);
+
+	/* Semantic colors */
+	--destructive: oklch(0.577 0.245 27);
+	--destructive-foreground: oklch(0.985 0 0);
+	--success: oklch(0.627 0.194 149);
+	--success-foreground: oklch(0.985 0 0);
+	--warning: oklch(0.769 0.189 70);
+	--warning-foreground: oklch(0.25 0 0);
+
+	/* Brand colors for gradients */
+	--brand-primary: oklch(0.585 0.233 264); /* Indigo */
+	--brand-secondary: oklch(0.606 0.25 292); /* Violet */
+	--brand-accent: oklch(0.656 0.241 354); /* Pink */
+
+	/* UI elements */
+	--border: oklch(0.905 0.01 270);
+	--input: oklch(0.905 0.01 270);
+	--ring: oklch(0.585 0.233 264);
+
+	/* Charts - Indigo palette */
+	--chart-1: oklch(0.585 0.233 264);
+	--chart-2: oklch(0.606 0.25 292);
+	--chart-3: oklch(0.656 0.241 354);
+	--chart-4: oklch(0.627 0.194 149);
+	--chart-5: oklch(0.769 0.189 70);
+
+	/* Sidebar */
+	--sidebar: oklch(0.975 0.005 270);
+	--sidebar-foreground: oklch(0.145 0.015 270);
+	--sidebar-primary: oklch(0.585 0.233 264);
 	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.97 0 0);
-	--sidebar-accent-foreground: oklch(0.205 0 0);
-	--sidebar-border: oklch(0.922 0 0);
-	--sidebar-ring: oklch(0.708 0 0);
+	--sidebar-accent: oklch(0.955 0.02 292);
+	--sidebar-accent-foreground: oklch(0.25 0.015 270);
+	--sidebar-border: oklch(0.905 0.01 270);
+	--sidebar-ring: oklch(0.585 0.233 264);
+
+	/* Glass variables */
+	--glass-bg-rgb: 255, 255, 255;
+	--glass-bg-alpha: 0.35;
+	--glass-border-rgb: 255, 255, 255;
+	--glass-border-alpha: 0.4;
+	--glass-shadow-rgb: 99, 102, 241;
+	--glass-shadow-alpha: 0.06;
 }
 
+/* ============================================
+   MIDNIGHT INDIGO PALETTE - Dark Mode
+   ============================================ */
 .dark {
-	--background: oklch(0.145 0 0);
-	--foreground: oklch(0.985 0 0);
-	--card: oklch(0.205 0 0);
-	--card-foreground: oklch(0.985 0 0);
-	--popover: oklch(0.205 0 0);
-	--popover-foreground: oklch(0.985 0 0);
-	--primary: oklch(0.922 0 0);
-	--primary-foreground: oklch(0.205 0 0);
-	--secondary: oklch(0.269 0 0);
-	--secondary-foreground: oklch(0.985 0 0);
-	--muted: oklch(0.269 0 0);
-	--muted-foreground: oklch(0.708 0 0);
-	--accent: oklch(0.269 0 0);
-	--accent-foreground: oklch(0.985 0 0);
-	--destructive: oklch(0.704 0.191 22.216);
-	--border: oklch(1 0 0 / 10%);
+	/* Core backgrounds - deep indigo-tinted dark */
+	--background: oklch(0.13 0.02 270);
+	--foreground: oklch(0.965 0.005 270);
+	--card: oklch(0.17 0.025 270);
+	--card-foreground: oklch(0.965 0.005 270);
+	--popover: oklch(0.17 0.025 270);
+	--popover-foreground: oklch(0.965 0.005 270);
+
+	/* Primary: Lighter Indigo for dark mode #818cf8 */
+	--primary: oklch(0.707 0.165 264);
+	--primary-foreground: oklch(0.13 0.02 270);
+
+	/* Secondary: Lighter Violet #a78bfa */
+	--secondary: oklch(0.714 0.17 292);
+	--secondary-foreground: oklch(0.13 0.02 270);
+
+	/* Muted */
+	--muted: oklch(0.25 0.02 270);
+	--muted-foreground: oklch(0.65 0.015 270);
+
+	/* Accent: Lighter Pink #f472b6 */
+	--accent: oklch(0.738 0.202 354);
+	--accent-foreground: oklch(0.13 0.02 270);
+
+	/* Semantic colors - brighter for dark mode */
+	--destructive: oklch(0.704 0.191 22);
+	--destructive-foreground: oklch(0.985 0 0);
+	--success: oklch(0.696 0.17 162);
+	--success-foreground: oklch(0.13 0.02 270);
+	--warning: oklch(0.828 0.189 84);
+	--warning-foreground: oklch(0.25 0 0);
+
+	/* Brand colors for gradients - brighter in dark */
+	--brand-primary: oklch(0.707 0.165 264);
+	--brand-secondary: oklch(0.714 0.17 292);
+	--brand-accent: oklch(0.738 0.202 354);
+
+	/* UI elements */
+	--border: oklch(1 0 0 / 12%);
 	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.556 0 0);
-	--chart-1: oklch(0.488 0.243 264.376);
-	--chart-2: oklch(0.696 0.17 162.48);
-	--chart-3: oklch(0.769 0.188 70.08);
-	--chart-4: oklch(0.627 0.265 303.9);
-	--chart-5: oklch(0.645 0.246 16.439);
-	--sidebar: oklch(0.205 0 0);
-	--sidebar-foreground: oklch(0.985 0 0);
-	--sidebar-primary: oklch(0.488 0.243 264.376);
+	--ring: oklch(0.707 0.165 264);
+
+	/* Charts */
+	--chart-1: oklch(0.707 0.165 264);
+	--chart-2: oklch(0.714 0.17 292);
+	--chart-3: oklch(0.738 0.202 354);
+	--chart-4: oklch(0.696 0.17 162);
+	--chart-5: oklch(0.828 0.189 84);
+
+	/* Sidebar */
+	--sidebar: oklch(0.15 0.025 270);
+	--sidebar-foreground: oklch(0.965 0.005 270);
+	--sidebar-primary: oklch(0.707 0.165 264);
 	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.269 0 0);
-	--sidebar-accent-foreground: oklch(0.985 0 0);
-	--sidebar-border: oklch(1 0 0 / 10%);
-	--sidebar-ring: oklch(0.556 0 0);
+	--sidebar-accent: oklch(0.22 0.03 292);
+	--sidebar-accent-foreground: oklch(0.965 0.005 270);
+	--sidebar-border: oklch(1 0 0 / 12%);
+	--sidebar-ring: oklch(0.707 0.165 264);
 }
 
 @layer base {
@@ -115,6 +196,160 @@
 		@apply border-border outline-ring/50;
 	}
 	body {
-		@apply bg-background text-foreground;
+		@apply text-foreground;
+		font-family: var(--font-sans);
+		font-weight: 300; /* Light as default */
+		letter-spacing: 0.01em;
+		/* Brand gradient: Indigo → Violet with soft center */
+		background-image: linear-gradient(
+			135deg,
+			oklch(0.585 0.233 264 / 0.6) 0%,
+			oklch(0.98 0.01 270) 50%,
+			oklch(0.606 0.25 292 / 0.6) 100%
+		);
+		background-repeat: no-repeat;
+		background-size: cover;
+		min-height: 100vh;
+		background-attachment: fixed;
+	}
+
+	/* Typography weights for Outfit */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 400; /* Regular for headings */
+	}
+
+	strong,
+	b {
+		font-weight: 500; /* Medium for bold text */
+	}
+
+	button,
+	[type="button"],
+	[type="submit"] {
+		font-weight: 400; /* Regular for buttons - readable */
+	}
+
+	/* Dark mode background gradient */
+	.dark body {
+		background-image: linear-gradient(
+			135deg,
+			oklch(0.25 0.08 264 / 0.8) 0%,
+			oklch(0.13 0.02 270) 50%,
+			oklch(0.25 0.08 292 / 0.8) 100%
+		);
+	}
+}
+
+/* Reusable matte frosted glass component */
+@layer components {
+	.glass {
+		/* Frosted glass blur - higher for matte effect */
+		--glass-blur: 16px;
+		--glass-saturate: 1.2;
+		backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+		-webkit-backdrop-filter: blur(var(--glass-blur))
+			saturate(var(--glass-saturate));
+		background-color: rgba(var(--glass-bg-rgb), var(--glass-bg-alpha));
+		border: 1px solid rgba(var(--glass-border-rgb), var(--glass-border-alpha));
+		box-shadow:
+			0 8px 32px rgba(var(--glass-shadow-rgb), var(--glass-shadow-alpha)),
+			inset 0 1px 0 rgba(255, 255, 255, 0.15);
+		border-radius: var(--radius);
+		/* Grainy texture overlay */
+		position: relative;
+	}
+
+	.glass::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+		opacity: 0.04;
+		pointer-events: none;
+		mix-blend-mode: overlay;
+	}
+
+	/* Slightly heavier glass card variant used for panels */
+	.glass-card {
+		@apply px-6 py-6 rounded-xl;
+		--glass-bg-alpha: 0.4;
+	}
+
+	/* Pronounced glass variation: more blur, slightly more opacity */
+	.glass-pronounced {
+		--glass-blur: 24px;
+		--glass-bg-alpha: 0.45;
+		--glass-border-alpha: 0.5;
+		box-shadow:
+			0 16px 48px rgba(var(--glass-shadow-rgb), 0.1),
+			inset 0 1px 0 rgba(255, 255, 255, 0.2);
+	}
+
+	.glass-pronounced::before {
+		opacity: 0.05;
+	}
+
+	/* Dark mode adjustments */
+	:root.dark .glass,
+	.dark .glass {
+		--glass-bg-rgb: 20, 20, 28;
+		--glass-bg-alpha: 0.45;
+		--glass-border-rgb: 255, 255, 255;
+		--glass-border-alpha: 0.1;
+		--glass-shadow-rgb: 0, 0, 0;
+		--glass-shadow-alpha: 0.4;
+		--glass-saturate: 1.3;
+	}
+
+	:root.dark .glass::before,
+	.dark .glass::before {
+		opacity: 0.06;
+		mix-blend-mode: soft-light;
+	}
+
+	/* Scalar API Reference styling */
+	.scalar-wrapper {
+		--scalar-font: "Outfit", system-ui, sans-serif;
+	}
+
+	/* Force Scalar dark mode via data attribute */
+	.scalar-wrapper[data-scalar-theme="dark"] {
+		color-scheme: dark;
+	}
+
+	.scalar-wrapper[data-scalar-theme="dark"] .scalar-api-reference,
+	.scalar-wrapper[data-scalar-theme="dark"] .dark-mode,
+	.scalar-wrapper[data-scalar-theme="dark"] [class*="scalar"] {
+		--scalar-color-1: oklch(98% 0 0) !important;
+		--scalar-color-2: oklch(75% 0 0) !important;
+		--scalar-color-3: oklch(55% 0 0) !important;
+		--scalar-background-1: oklch(12% 0 0) !important;
+		--scalar-background-2: oklch(15% 0 0) !important;
+		--scalar-background-3: oklch(18% 0 0) !important;
+		--scalar-border-color: oklch(25% 0 0) !important;
+		background-color: oklch(12% 0 0) !important;
+	}
+
+	.scalar-wrapper[data-scalar-theme="light"] {
+		color-scheme: light;
+	}
+
+	.scalar-wrapper[data-scalar-theme="light"] .scalar-api-reference,
+	.scalar-wrapper[data-scalar-theme="light"] .light-mode,
+	.scalar-wrapper[data-scalar-theme="light"] [class*="scalar"] {
+		--scalar-color-1: oklch(15% 0 0) !important;
+		--scalar-color-2: oklch(35% 0 0) !important;
+		--scalar-color-3: oklch(55% 0 0) !important;
+		--scalar-background-1: oklch(100% 0 0) !important;
+		--scalar-background-2: oklch(97% 0 0) !important;
+		--scalar-background-3: oklch(94% 0 0) !important;
+		--scalar-border-color: oklch(85% 0 0) !important;
+		background-color: oklch(100% 0 0) !important;
 	}
 }

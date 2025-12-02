@@ -11,12 +11,11 @@ src/output/
 # Environment variables
 .env
 .env.local
+.env.*.local
 
-# Keep production templates for deployment
-# .env.production
-# .env.development
-# frontend/.env.production
-# frontend/.env.development
+# Keep example files for other users
+!.env.example
+!frontend/.env.example
 
 # IDE/Editor files
 .vscode/settings.json
@@ -92,6 +91,17 @@ dist
 # Storybook build outputs
 .out
 .storybook-out
+storybook-static/
+**/storybook-static/
+
+# Storybook cache
+.storybook/.cache/
+**/.storybook/.cache/
+
+# Debug logs
+*.debug.log
+debug-*.log
+*-debug.log
 
 # Temporary folders
 tmp/

@@ -72,6 +72,12 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "⚙️",
 		template: "[5] Processing collected data...",
 	},
+	STEP_SKIP_DATA: {
+		level: "info",
+		category: "INIT",
+		icon: "⏭️",
+		template: "[5] Skipping static data loading (SKIP_STATIC_DATA=true)",
+	},
 	ENV_VALIDATION_FAILED: {
 		level: "error",
 		category: "CONFIG",

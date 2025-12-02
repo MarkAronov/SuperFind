@@ -63,6 +63,12 @@ const loadStaticData = async (): Promise<ProcessedFile[]> => {
  */
 const initializeApplication = async (): Promise<ProcessedFile[]> => {
 	try {
+		// Check if we should skip static data loading
+		if (process.env.SKIP_STATIC_DATA === "true") {
+			log("STEP_SKIP_DATA");
+			return [];
+		}
+
 		log("STEP_PROCESS_DATA");
 
 		// Load and process static data

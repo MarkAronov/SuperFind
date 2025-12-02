@@ -40,6 +40,9 @@ export const getCurrentModelConfig = () => {
 			protocol: process.env.QDRANT_PROTOCOL || "http",
 			has_api_key: !!process.env.QDRANT_API_KEY,
 		},
+		options: {
+			skip_static_data: process.env.SKIP_STATIC_DATA === "true",
+		},
 	};
 };
 
@@ -78,6 +81,12 @@ export const logCurrentConfiguration = () => {
 	);
 	console.log(
 		`    API Key: ${config.qdrant.has_api_key ? "✅ Configured" : "❌ Not set"}`,
+	);
+
+	// Startup Options
+	console.log("\n⚙️  Startup Options:");
+	console.log(
+		`    Skip Static Data: ${config.options.skip_static_data ? "✅ Yes" : "❌ No"}`,
 	);
 
 	separator();

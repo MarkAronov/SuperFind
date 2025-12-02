@@ -11,6 +11,7 @@ export const ApiPage = () => {
 	// Always use the local OpenAPI spec (bundled with frontend)
 	const specUrl = "/openapi.json";
 
+
 	// Create a fresh configuration object when dark mode changes
 	const configuration = useMemo(
 		() => ({
@@ -28,6 +29,7 @@ export const ApiPage = () => {
 			theme: "purple" as const,
 		}),
 		[isDark],
+
 	);
 
 	return (

@@ -1,9 +1,13 @@
 import type { Context } from "hono";
 import { Hono } from "hono";
 import { getAllDocuments } from "../database";
+import { aiRateLimiter } from "../middleware/rate-limiter";
 import { handleSearchRequest } from "./index";
 
 const AIRouter = new Hono();
+
+// Apply rate limiting to all AI routes
+AIRouter.use("/*", aiRateLimiter);
 
 // Note: AI service is initialized in the main app startup sequence
 

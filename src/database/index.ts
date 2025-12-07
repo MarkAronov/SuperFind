@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import { Document } from "@langchain/core/documents";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { QdrantClient } from "@qdrant/js-client-rest";
@@ -47,7 +46,7 @@ const generateId = (): string => {
 };
 
 /**
- * Ensure a collection exists in Qdrant
+ * Ensure a collection exists in Qdrant with proper payload indexes
  */
 const ensureCollectionExists = async (
 	collectionName: string,
@@ -59,7 +58,27 @@ const ensureCollectionExists = async (
 
 	try {
 		// Check if collection exists
-		await qdrantClient.getCollection(collectionName);
+		const collectionInfo = await qdrantClient.getCollection(collectionName);
+
+		// Check if personHash index exists
+		const hasPersonHashIndex =
+			collectionInfo.payload_schema?.personHash !== undefined;
+
+		if (!hasPersonHashIndex) {
+			// Create index for personHash to enable filtering
+			await qdrantClient.createPayloadIndex(collectionName, {
+				field_name: "personHash",
+				field_schema: "keyword",
+			});
+			log(
+				"DB_INDEX_CREATED",
+				{
+					collection: collectionName,
+					field: "personHash",
+				},
+				2,
+			);
+		}
 	} catch {
 		// Collection doesn't exist, create it
 		const config =
@@ -77,6 +96,20 @@ const ensureCollectionExists = async (
 			{
 				collection: collectionName,
 				dimensions: dimensions.toString(),
+			},
+			2,
+		);
+
+		// Create index for personHash to enable filtering
+		await qdrantClient.createPayloadIndex(collectionName, {
+			field_name: "personHash",
+			field_schema: "keyword",
+		});
+		log(
+			"DB_INDEX_CREATED",
+			{
+				collection: collectionName,
+				field: "personHash",
 			},
 			2,
 		);
@@ -171,16 +204,16 @@ export const qdrantRest = async (
 					);
 
 					const content = params.payload.content as string;
-					const contentMD5 = generateMD5(content);
+					const personHash = params.payload.personHash as string;
 
 					// Check for duplicates before storing (unless explicitly disabled)
-					if (!params.payload.skipDuplicateCheck) {
-						const existsResult = await documentExistsByMD5(
-							contentMD5,
+					if (!params.payload.skipDuplicateCheck && personHash) {
+						const existsResult = await documentExistsByHash(
+							personHash,
 							params.collection,
 						);
 						if (existsResult.success && existsResult.data) {
-							log("DB_DOCUMENT_EXISTS", { md5: contentMD5 }, 2);
+							log("DB_DOCUMENT_EXISTS", { hash: personHash }, 2);
 							return {
 								success: true,
 								data: { id: "existing", stored: false, duplicate: true },
@@ -212,7 +245,7 @@ export const qdrantRest = async (
 								vector: vectors[0],
 								payload: {
 									...params.payload,
-									md5: contentMD5,
+									personHash: personHash || "",
 								},
 							},
 						],
@@ -358,7 +391,6 @@ export const qdrantRest = async (
 								vector: vectors[0],
 								payload: {
 									...params.updateData,
-									md5: generateMD5(content),
 									updated_at: new Date().toISOString(),
 								},
 							},
@@ -450,13 +482,6 @@ export const qdrantStatus = async (): Promise<
 };
 
 /**
- * Generate MD5 hash of file content
- */
-export const generateMD5 = (content: string): string => {
-	return createHash("md5").update(content).digest("hex");
-};
-
-/**
  * Retrieve all documents from a collection (no vector search required)
  */
 export const getAllDocuments = async (
@@ -509,10 +534,10 @@ export const getAllDocuments = async (
 };
 
 /**
- * Check if a document with given MD5 hash already exists in Qdrant
+ * Check if a document with given personHash already exists in Qdrant
  */
-export const documentExistsByMD5 = async (
-	md5Hash: string,
+export const documentExistsByHash = async (
+	hash: string,
 	collection = "documents",
 ): Promise<QdrantResponse<boolean>> => {
 	if (!qdrantClient || !isConnected) {
@@ -523,13 +548,13 @@ export const documentExistsByMD5 = async (
 	}
 
 	try {
-		// Search for documents with matching MD5 hash using scroll (since search requires a vector)
+		// Search for documents with matching personHash using scroll
 		const scrollResult = await qdrantClient.scroll(collection, {
 			filter: {
 				must: [
 					{
-						key: "md5",
-						match: { value: md5Hash },
+						key: "personHash",
+						match: { value: hash },
 					},
 				],
 			},
@@ -540,9 +565,9 @@ export const documentExistsByMD5 = async (
 		const exists = scrollResult.points.length > 0;
 
 		log(
-			"DB_MD5_CHECK",
+			"DB_HASH_CHECK",
 			{
-				md5: md5Hash,
+				hash,
 				exists: exists.toString(),
 				collection,
 			},
@@ -566,7 +591,7 @@ export const documentExistsByMD5 = async (
 };
 
 /**
- * Store processed document in Qdrant with MD5 hash
+ * Store processed document in Qdrant with person hash
  * Now uses typed Person data for better consistency
  * Note: This function assumes duplicate checking has already been performed
  */
@@ -575,7 +600,7 @@ export const storeDocument = async (
 	processedData: object,
 	metadata: Record<string, unknown>,
 	collection = "documents",
-): Promise<QdrantResponse<{ id: string | number; md5: string }>> => {
+): Promise<QdrantResponse<{ id: string | number; hash: string }>> => {
 	if (!qdrantClient || !isConnected) {
 		return {
 			success: false,
@@ -584,7 +609,8 @@ export const storeDocument = async (
 	}
 
 	try {
-		const md5Hash = generateMD5(content);
+		// Use personHash from metadata (required for person deduplication)
+		const personHash = metadata.personHash as string;
 		// Use a proper integer ID that fits in Qdrant's unsigned integer range
 		const documentId = Math.floor(Math.random() * 2147483647); // Max 32-bit signed integer
 
@@ -616,7 +642,7 @@ export const storeDocument = async (
 
 		// Create simple payload with only primitive values
 		const simplePayload: Record<string, string | number | boolean> = {
-			md5: md5Hash,
+			personHash: personHash || "", // Person identity hash for deduplication
 			content: content,
 			stored_at: new Date().toISOString(),
 		};
@@ -666,7 +692,7 @@ export const storeDocument = async (
 			"DB_DOCUMENT_STORE_SUCCESS",
 			{
 				id: documentId.toString(),
-				md5: md5Hash,
+				hash: personHash,
 				collection,
 			},
 			2,
@@ -674,7 +700,7 @@ export const storeDocument = async (
 
 		return {
 			success: true,
-			data: { id: documentId, md5: md5Hash },
+			data: { id: documentId, hash: personHash },
 			message: "Document stored successfully",
 		};
 	} catch (error) {

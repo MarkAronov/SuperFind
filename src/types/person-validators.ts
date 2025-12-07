@@ -1,9 +1,37 @@
-/**
- * Person validation and normalization functions
- * Separate from types to keep the types file clean and focused on type definitions
- */
+import { createHash } from "node:crypto";
 
 import type { Person, PersonValidationResult, ValidatedPerson } from "./person";
+
+/**
+ * Generate a stable hash for a person object based on identity fields
+ * This is used for deduplication - same person = same hash regardless of formatting
+ *
+ * Identity is determined by (in order of importance):
+ * 1. Email (if present) - most unique identifier
+ * 2. Name + Role + Location combination
+ */
+export const generatePersonHash = (person: Person): string => {
+	// Normalize strings for consistent hashing
+	const normalize = (s: string | undefined | null): string =>
+		(s || "").toLowerCase().trim().replace(/\s+/g, " ");
+
+	// Primary: email is the strongest unique identifier
+	const email = normalize(person.email);
+
+	// Secondary: name + role + location combo
+	const name = normalize(person.name);
+	const role = normalize(person.role);
+	const location = normalize(person.location);
+
+	// Create identity string
+	// If email exists, use it as primary identifier with name
+	// Otherwise fall back to name + role + location
+	const identityString = email
+		? `${email}|${name}`
+		: `${name}|${role}|${location}`;
+
+	return createHash("sha256").update(identityString).digest("hex").slice(0, 16);
+};
 
 /**
  * Type guard to check if data has minimum required person fields

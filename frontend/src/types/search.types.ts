@@ -16,7 +16,7 @@ export interface PersonSearchResult {
 	score: number; // 0-1 score indicating match quality
 	person: Person;
 	metadata?: {
-		md5?: string;
+		personHash?: string;
 		stored_at?: string;
 		fileName?: string;
 		fileType?: string;

@@ -72,7 +72,7 @@ export interface PersonMetadata {
 	fileName?: string;
 	filePath?: string;
 	fileType?: string;
-	md5?: string;
+	personHash?: string;
 	stored_at?: string;
 
 	// Allow additional metadata fields
@@ -98,7 +98,7 @@ export interface QdrantPerson extends Person {
 	id?: string; // Qdrant point ID
 	entityType: "person";
 	entityId: string;
-	md5?: string; // File hash for duplicate detection
+	personHash?: string; // Person identity hash for duplicate detection
 	stored_at?: string; // Timestamp when stored
 	fileName?: string; // Source file name
 	filePath?: string; // Full source file path
@@ -121,6 +121,7 @@ export interface QdrantPayload {
  * Import them here for backward compatibility with existing imports
  */
 export {
+	generatePersonHash,
 	isValidPerson,
 	normalizePerson,
 	validatePerson,

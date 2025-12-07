@@ -1,5 +1,4 @@
 import { convertTextToJson } from "../ai";
-import { documentExistsByMD5, generateMD5 } from "../database";
 import { extractKeysFromInterface } from "../utils/interface-parser";
 import { log } from "../utils/logger";
 import { extractAndStoreEntities } from "./entity-storage";
@@ -20,35 +19,6 @@ export const processFile = async (
 	context?: RunContext,
 ): Promise<ProcessedFile | null> => {
 	try {
-		// Generate MD5 hash of the original file content
-		const md5Hash = generateMD5(file.content);
-
-		// Check if the file already exists in the appropriate collection
-		// For people data, check in 'people' collection; for general documents, use 'documents'
-		const collectionToCheck = "people"; // Since we're mainly processing person data
-		const existsResult = await documentExistsByMD5(md5Hash, collectionToCheck);
-		if (!existsResult.success) {
-			log(
-				"DB_CHECK_WARNING",
-				{ error: existsResult.error || "Unknown error" },
-				2,
-			);
-			// Continue processing instead of returning null
-		}
-
-		// If document already exists, return early
-		if (existsResult.success && existsResult.data) {
-			log("PARSER_FILE_EXISTS_MD5", { fileName: file.name, md5: md5Hash }, 2);
-			return {
-				fileName: file.name,
-				filePath: file.path,
-				dataType: file.type,
-				md5Hash,
-				alreadyExists: true,
-				storedInQdrant: false,
-			};
-		}
-
 		// Process the file based on its type
 		let processedData: object;
 
@@ -125,7 +95,6 @@ export const processFile = async (
 				fileName: file.name,
 				filePath: file.path,
 				dataType: file.type,
-				md5Hash,
 				alreadyExists: false,
 				storedInQdrant: false,
 				processedData,
@@ -140,7 +109,6 @@ export const processFile = async (
 			{
 				count: entityResults.length.toString(),
 				fileName: file.name,
-				md5: md5Hash,
 			},
 			2,
 		);
@@ -149,7 +117,6 @@ export const processFile = async (
 			fileName: file.name,
 			filePath: file.path,
 			dataType: file.type,
-			md5Hash,
 			alreadyExists: false,
 			storedInQdrant: allStored,
 			processedData,
@@ -289,7 +256,6 @@ export const processFileUpload = async (
 			data: {
 				fileName: result.fileName,
 				dataType: result.dataType,
-				md5Hash: result.md5Hash,
 				alreadyExists: result.alreadyExists,
 				storedInQdrant: result.storedInQdrant,
 				processedData: result.processedData,

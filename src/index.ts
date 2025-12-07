@@ -8,6 +8,7 @@ import {
 	validateEnvironment,
 } from "./config/env.config";
 import { createLangChainVectorStore, initQdrant } from "./database";
+import { generalRateLimiter } from "./middleware/rate-limiter";
 import {
 	processFiles,
 	scanStaticDataFolder,
@@ -122,6 +123,9 @@ app.use(
 		credentials: true,
 	}),
 );
+
+// Apply general rate limiting to all routes
+app.use("/*", generalRateLimiter);
 
 // Initialize the system on startup
 let isInitialized = false;

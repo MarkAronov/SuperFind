@@ -361,7 +361,7 @@
 						"items": {
 							"type": "string"
 						},
-						"example": ["React", "TypeScript", "Node.js", "Python"]
+						"example": ["React", "TypeScript", "Node.js"]
 					},
 					"experience": {
 						"type": "string",

@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import {
 	Brain,
 	Cloud,
@@ -119,13 +120,7 @@ const categories: IntegrationCategory[] = [
 				icon: <Code className="h-6 w-6" />,
 				title: "TypeScript SDK",
 				description: "Type-safe SDK with full IntelliSense support",
-				status: "soon",
-			},
-			{
-				icon: <Code className="h-6 w-6" />,
-				title: "Python SDK",
-				description: "Pythonic interface for data science workflows",
-				status: "planned",
+				status: "ready",
 			},
 		],
 	},
@@ -207,6 +202,7 @@ const categories: IntegrationCategory[] = [
 ];
 
 export const IntegrationsPage = () => {
+	const navigate = useNavigate();
 	return (
 		<PageTemplate className="bg-transparent">
 			<div className="max-w-5xl mx-auto">
@@ -258,6 +254,25 @@ export const IntegrationsPage = () => {
 												<p className="text-sm lg:text-base text-muted-foreground">
 													{integration.description}
 												</p>
+												{integration.title === "TypeScript SDK" && (
+													<div className="mt-4">
+														<button
+															type="button"
+															onClick={() => navigate({ to: "/sdk" })}
+															className="inline-block px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+														>
+															View SDK
+														</button>
+														<a
+															href={EXTERNAL_LINKS.sdkTypescript}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="ml-3 inline-block px-3 py-1.5 border border-border rounded-lg hover:bg-muted transition-colors text-sm font-medium"
+														>
+															View on GitHub
+														</a>
+													</div>
+												)}
 											</div>
 										</div>
 									</Card>

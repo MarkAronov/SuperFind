@@ -11,7 +11,8 @@
 		"check:format": "biome format ./src --check",
 		"check:format:fix": "biome format ./src --check --write",
 		"csv:validate": "node scripts/validate-csv.js",
-		"csv:normalize": "node scripts/normalize-csv.js --inplace"
+		"csv:normalize": "node scripts/normalize-csv.js --inplace",
+		"build:sdk": "cd sdk/typescript && npm run build"
 	},
 	"dependencies": {
 		"@huggingface/inference": "^4.8.0",

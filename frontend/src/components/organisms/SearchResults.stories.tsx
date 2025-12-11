@@ -136,3 +136,34 @@ export const WithAnswerOnly: Story = {
 		isLoading: false,
 	},
 };
+
+export const NonClickableList: Story = {
+	args: {
+		data: {
+			success: true,
+			query: "TypeScript developers",
+			timestamp: new Date().toISOString(),
+			answer: "Top matches for TypeScript developers",
+			people: [
+				{
+					name: "Sarah Chen",
+					role: "Senior Frontend Developer",
+					location: "San Francisco, CA",
+					skills: "TypeScript; React; Next.js; Tailwind CSS",
+					experience: 7,
+					experience_years: 7,
+					description: "Passionate about building great user experiences",
+					email: "sarah.chen@example.com",
+					relevanceScore: 0.95,
+				},
+			],
+			sources: [],
+		},
+		isLoading: false,
+	},
+	parameters: {
+		docs: {
+			storyDescription: 'A list of result cards where the cards are static and do not navigate on click.',
+		},
+	},
+};

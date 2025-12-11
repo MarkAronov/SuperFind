@@ -16,7 +16,7 @@ export interface Person {
 	// Professional information (REQUIRED)
 	skills: string | string[];
 	experience: string | number;
-	description: string;
+	description?: string; // Made optional since not always present in source data
 
 	// Contact information (REQUIRED email, optional phone)
 	email: string;

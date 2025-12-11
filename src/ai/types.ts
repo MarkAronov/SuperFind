@@ -41,6 +41,8 @@ export interface SearchResult {
 	success: boolean;
 	answer: string;
 	sources: SearchSource[];
+	total?: number;
+	hasMore?: boolean;
 	confidence?: number;
 	error?: string;
 }

@@ -59,20 +59,11 @@ export const isValidPerson = (data: unknown): data is ValidatedPerson => {
 		person.experience !== undefined &&
 		person.experience !== null &&
 		person.experience !== "";
-	const hasDescription =
-		typeof person.description === "string" &&
-		person.description.trim().length > 0;
 	const hasEmail =
 		typeof person.email === "string" && person.email.trim().length > 0;
 
 	return (
-		hasName &&
-		hasRole &&
-		hasLocation &&
-		hasSkills &&
-		hasExperience &&
-		hasDescription &&
-		hasEmail
+		hasName && hasRole && hasLocation && hasSkills && hasExperience && hasEmail
 	);
 };
 
@@ -137,17 +128,6 @@ export const validatePerson = (data: unknown): PersonValidationResult => {
 	}
 
 	if (
-		!person.description ||
-		typeof person.description !== "string" ||
-		person.description.trim().length === 0
-	) {
-		result.missingFields.push("description");
-		result.errors.push(
-			"Description is required and must be a non-empty string",
-		);
-	}
-
-	if (
 		!person.email ||
 		typeof person.email !== "string" ||
 		person.email.trim().length === 0
@@ -166,7 +146,7 @@ export const validatePerson = (data: unknown): PersonValidationResult => {
 			location: person.location as string,
 			skills: person.skills as string | string[],
 			experience: person.experience as string | number,
-			description: person.description as string,
+			description: (person.description as string) || "",
 			email: person.email as string,
 		} as ValidatedPerson;
 	}

@@ -35,8 +35,12 @@ export interface SearchResult {
 	success: boolean;
 	query: string;
 	answer?: string; // Optional - may not be present in error cases
-	people?: PersonSearchResult[]; // Optional - may not be present in error cases
+	people?: Array<Person & { relevanceScore?: number; rawContent?: string }>; // Flat structure from backend
 	sources?: Source[]; // Optional - may not be present in error cases
+	total?: number; // Total number of results available
+	limit?: number; // Number of results per page
+	offset?: number; // Current offset
+	hasMore?: boolean; // Whether there are more results available
 	timestamp: string;
 	error?: string; // Optional - present in error cases
 	details?: string; // Optional - present in error cases

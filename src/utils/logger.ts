@@ -164,6 +164,24 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "→",
 		template: "Filtered from {before} to {after} results",
 	},
+	AI_EXTRACTED_FILTERS: {
+		level: "debug",
+		category: "AI",
+		icon: "🔍",
+		template: "Extracted filters from '{query}': {filters}",
+	},
+	AI_FILTER_EXTRACTION_ERROR: {
+		level: "warning",
+		category: "AI",
+		icon: "⚠",
+		template: "Failed to extract filters: {error}",
+	},
+	AI_SUMMARY_ERROR: {
+		level: "warning",
+		category: "AI",
+		icon: "⚠",
+		template: "Failed to generate summary: {error}",
+	},
 	AI_SEARCH_SUCCESS: {
 		level: "success",
 		category: "AI",
@@ -285,6 +303,18 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		category: "DATABASE",
 		icon: "→",
 		template: "Hash check for {hash}: {exists} in {collection}",
+	},
+	DB_HYBRID_SEARCH: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "🔍",
+		template: "Hybrid search: '{query}' with filters {filters} → {resultsCount} results",
+	},
+	DB_HYBRID_SEARCH_ERROR: {
+		level: "error",
+		category: "DATABASE",
+		icon: "✗",
+		template: "Hybrid search failed: {error}",
 	},
 
 	DB_DOCUMENT_STORED: {

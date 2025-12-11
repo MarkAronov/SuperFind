@@ -1,7 +1,7 @@
 {
 	"name": "skillvector",
 	"scripts": {
-		"start": "bun src/index.ts",
+		"start": "SKIP_STATIC_DATA=true bun run src/index.ts",
 		"dev": "bun run --hot src/index.ts",
 		"dev:quick": "SKIP_STATIC_DATA=true bun run --hot src/index.ts",
 		"lint": "biome lint ./src",

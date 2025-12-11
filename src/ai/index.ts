@@ -1,4 +1,5 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { hybridSearch } from "../database";
 import { parsePersonFromContent } from "../parser/person-extractor";
 import {
 	createZodSchemaFromKeys,
@@ -21,17 +22,12 @@ import type {
 
 // Service state
 let provider: AIProvider;
-let vectorStore: VectorStore | undefined;
 
 /**
  * Initialize the AI service with provider and vector store
  */
-export const initializeAIService = (
-	aiProvider: AIProvider,
-	aiVectorStore?: VectorStore,
-): void => {
+export const initializeAIService = (aiProvider: AIProvider): void => {
 	provider = aiProvider;
-	vectorStore = aiVectorStore;
 };
 
 /**
@@ -99,79 +95,72 @@ JSON Response:`);
 };
 
 /**
- * TASK 2: Search database and generate AI-powered answer using LangChain templates
+ * TASK 2: Search database and generate AI-powered answer using hybrid search
+ * Extracts filters from natural language query and uses Qdrant native filtering
  * @param query - User search query
  * @param limit - Max number of sources to retrieve
  */
 export const searchAndAnswer = async (
 	query: string,
-	limit = 20,
+	limit = 10,
+	offset = 0,
 ): Promise<SearchResult> => {
 	try {
-		if (!vectorStore) {
-			throw new Error("Vector store not configured");
-		}
+		// Extract filter criteria from the query using AI
+		const filters = await extractFiltersFromQuery(query);
 
-		// Retrieve relevant documents
-		const documentsWithScores = await vectorStore.similaritySearchWithScore(
-			query,
-			limit,
+		log(
+			"AI_EXTRACTED_FILTERS",
+			{
+				query,
+				filters: JSON.stringify(filters),
+			},
+			2,
 		);
 
-		if (documentsWithScores.length === 0) {
+		// Use hybrid search (vector + keyword/BM25 + metadata filtering)
+		// Fetch extra results to determine if there are more pages
+		// We fetch limit + offset + 1 to check if hasMore without fetching all results
+		const fetchLimit = limit + offset + 1;
+		const searchResult = await hybridSearch(query, filters, fetchLimit);
+
+		if (!searchResult.success || !searchResult.data) {
+			throw new Error(searchResult.error || "Hybrid search failed");
+		}
+
+		const allResults = searchResult.data;
+
+		// Apply offset and limit
+		const results = allResults.slice(offset, offset + limit);
+		if (results.length === 0 && offset === 0) {
 			return {
 				success: true,
 				answer: "I couldn't find any people matching your criteria.",
 				sources: [],
+				total: 0,
+				hasMore: false,
 			};
 		}
 
-		log(
-			"AI_CANDIDATES_RETRIEVED",
-			{ count: documentsWithScores.length.toString() },
-			2,
-		);
+		log("AI_CANDIDATES_RETRIEVED", { count: results.length.toString() }, 2);
 
-		// Log first score to understand the scoring format
-		if (documentsWithScores.length > 0) {
-			const firstScore = documentsWithScores[0][1];
-			log("AI_SAMPLE_SCORE", { score: firstScore.toString() }, 2);
-		}
+		// Convert to search sources format
+		const allSources = results.map((result, index) => ({
+			id: `doc-${index}`,
+			content: result.content,
+			metadata: { ...result.metadata, score: result.score },
+			relevanceScore: result.score,
+		}));
 
-		// Convert documents to search sources format
-		// Qdrant with Cosine distance returns similarity scores (higher = more similar)
-		// Scores should be between 0 and 1, but let's normalize them properly
-		const allSources = documentsWithScores.map(([doc, score], index) => {
-			// Convert score to percentage (0-1 range)
-			// If using cosine similarity, score is already 0-1 where 1 = perfect match
-			// If score is negative or >1, it indicates distance metric - convert it
-			let normalizedScore = score;
-
-			// Handle different score formats
-			if (score < 0 || score > 1) {
-				// If score is outside 0-1, assume it's a distance metric
-				// For cosine distance: convert to similarity (1 - distance/2)
-				normalizedScore = Math.max(0, 1 - Math.abs(score) / 2);
-			}
-
-			// Clamp to 0-1 range
-			normalizedScore = Math.max(0, Math.min(1, normalizedScore));
-
-			return {
-				id: `doc-${index}`,
-				content: doc.pageContent,
-				metadata: { ...doc.metadata, score: normalizedScore },
-				relevanceScore: normalizedScore,
-			};
-		});
-
-		// Single AI call: Filter AND generate answer
-		const result = await filterAndAnswerWithAI(query, allSources);
+		// Generate AI summary of results
+		const summary = await generateSearchSummary(query, allSources);
 
 		return {
 			success: true,
-			answer: result.answer,
-			sources: result.filteredSources,
+			answer: summary,
+			sources: allSources,
+			total: allResults.length,
+			hasMore: allResults.length > offset + limit,
 		};
 	} catch (error) {
 		return {
@@ -184,68 +173,44 @@ export const searchAndAnswer = async (
 };
 
 /**
- * Single AI call: Filter candidates AND generate answer
+ * Extract filter criteria from natural language query using AI
  */
-const filterAndAnswerWithAI = async (
+const extractFiltersFromQuery = async (
 	query: string,
-	sources: Array<{
-		id: string;
-		content: string;
-		metadata: Record<string, unknown>;
-		relevanceScore: number;
-	}>,
 ): Promise<{
-	answer: string;
-	filteredSources: Array<{
-		id: string;
-		content: string;
-		metadata: Record<string, unknown>;
-		relevanceScore: number;
-	}>;
+	location?: string;
+	skills?: string;
+	role?: string;
+	minExperience?: number;
+	maxExperience?: number;
 }> => {
-	if (sources.length === 0) {
-		return { answer: "No candidates found.", filteredSources: [] };
-	}
-
 	try {
 		const prompt = ChatPromptTemplate.fromTemplate(`
-You are a search assistant. Analyze the query and candidates, then:
-1. Identify which candidates match ALL criteria in the query
-2. Provide a brief summary of the matching people
+Extract search filters from this query. Return a JSON object with these optional fields:
+- location: city or country mentioned (e.g., "Italy", "New York")
+- skills: specific skills mentioned as a single STRING (e.g., "Python", "React JavaScript", "Docker Kubernetes")
+- role: job title mentioned (e.g., "Developer", "Manager")
+- minExperience: minimum years of experience (number)
+- maxExperience: maximum years of experience (number)
 
 Query: "{query}"
 
-Candidates:
-{candidates}
+Rules:
+- Only include fields that are explicitly mentioned in the query
+- For experience like "5+ years", set minExperience to 5
+- For experience like "less than 3 years", set maxExperience to 3
+- For skills, if multiple skills are mentioned, join them with spaces into a SINGLE STRING
+- Return ONLY valid JSON, no markdown, no explanations
+- If no filters are found, return {{}}
 
-Instructions:
-- If query mentions location (e.g., "from Italy"), only include people from that location
-- If query mentions skills (e.g., "Python"), only include people with those skills
-- If query mentions experience (e.g., "5+ years"), only include people meeting that requirement
-- Return a JSON object with:
-  - "matchingIndices": array of numbers (e.g., [0, 2, 5]) of candidates who match ALL criteria
-  - "summary": brief text summary of the matching people
+JSON Response:`);
 
-Response format:
-{{"matchingIndices": [0, 1], "summary": "Found 2 Python developers from Italy..."}}
-
-Response:`);
-
-		const candidatesText = sources
-			.map((s, idx) => `[${idx}] ${s.content.substring(0, 300)}`)
-			.join("\n\n");
-
-		const formattedPrompt = await prompt.format({
-			query,
-			candidates: candidatesText,
-		});
-
+		const formattedPrompt = await prompt.format({ query });
 		const response = await provider.generateCompletion(formattedPrompt, {
-			temperature: 0.2,
-			maxTokens: 300,
+			temperature: 0.1,
+			maxTokens: 200,
 		});
 
-		// Parse response
 		const cleanResponse = response
 			.trim()
 			.replace(/^```json\s*/i, "")
@@ -253,43 +218,73 @@ Response:`);
 			.replace(/\s*```$/i, "")
 			.trim();
 
-		const parsed = JSON.parse(cleanResponse) as {
-			matchingIndices: number[];
-			summary: string;
+		const filters = JSON.parse(cleanResponse) as {
+			location?: string;
+			skills?: string;
+			role?: string;
+			minExperience?: number;
+			maxExperience?: number;
 		};
 
-		// Filter sources by matching indices
-		const filteredSources = parsed.matchingIndices
-			.filter((idx) => idx >= 0 && idx < sources.length)
-			.map((idx) => sources[idx]);
-
-		log(
-			"AI_FILTERED_RESULTS",
-			{
-				before: sources.length.toString(),
-				after: filteredSources.length.toString(),
-			},
-			2,
-		);
-
-		// Return all sources if AI found nothing (fallback)
-		if (filteredSources.length === 0) {
-			return {
-				answer: parsed.summary || "No exact matches found.",
-				filteredSources: sources,
-			};
-		}
-
-		return {
-			answer: parsed.summary,
-			filteredSources,
-		};
+		return filters;
 	} catch (error) {
-		log("AI_FILTERING_ERROR", { error: String(error) }, 2);
-		return {
-			answer: "Found several candidates matching your search.",
-			filteredSources: sources, // Fallback: return all
-		};
+		log("AI_FILTER_EXTRACTION_ERROR", { error: String(error) }, 2);
+		return {}; // Return empty filters on error
+	}
+};
+
+/**
+ * Generate a summary of search results using AI
+ */
+const generateSearchSummary = async (
+	query: string,
+	sources: Array<{
+		id: string;
+		content: string;
+		metadata: Record<string, unknown>;
+		relevanceScore: number;
+	}>,
+): Promise<string> => {
+	if (sources.length === 0) {
+		return "No candidates found.";
+	}
+
+	try {
+		const prompt = ChatPromptTemplate.fromTemplate(`
+You are a search assistant. Provide a brief summary of the search results.
+
+Query: "{query}"
+
+Results ({count} people found):
+{results}
+
+Generate a concise 1-2 sentence summary highlighting:
+- How many people were found
+- Key qualifications or roles
+- Locations if relevant
+
+Summary:`);
+
+		const resultsText = sources
+			.slice(0, 10) // Only summarize top 10
+			.map((s, idx) => `${idx + 1}. ${s.content.substring(0, 200)}`)
+			.join("\n");
+
+		const formattedPrompt = await prompt.format({
+			query,
+			count: sources.length.toString(),
+			results: resultsText,
+		});
+
+		const response = await provider.generateCompletion(formattedPrompt, {
+			temperature: 0.2,
+			maxTokens: 300,
+		});
+
+		return response.trim();
+	} catch (error) {
+		log("AI_SUMMARY_ERROR", { error: String(error) }, 2);
+		return `Found ${sources.length} people matching your search.`;
 	}
 };
 
@@ -298,12 +293,18 @@ Response:`);
  */
 export const handleSearchRequest = async (
 	query: string,
+	limit = 20,
+	offset = 0,
 ): Promise<{
 	success: boolean;
 	query: string;
 	answer?: string;
 	people?: Array<Record<string, unknown>>;
 	sources?: Array<{ content: string; metadata: Record<string, unknown> }>;
+	total?: number;
+	limit?: number;
+	offset?: number;
+	hasMore?: boolean;
 	timestamp: string;
 	error?: string;
 	details?: string;
@@ -318,10 +319,14 @@ export const handleSearchRequest = async (
 			};
 		}
 
-		log("AI_SEARCH_REQUEST", { query }, 2);
+		log(
+			"AI_SEARCH_REQUEST",
+			{ query, limit: limit.toString(), offset: offset.toString() },
+			2,
+		);
 
 		// Use the AI service with AI-powered filtering
-		const result = await searchAndAnswer(query, 20);
+		const result = await searchAndAnswer(query, limit, offset);
 
 		if (!result.success) {
 			return {
@@ -351,6 +356,10 @@ export const handleSearchRequest = async (
 			answer: result.answer,
 			people, // Structured person objects
 			sources: result.sources, // Keep original sources for backwards compatibility
+			total: result.total,
+			limit,
+			offset,
+			hasMore: result.hasMore,
 			timestamp: new Date().toISOString(),
 		};
 	} catch (error) {

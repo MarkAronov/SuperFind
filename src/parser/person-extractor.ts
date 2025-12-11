@@ -246,11 +246,13 @@ export const validatePersonData = (
 ): {
 	isValid: boolean;
 	missingFields: string[];
+	errors: string[];
 } => {
 	// Use the shared validation function
 	const result = validatePerson(person);
 	return {
 		isValid: result.isValid,
 		missingFields: result.missingFields,
+		errors: result.errors,
 	};
 };

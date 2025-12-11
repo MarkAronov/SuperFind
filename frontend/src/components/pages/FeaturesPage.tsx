@@ -53,7 +53,7 @@ export const FeaturesPage = () => {
 	];
 
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate className="bg-transparent" title="Features">
 			<div className="max-w-5xl mx-auto">
 				{/* Hero Section */}
 				<div className="text-center mb-16">

@@ -32,8 +32,13 @@ export const extractAndStoreEntities = async (
 	if (Array.isArray(processedData)) {
 		for (const item of processedData) {
 			if (item && typeof item === "object") {
+				// Use description as context for enhancement, or empty string if not available
+				// Do NOT use originalContent (full file) as it causes cross-contamination
+				const itemRecord = item as Record<string, unknown>;
+				const itemContext = typeof itemRecord.description === "string" ? itemRecord.description : "";
+
 				// Enhance person data with better extraction
-				const enhancedItem = enhancePersonData(item as Person, originalContent);
+				const enhancedItem = enhancePersonData(item as Person, itemContext);
 
 				// Validate person has required fields
 				const validation = validatePersonData(enhancedItem);

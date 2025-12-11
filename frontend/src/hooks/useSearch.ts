@@ -11,10 +11,14 @@ interface RateLimitError {
 	retryAfter: number;
 }
 
-async function searchPeople(query: string): Promise<SearchResult> {
+async function searchPeople(
+	query: string,
+	limit = 20,
+	offset = 0,
+): Promise<SearchResult> {
 	try {
 		const { data } = await axios.get<SearchResult>(`${API_URL}/ai/search`, {
-			params: { query },
+			params: { query, limit, offset },
 		});
 		return data;
 	} catch (error) {
@@ -28,10 +32,15 @@ async function searchPeople(query: string): Promise<SearchResult> {
 	}
 }
 
-export function useSearch(query: string, enabled = true) {
+export function useSearch(
+	query: string,
+	options: { enabled?: boolean; limit?: number; offset?: number } = {},
+) {
+	const { enabled = true, limit = 10, offset = 0 } = options;
+	
 	return useQuery({
-		queryKey: ["search", query],
-		queryFn: () => searchPeople(query),
+		queryKey: ["search", query, limit, offset],
+		queryFn: () => searchPeople(query, limit, offset),
 		enabled: enabled && query.trim().length > 0,
 		staleTime: 1000 * 60 * 5,
 		retry: (failureCount, error) => {

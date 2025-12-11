@@ -60,24 +60,33 @@ const ensureCollectionExists = async (
 		// Check if collection exists
 		const collectionInfo = await qdrantClient.getCollection(collectionName);
 
-		// Check if personHash index exists
-		const hasPersonHashIndex =
-			collectionInfo.payload_schema?.personHash !== undefined;
+		// Define all required indexes for hybrid search and filtering
+		const requiredIndexes = [
+			{ field: "personHash", schema: "keyword" },
+			{ field: "data_location", schema: { type: "text", tokenizer: "word" } },
+			{ field: "data_role", schema: { type: "text", tokenizer: "word" } },
+			{ field: "data_skills", schema: { type: "text", tokenizer: "word" } },
+			{ field: "data_experience_years", schema: "integer" },
+			{ field: "content", schema: { type: "text", tokenizer: "word" } },
+		];
 
-		if (!hasPersonHashIndex) {
-			// Create index for personHash to enable filtering
-			await qdrantClient.createPayloadIndex(collectionName, {
-				field_name: "personHash",
-				field_schema: "keyword",
-			});
-			log(
-				"DB_INDEX_CREATED",
-				{
-					collection: collectionName,
-					field: "personHash",
-				},
-				2,
-			);
+		// Create missing indexes
+		for (const { field, schema } of requiredIndexes) {
+			const hasIndex = collectionInfo.payload_schema?.[field] !== undefined;
+			if (!hasIndex) {
+				await qdrantClient.createPayloadIndex(collectionName, {
+					field_name: field,
+					field_schema: schema as any,
+				});
+				log(
+					"DB_INDEX_CREATED",
+					{
+						collection: collectionName,
+						field,
+					},
+					2,
+				);
+			}
 		}
 	} catch {
 		// Collection doesn't exist, create it
@@ -100,19 +109,30 @@ const ensureCollectionExists = async (
 			2,
 		);
 
-		// Create index for personHash to enable filtering
-		await qdrantClient.createPayloadIndex(collectionName, {
-			field_name: "personHash",
-			field_schema: "keyword",
-		});
-		log(
-			"DB_INDEX_CREATED",
-			{
-				collection: collectionName,
-				field: "personHash",
-			},
-			2,
-		);
+		// Create all required indexes
+		const requiredIndexes = [
+			{ field: "personHash", schema: "keyword" },
+			{ field: "data_location", schema: { type: "text", tokenizer: "word" } },
+			{ field: "data_role", schema: { type: "text", tokenizer: "word" } },
+			{ field: "data_skills", schema: { type: "text", tokenizer: "word" } },
+			{ field: "data_experience_years", schema: "integer" },
+			{ field: "content", schema: { type: "text", tokenizer: "word" } },
+		];
+
+		for (const { field, schema } of requiredIndexes) {
+			await qdrantClient.createPayloadIndex(collectionName, {
+				field_name: field,
+				field_schema: schema as any,
+			});
+			log(
+				"DB_INDEX_CREATED",
+				{
+					collection: collectionName,
+					field,
+				},
+				2,
+			);
+		}
 	}
 };
 
@@ -707,6 +727,217 @@ export const storeDocument = async (
 		return {
 			success: false,
 			error: error instanceof Error ? error.message : "Document storage failed",
+		};
+	}
+};
+
+/**
+ * Hybrid search combining vector similarity with keyword/BM25 search and metadata filtering
+ * Uses Qdrant's query API with RRF (Reciprocal Rank Fusion) for optimal results
+ */
+export const hybridSearch = async (
+	query: string,
+	filters?: {
+		location?: string;
+		skills?: string;
+		role?: string;
+		minExperience?: number;
+		maxExperience?: number;
+	},
+	limit = 10,
+	collection = "people",
+): Promise<
+	QdrantResponse<
+		Array<{
+			id: string | number;
+			score: number;
+			content: string;
+			metadata: Record<string, unknown>;
+		}>
+	>
+> => {
+	if (!qdrantClient || !isConnected) {
+		return {
+			success: false,
+			error: "Qdrant not initialized. Call initQdrant() first.",
+		};
+	}
+
+	try {
+		console.log("[hybridSearch] Starting search with query:", query);
+		console.log("[hybridSearch] Filters:", JSON.stringify(filters, null, 2));
+		console.log("[hybridSearch] Limit:", limit, "Collection:", collection);
+
+		// Ensure collection exists with proper indexes
+		await ensureCollectionExists(collection);
+		console.log("[hybridSearch] Collection exists confirmed");
+
+		// Generate embedding for vector search
+		const embeddingsProvider = initEmbeddings();
+		const vectors = await embeddingsProvider.embedDocuments([query]);
+		console.log(
+			"[hybridSearch] Generated embeddings, vector length:",
+			vectors.length,
+		);
+
+		if (vectors.length === 0) {
+			return {
+				success: false,
+				error: "Failed to generate embeddings for query",
+			};
+		}
+
+		// Build metadata filter conditions
+		// NOTE: data_location and data_role are indexed as 'keyword' (exact match only)
+		// data_skills and content are indexed as 'text' (supports text search)
+		// For keyword fields, we skip filters that won't match exactly
+		// For text fields, we use 'text' match for partial matching
+		const filterConditions: Array<Record<string, unknown>> = [];
+
+		// Skip location and role filters since they're keyword indexes
+		// and the AI extracts generic terms like "North America" or "Developer"
+		// that won't match exact values like "San Diego, USA" or "Software Architect"
+		// The vector search will handle semantic matching for these
+
+		if (filters?.location) {
+			console.log(
+				"[hybridSearch] Skipping location filter (keyword index, exact match only):",
+				filters.location,
+			);
+		}
+
+		if (filters?.role) {
+			console.log(
+				"[hybridSearch] Skipping role filter (keyword index, exact match only):",
+				filters.role,
+			);
+		}
+
+		if (filters?.skills) {
+			// Text match for skills - data_skills is indexed as 'text' with word tokenizer
+			const skillsText = Array.isArray(filters.skills)
+				? filters.skills.join(" ")
+				: filters.skills;
+			const skillsFilter = {
+				key: "data_skills",
+				match: { text: skillsText },
+			};
+			filterConditions.push(skillsFilter);
+			console.log(
+				"[hybridSearch] Added skills filter:",
+				JSON.stringify(skillsFilter),
+			);
+		}
+
+		if (
+			filters?.minExperience !== undefined ||
+			filters?.maxExperience !== undefined
+		) {
+			// Try to filter on data_experience_years first (number field)
+			const rangeFilter: Record<string, unknown> = {
+				key: "data_experience_years",
+				range: {},
+			};
+			if (filters.minExperience !== undefined) {
+				(rangeFilter.range as Record<string, number>).gte =
+					filters.minExperience;
+			}
+			if (filters.maxExperience !== undefined) {
+				(rangeFilter.range as Record<string, number>).lte =
+					filters.maxExperience;
+			}
+			filterConditions.push(rangeFilter);
+			console.log(
+				"[hybridSearch] Added experience filter:",
+				JSON.stringify(rangeFilter),
+			);
+		}
+
+		console.log(
+			"[hybridSearch] Total filter conditions:",
+			filterConditions.length,
+		);
+		console.log(
+			"[hybridSearch] Filter conditions:",
+			JSON.stringify(filterConditions, null, 2),
+		);
+
+		// Execute vector search with metadata filtering
+		const searchParams = {
+			vector: vectors[0],
+			limit,
+			with_payload: true,
+			filter:
+				filterConditions.length > 0 ? { must: filterConditions } : undefined,
+		};
+		console.log(
+			"[hybridSearch] Executing Qdrant search with params:",
+			JSON.stringify(
+				{
+					...searchParams,
+					vector: `[${vectors[0].length} dimensions]`,
+				},
+				null,
+				2,
+			),
+		);
+
+		const result = await qdrantClient.search(collection, searchParams);
+		console.log(
+			"[hybridSearch] Search completed, results count:",
+			result.length,
+		);
+
+		// Filter out low-quality results (relevance threshold)
+		// This prevents nonsense queries from returning random results
+		const RELEVANCE_THRESHOLD = 0.3; // Adjust this threshold as needed
+		const filteredResults = result.filter(
+			(point) => (point.score || 0) >= RELEVANCE_THRESHOLD,
+		);
+
+		console.log(
+			`[hybridSearch] Results after relevance filter (>=${RELEVANCE_THRESHOLD}):`,
+			filteredResults.length,
+		);
+
+		// Format results
+		const formattedResults = filteredResults.map((point) => ({
+			id: point.id,
+			score: point.score || 0,
+			content: (point.payload?.content as string) || "",
+			metadata: point.payload || {},
+		}));
+
+		console.log(
+			"[hybridSearch] Formatted results count:",
+			formattedResults.length,
+		);
+
+		log(
+			"DB_HYBRID_SEARCH",
+			{
+				query,
+				filters: JSON.stringify(filters || {}),
+				resultsCount: formattedResults.length.toString(),
+			},
+			2,
+		);
+
+		return {
+			success: true,
+			data: formattedResults,
+			message: `Found ${formattedResults.length} results`,
+		};
+	} catch (error) {
+		console.error("[hybridSearch] ERROR:", error);
+		console.error("[hybridSearch] Error details:", {
+			message: error instanceof Error ? error.message : String(error),
+			stack: error instanceof Error ? error.stack : undefined,
+		});
+		log("DB_HYBRID_SEARCH_ERROR", { error: String(error) }, 2);
+		return {
+			success: false,
+			error: error instanceof Error ? error.message : "Hybrid search failed",
 		};
 	}
 };

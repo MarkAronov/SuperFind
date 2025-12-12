@@ -157,8 +157,8 @@ const runInitialization = async (): Promise<void> => {
 			// Step 2: Initialize AI Service (now that Qdrant is ready)
 			log("STEP_INIT_AI");
 			const aiProvider = await createBestAvailable();
-			const aiVectorStore = await createLangChainVectorStore();
-			initializeAIService(aiProvider, aiVectorStore);
+			await createLangChainVectorStore();
+			initializeAIService(aiProvider);
 			log("AI_PROVIDER_INITIALIZED", { provider: aiProvider.name }, 1);
 
 			// Step 3: Initialize application (data processing)

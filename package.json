@@ -17,7 +17,14 @@
 		"check:backend": "biome check ./src",
 		"check:frontend": "cd frontend && bun run check",
 		"check:all": "bun run check:backend && bun run check:frontend",
-		"ci-local": "bun run check:all && bun run build:sdk && cd frontend && npm run build"
+		"typecheck:backend": "tsc --noEmit",
+		"typecheck:frontend": "cd frontend && tsc --noEmit",
+		"typecheck:all": "bun run typecheck:backend && bun run typecheck:frontend",
+		"test": "echo 'No tests yet' && exit 0",
+		"build:backend": "echo 'Backend builds at runtime with Bun' && exit 0",
+		"build:frontend": "cd frontend && npm run build",
+		"build:all": "bun run build:backend && bun run build:sdk && bun run build:frontend",
+		"ci-local": "bun run check:all && bun run typecheck:all && bun run test && bun run build:all"
 	},
 	"dependencies": {
 		"@huggingface/inference": "^4.8.0",

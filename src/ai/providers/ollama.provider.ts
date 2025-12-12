@@ -57,8 +57,8 @@ const listAvailableModels = async (baseUrl: string): Promise<string[]> => {
 			throw new Error(`Failed to fetch models: ${response.status}`);
 		}
 
-		const data = await response.json();
-		return data.models?.map((model: { name: string }) => model.name) || [];
+		const data = (await response.json()) as { models?: { name: string }[] };
+		return data.models?.map((model) => model.name) || [];
 	} catch (error) {
 		console.warn("Could not fetch Ollama models:", error);
 		return [];

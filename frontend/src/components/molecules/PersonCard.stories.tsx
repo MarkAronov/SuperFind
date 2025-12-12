@@ -57,3 +57,17 @@ export const StringSkills: Story = {
 		</div>
 	),
 };
+
+export const NonClickable: Story = {
+	render: () => (
+		<div className="w-full max-w-md p-4">
+			<PersonCard person={mockPerson} />
+		</div>
+	),
+	parameters: {
+		docs: {
+			storyDescription:
+				"Person cards are no longer clickable — they are static cards. Click behavior was removed to avoid accidental navigation.",
+		},
+	},
+};

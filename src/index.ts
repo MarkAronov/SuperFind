@@ -8,6 +8,7 @@ import {
 	validateEnvironment,
 } from "./config/env.config";
 import { createLangChainVectorStore, initQdrant } from "./database";
+import { generalRateLimiter } from "./middleware/rate-limiter";
 import {
 	processFiles,
 	scanStaticDataFolder,
@@ -123,6 +124,9 @@ app.use(
 	}),
 );
 
+// Apply general rate limiting to all routes
+app.use("/*", generalRateLimiter);
+
 // Initialize the system on startup
 let isInitialized = false;
 let initializationPromise: Promise<void> | null = null;
@@ -143,20 +147,18 @@ const runInitialization = async (): Promise<void> => {
 			const envValidation = validateEnvironment();
 			if (!envValidation.valid) {
 				log("CONFIG_VALIDATION_FAILED");
-				envValidation.errors.forEach((error) =>
-					log("CONFIG_ERROR", { error }, 1),
-				);
+				for (const error of envValidation.errors) {
+					log("CONFIG_ERROR", { error }, 1);
+				}
 				throw new Error("Environment configuration invalid");
-			}
-
-			// Step 1: Initialize external services first (Qdrant, etc.)
+			} // Step 1: Initialize external services first (Qdrant, etc.)
 			await initializeExternalServices();
 
 			// Step 2: Initialize AI Service (now that Qdrant is ready)
 			log("STEP_INIT_AI");
 			const aiProvider = await createBestAvailable();
-			const aiVectorStore = await createLangChainVectorStore();
-			initializeAIService(aiProvider, aiVectorStore);
+			await createLangChainVectorStore();
+			initializeAIService(aiProvider);
 			log("AI_PROVIDER_INITIALIZED", { provider: aiProvider.name }, 1);
 
 			// Step 3: Initialize application (data processing)
@@ -223,3 +225,4 @@ app.route("/parser", parserApp);
 app.route("/ai", aiRouter);
 
 export default app;
+// test

@@ -9,10 +9,26 @@ interface SearchResultsProps {
 }
 
 export function SearchResults({ data, isLoading }: SearchResultsProps) {
-	// Parse people from sources if people array doesn't exist
+	// Parse people from the data
 	const people = useMemo((): PersonSearchResult[] => {
+		// If we have people array from the backend (flat structure)
 		if (data.people && data.people.length > 0) {
-			return data.people;
+			return data.people.map((person, index) => ({
+				id: index.toString(),
+				score: person.relevanceScore || 0.8,
+				person: {
+					name: person.name || "Unknown",
+					location: person.location || "Unknown",
+					role: person.role || "Unknown",
+					skills: person.skills || "Unknown",
+					experience: person.experience_years || person.experience || 0,
+					description: person.description || "",
+					email: person.email || "",
+				},
+				metadata: {
+					rawContent: person.rawContent,
+				},
+			}));
 		}
 
 		// Fallback: parse from sources

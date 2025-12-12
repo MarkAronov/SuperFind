@@ -49,6 +49,12 @@ export function Header() {
 							>
 								API
 							</Link>
+							<Link
+								to="/sdk"
+								className="text-foreground/90 hover:text-primary transition-colors font-medium"
+							>
+								SDK
+							</Link>
 							<a
 								href={SOCIAL_LINKS.github}
 								target="_blank"
@@ -111,6 +117,13 @@ export function Header() {
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									API
+								</Link>
+								<Link
+									to="/sdk"
+									className="text-muted-foreground hover:text-primary transition-colors font-medium"
+									onClick={() => setMobileMenuOpen(false)}
+								>
+									SDK
 								</Link>
 								<a
 									href={SOCIAL_LINKS.github}

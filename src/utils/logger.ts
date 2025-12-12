@@ -164,6 +164,24 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "→",
 		template: "Filtered from {before} to {after} results",
 	},
+	AI_EXTRACTED_FILTERS: {
+		level: "debug",
+		category: "AI",
+		icon: "🔍",
+		template: "Extracted filters from '{query}': {filters}",
+	},
+	AI_FILTER_EXTRACTION_ERROR: {
+		level: "warning",
+		category: "AI",
+		icon: "⚠",
+		template: "Failed to extract filters: {error}",
+	},
+	AI_SUMMARY_ERROR: {
+		level: "warning",
+		category: "AI",
+		icon: "⚠",
+		template: "Failed to generate summary: {error}",
+	},
 	AI_SEARCH_SUCCESS: {
 		level: "success",
 		category: "AI",
@@ -260,7 +278,7 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		level: "debug",
 		category: "DATABASE",
 		icon: "⚬",
-		template: "Document already exists (MD5: {md5})",
+		template: "Document already exists (hash: {hash})",
 	},
 	DB_COLLECTION_CREATED: {
 		level: "success",
@@ -268,18 +286,38 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "✓",
 		template: "Collection {collection} created with {dimensions} dimensions",
 	},
+	DB_INDEX_CREATED: {
+		level: "success",
+		category: "DATABASE",
+		icon: "✓",
+		template: "Created payload index on {field} in {collection}",
+	},
 	DB_SEARCH_COMPLETE: {
 		level: "debug",
 		category: "DATABASE",
 		icon: "→",
 		template: "Search completed with {count} results",
 	},
-	DB_MD5_CHECK: {
+	DB_HASH_CHECK: {
 		level: "debug",
 		category: "DATABASE",
 		icon: "→",
-		template: "MD5 check for {md5}: {exists} in {collection}",
+		template: "Hash check for {hash}: {exists} in {collection}",
 	},
+	DB_HYBRID_SEARCH: {
+		level: "debug",
+		category: "DATABASE",
+		icon: "🔍",
+		template:
+			"Hybrid search: '{query}' with filters {filters} → {resultsCount} results",
+	},
+	DB_HYBRID_SEARCH_ERROR: {
+		level: "error",
+		category: "DATABASE",
+		icon: "✗",
+		template: "Hybrid search failed: {error}",
+	},
+
 	DB_DOCUMENT_STORED: {
 		level: "success",
 		category: "DATABASE",
@@ -354,12 +392,7 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		icon: "⚬",
 		template: "Already exists: {fileName}",
 	},
-	PARSER_FILE_EXISTS_MD5: {
-		level: "debug",
-		category: "PARSER",
-		icon: "⚬",
-		template: "File {fileName} already exists (MD5: {md5})",
-	},
+
 	PARSER_AI_EXTRACTION_ERROR: {
 		level: "error",
 		category: "PARSER",
@@ -400,19 +433,19 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		level: "debug",
 		category: "PARSER",
 		icon: "⚬",
-		template: "Skipping duplicate entry (MD5: {md5}): {name}",
+		template: "Skipping duplicate entry (hash: {hash}): {name}",
 	},
 	PARSER_DUPLICATE_EXISTS: {
 		level: "debug",
 		category: "PARSER",
 		icon: "⚬",
-		template: "Person {name} already exists (MD5: {md5})",
+		template: "Person {name} already exists (hash: {hash})",
 	},
 	PARSER_DOCUMENT_EXISTS: {
 		level: "debug",
 		category: "PARSER",
 		icon: "⚬",
-		template: "Document {fileName} already exists (MD5: {md5})",
+		template: "Document {fileName} already exists (hash: {hash})",
 	},
 	PARSER_NO_ENTITIES: {
 		level: "error",
@@ -430,8 +463,7 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		level: "success",
 		category: "PARSER",
 		icon: "✓",
-		template:
-			"Processed and stored {count} entities from {fileName} (MD5: {md5})",
+		template: "Processed and stored {count} entities from {fileName}",
 	},
 	PARSER_DATA_STORED: {
 		level: "success",

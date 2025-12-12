@@ -72,15 +72,15 @@ export const extractExperienceFromText = (text: string): number | null => {
 	let match = text.match(
 		/(\d+)\s+years?\s+of\s+(?:professional\s+)?experience/i,
 	);
-	if (match) return Number.parseInt(match[1]);
+	if (match) return Number.parseInt(match[1], 10);
 
 	// Pattern 2: "Experience: X years"
 	match = text.match(/experience:\s*(\d+)\s*years?/i);
-	if (match) return Number.parseInt(match[1]);
+	if (match) return Number.parseInt(match[1], 10);
 
 	// Pattern 3: "with X years"
 	match = text.match(/with\s+(\d+)\s+years/i);
-	if (match) return Number.parseInt(match[1]);
+	if (match) return Number.parseInt(match[1], 10);
 
 	return null;
 };
@@ -246,11 +246,13 @@ export const validatePersonData = (
 ): {
 	isValid: boolean;
 	missingFields: string[];
+	errors: string[];
 } => {
 	// Use the shared validation function
 	const result = validatePerson(person);
 	return {
 		isValid: result.isValid,
 		missingFields: result.missingFields,
+		errors: result.errors,
 	};
 };

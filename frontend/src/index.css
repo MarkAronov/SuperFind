@@ -326,14 +326,14 @@
 	.scalar-wrapper[data-scalar-theme="dark"] .scalar-api-reference,
 	.scalar-wrapper[data-scalar-theme="dark"] .dark-mode,
 	.scalar-wrapper[data-scalar-theme="dark"] [class*="scalar"] {
-		--scalar-color-1: oklch(98% 0 0) !important;
-		--scalar-color-2: oklch(75% 0 0) !important;
-		--scalar-color-3: oklch(55% 0 0) !important;
-		--scalar-background-1: oklch(12% 0 0) !important;
-		--scalar-background-2: oklch(15% 0 0) !important;
-		--scalar-background-3: oklch(18% 0 0) !important;
-		--scalar-border-color: oklch(25% 0 0) !important;
-		background-color: oklch(12% 0 0) !important;
+		--scalar-color-1: oklch(98% 0 0);
+		--scalar-color-2: oklch(75% 0 0);
+		--scalar-color-3: oklch(55% 0 0);
+		--scalar-background-1: oklch(12% 0 0);
+		--scalar-background-2: oklch(15% 0 0);
+		--scalar-background-3: oklch(18% 0 0);
+		--scalar-border-color: oklch(25% 0 0);
+		background-color: oklch(12% 0 0);
 	}
 
 	.scalar-wrapper[data-scalar-theme="light"] {
@@ -343,13 +343,13 @@
 	.scalar-wrapper[data-scalar-theme="light"] .scalar-api-reference,
 	.scalar-wrapper[data-scalar-theme="light"] .light-mode,
 	.scalar-wrapper[data-scalar-theme="light"] [class*="scalar"] {
-		--scalar-color-1: oklch(15% 0 0) !important;
-		--scalar-color-2: oklch(35% 0 0) !important;
-		--scalar-color-3: oklch(55% 0 0) !important;
-		--scalar-background-1: oklch(100% 0 0) !important;
-		--scalar-background-2: oklch(97% 0 0) !important;
-		--scalar-background-3: oklch(94% 0 0) !important;
-		--scalar-border-color: oklch(85% 0 0) !important;
-		background-color: oklch(100% 0 0) !important;
+		--scalar-color-1: oklch(15% 0 0);
+		--scalar-color-2: oklch(35% 0 0);
+		--scalar-color-3: oklch(55% 0 0);
+		--scalar-background-1: oklch(100% 0 0);
+		--scalar-background-2: oklch(97% 0 0);
+		--scalar-background-3: oklch(94% 0 0);
+		--scalar-border-color: oklch(85% 0 0);
+		background-color: oklch(100% 0 0);
 	}
 }

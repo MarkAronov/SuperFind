@@ -1,9 +1,37 @@
-/**
- * Person validation and normalization functions
- * Separate from types to keep the types file clean and focused on type definitions
- */
+import { createHash } from "node:crypto";
 
 import type { Person, PersonValidationResult, ValidatedPerson } from "./person";
+
+/**
+ * Generate a stable hash for a person object based on identity fields
+ * This is used for deduplication - same person = same hash regardless of formatting
+ *
+ * Identity is determined by (in order of importance):
+ * 1. Email (if present) - most unique identifier
+ * 2. Name + Role + Location combination
+ */
+export const generatePersonHash = (person: Person): string => {
+	// Normalize strings for consistent hashing
+	const normalize = (s: string | undefined | null): string =>
+		(s || "").toLowerCase().trim().replace(/\s+/g, " ");
+
+	// Primary: email is the strongest unique identifier
+	const email = normalize(person.email);
+
+	// Secondary: name + role + location combo
+	const name = normalize(person.name);
+	const role = normalize(person.role);
+	const location = normalize(person.location);
+
+	// Create identity string
+	// If email exists, use it as primary identifier with name
+	// Otherwise fall back to name + role + location
+	const identityString = email
+		? `${email}|${name}`
+		: `${name}|${role}|${location}`;
+
+	return createHash("sha256").update(identityString).digest("hex").slice(0, 16);
+};
 
 /**
  * Type guard to check if data has minimum required person fields
@@ -31,20 +59,11 @@ export const isValidPerson = (data: unknown): data is ValidatedPerson => {
 		person.experience !== undefined &&
 		person.experience !== null &&
 		person.experience !== "";
-	const hasDescription =
-		typeof person.description === "string" &&
-		person.description.trim().length > 0;
 	const hasEmail =
 		typeof person.email === "string" && person.email.trim().length > 0;
 
 	return (
-		hasName &&
-		hasRole &&
-		hasLocation &&
-		hasSkills &&
-		hasExperience &&
-		hasDescription &&
-		hasEmail
+		hasName && hasRole && hasLocation && hasSkills && hasExperience && hasEmail
 	);
 };
 
@@ -109,17 +128,6 @@ export const validatePerson = (data: unknown): PersonValidationResult => {
 	}
 
 	if (
-		!person.description ||
-		typeof person.description !== "string" ||
-		person.description.trim().length === 0
-	) {
-		result.missingFields.push("description");
-		result.errors.push(
-			"Description is required and must be a non-empty string",
-		);
-	}
-
-	if (
 		!person.email ||
 		typeof person.email !== "string" ||
 		person.email.trim().length === 0
@@ -138,7 +146,7 @@ export const validatePerson = (data: unknown): PersonValidationResult => {
 			location: person.location as string,
 			skills: person.skills as string | string[],
 			experience: person.experience as string | number,
-			description: person.description as string,
+			description: (person.description as string) || "",
 			email: person.email as string,
 		} as ValidatedPerson;
 	}

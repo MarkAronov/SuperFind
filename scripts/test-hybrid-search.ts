@@ -15,8 +15,8 @@ async function testSearch(query: string, description: string) {
       console.log(`Answer: ${data.answer?.substring(0, 200)}...`);
       
       if (data.people && data.people.length > 0) {
-        console.log("\nTop results:");
-        data.people.slice(0, 3).forEach((p: any, i: number) => {
+        console.log("Top results:");
+        data.people.slice(0, 3).forEach((p: { name: string; role: string; location: string; relevanceScore?: number }, i: number) => {
           console.log(`  ${i + 1}. ${p.name} - ${p.role} (${p.location}) - Score: ${p.relevanceScore?.toFixed(3)}`);
         });
       }

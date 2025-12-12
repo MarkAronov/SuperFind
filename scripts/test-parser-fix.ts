@@ -1,5 +1,4 @@
 import { parseCSV } from "../src/parser/file-parsers";
-import { log } from "../src/utils/logger";
 
 const badCsvContent = `name,location,role,skills,experience_years,email,description
 Robert Lee,Chicago, USA,,Cloud Computing; AWS; Terraform,,robert.lee@tech.com,Cloud professional with experience in infrastructure as code`;

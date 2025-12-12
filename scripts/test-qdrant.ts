@@ -36,7 +36,7 @@ async function main() {
 			);
 
 			// Test if we can find by personHash
-			const testHash = (result.points[0].payload as any).personHash;
+			const testHash = (result.points[0].payload as { personHash: string }).personHash;
 			console.log("\n\nTesting hash lookup for:", testHash);
 
 			const searchResult = await client.scroll("people", {
@@ -56,7 +56,7 @@ async function main() {
 			if (searchResult.points.length > 0) {
 				console.log(
 					"Found person:",
-					(searchResult.points[0].payload as any).data_name,
+					(searchResult.points[0].payload as { data_name: string }).data_name,
 				);
 			}
 		}

@@ -15,9 +15,11 @@ export function SearchPage() {
 	const searchParams = useSearchParams({ from: "/" });
 	const query = (searchParams as { q?: string }).q || "";
 	const [offset, setOffset] = useState(0);
-	const [accumulatedData, setAccumulatedData] = useState<SearchResult | null>(null);
+	const [accumulatedData, setAccumulatedData] = useState<SearchResult | null>(
+		null,
+	);
 	const limit = 10;
-	
+
 	const { data, isLoading, error, refetch } = useSearch(query, {
 		enabled: true,
 		limit,
@@ -44,6 +46,7 @@ export function SearchPage() {
 	}, [data, offset]);
 
 	// Reset accumulated data when query changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: query change should reset state
 	useEffect(() => {
 		setOffset(0);
 		setAccumulatedData(null);
@@ -102,31 +105,34 @@ export function SearchPage() {
 					</Card>
 				)}
 
-			{/* Search Results */}
-			{accumulatedData && <SearchResults data={accumulatedData} isLoading={isLoading} />}
+				{/* Search Results */}
+				{accumulatedData && (
+					<SearchResults data={accumulatedData} isLoading={isLoading} />
+				)}
 
-			{/* Load More Button */}
-			{accumulatedData?.hasMore && (
-				<div className="mt-8 flex justify-center">
-					<button
-						type="button"
-						onClick={handleLoadMore}
-						disabled={isLoading}
-						className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-					>
-						{isLoading ? "Loading..." : "Load More Results"}
-					</button>
-				</div>
-			)}
+				{/* Load More Button */}
+				{accumulatedData?.hasMore && (
+					<div className="mt-8 flex justify-center">
+						<button
+							type="button"
+							onClick={handleLoadMore}
+							disabled={isLoading}
+							className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						>
+							{isLoading ? "Loading..." : "Load More Results"}
+						</button>
+					</div>
+				)}
 
-			{/* Pagination Info */}
-			{accumulatedData?.people && accumulatedData.people.length > 0 && (
-				<div className="mt-4 text-center text-sm text-muted-foreground">
-					Showing {accumulatedData.people.length} of {accumulatedData.total || accumulatedData.people.length} results
-				</div>
-			)}
+				{/* Pagination Info */}
+				{accumulatedData?.people && accumulatedData.people.length > 0 && (
+					<div className="mt-4 text-center text-sm text-muted-foreground">
+						Showing {accumulatedData.people.length} of{" "}
+						{accumulatedData.total || accumulatedData.people.length} results
+					</div>
+				)}
 
-			{/* Hint for browse all*/}
+				{/* Hint for browse all*/}
 				{!query && (
 					<div className="mt-8 text-center">
 						<p className="text-xs text-muted-foreground/50">

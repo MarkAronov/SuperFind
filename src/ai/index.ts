@@ -7,12 +7,7 @@ import {
 	parseAndValidateJson,
 } from "../utils/interface-parser";
 import { log } from "../utils/logger";
-import type {
-	AIProvider,
-	SearchResult,
-	TextToJsonResult,
-	VectorStore,
-} from "./types";
+import type { AIProvider, SearchResult, TextToJsonResult } from "./types";
 
 /**
  * Main AI Service - handles the 2 core tasks using LangChain:

@@ -76,6 +76,7 @@ const ensureCollectionExists = async (
 			if (!hasIndex) {
 				await qdrantClient.createPayloadIndex(collectionName, {
 					field_name: field,
+					// biome-ignore lint/suspicious/noExplicitAny: Qdrant schema type is union of multiple types
 					field_schema: schema as any,
 				});
 				log(
@@ -122,6 +123,7 @@ const ensureCollectionExists = async (
 		for (const { field, schema } of requiredIndexes) {
 			await qdrantClient.createPayloadIndex(collectionName, {
 				field_name: field,
+				// biome-ignore lint/suspicious/noExplicitAny: Qdrant schema type is union of multiple types
 				field_schema: schema as any,
 			});
 			log(

@@ -37,7 +37,7 @@ export function useSearch(
 	options: { enabled?: boolean; limit?: number; offset?: number } = {},
 ) {
 	const { enabled = true, limit = 10, offset = 0 } = options;
-	
+
 	return useQuery({
 		queryKey: ["search", query, limit, offset],
 		queryFn: () => searchPeople(query, limit, offset),

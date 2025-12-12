@@ -163,7 +163,8 @@ export const NonClickableList: Story = {
 	},
 	parameters: {
 		docs: {
-			storyDescription: 'A list of result cards where the cards are static and do not navigate on click.',
+			storyDescription:
+				"A list of result cards where the cards are static and do not navigate on click.",
 		},
 	},
 };

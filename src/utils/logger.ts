@@ -308,7 +308,8 @@ const LOG_MESSAGES: Record<string, LogMessage> = {
 		level: "debug",
 		category: "DATABASE",
 		icon: "🔍",
-		template: "Hybrid search: '{query}' with filters {filters} → {resultsCount} results",
+		template:
+			"Hybrid search: '{query}' with filters {filters} → {resultsCount} results",
 	},
 	DB_HYBRID_SEARCH_ERROR: {
 		level: "error",

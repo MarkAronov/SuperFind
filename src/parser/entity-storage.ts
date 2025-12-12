@@ -35,7 +35,10 @@ export const extractAndStoreEntities = async (
 				// Use description as context for enhancement, or empty string if not available
 				// Do NOT use originalContent (full file) as it causes cross-contamination
 				const itemRecord = item as Record<string, unknown>;
-				const itemContext = typeof itemRecord.description === "string" ? itemRecord.description : "";
+				const itemContext =
+					typeof itemRecord.description === "string"
+						? itemRecord.description
+						: "";
 
 				// Enhance person data with better extraction
 				const enhancedItem = enhancePersonData(item as Person, itemContext);

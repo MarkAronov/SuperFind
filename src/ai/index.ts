@@ -284,6 +284,47 @@ Summary:`);
 };
 
 /**
+ * Parse person data from search source, preferring structured metadata
+ * @param source - Search result source with content and metadata
+ * @returns Structured person data object
+ */
+const parsePersonFromSource = (source: {
+	content: string;
+	metadata: Record<string, unknown>;
+}): Record<string, unknown> => {
+	const metadata = source.metadata || {};
+
+	// Check if we have structured data in metadata (data_* fields from Qdrant)
+	const hasStructuredData = metadata.data_name || metadata.data_email;
+
+	if (hasStructuredData) {
+		// Use structured data from Qdrant payload
+		return {
+			name: metadata.data_name || "Unknown",
+			location: metadata.data_location || "Unknown",
+			role: metadata.data_role || "Unknown",
+			skills: metadata.data_skills || "Unknown",
+			experience:
+				metadata.data_experience || metadata.data_experience_years || 0,
+			experience_years:
+				metadata.data_experience_years || metadata.data_experience || 0,
+			description: metadata.data_description || "",
+			email: metadata.data_email || "",
+			relevanceScore: metadata.score || 0.8,
+			rawContent: source.content,
+		};
+	}
+
+	// Fallback: parse from content string
+	const personData = parsePersonFromContent(source.content);
+	return {
+		...personData,
+		relevanceScore: metadata.score || 0.8,
+		rawContent: source.content,
+	};
+};
+
+/**
  * Handle search requests and return AI-powered answers with structured person data
  */
 export const handleSearchRequest = async (
@@ -335,40 +376,8 @@ export const handleSearchRequest = async (
 
 		log("AI_SEARCH_RESULTS", { count: result.sources.length.toString() }, 2);
 
-		// Parse person data from each source
-		// Prefer structured data from metadata over parsing content
-		const people = result.sources.map((source) => {
-			const metadata = source.metadata || {};
-
-			// Check if we have structured data in metadata (data_* fields from Qdrant)
-			const hasStructuredData = metadata.data_name || metadata.data_email;
-
-			if (hasStructuredData) {
-				// Use structured data from Qdrant payload
-				return {
-					name: metadata.data_name || "Unknown",
-					location: metadata.data_location || "Unknown",
-					role: metadata.data_role || "Unknown",
-					skills: metadata.data_skills || "Unknown",
-					experience:
-						metadata.data_experience || metadata.data_experience_years || 0,
-					experience_years:
-						metadata.data_experience_years || metadata.data_experience || 0,
-					description: metadata.data_description || "",
-					email: metadata.data_email || "",
-					relevanceScore: metadata.score || 0.8,
-					rawContent: source.content,
-				};
-			}
-
-			// Fallback: parse from content string
-			const personData = parsePersonFromContent(source.content);
-			return {
-				...personData,
-				relevanceScore: metadata.score || 0.8,
-				rawContent: source.content,
-			};
-		});
+		// Parse person data from each source using helper function
+		const people = result.sources.map(parsePersonFromSource);
 
 		return {
 			success: true,

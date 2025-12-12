@@ -12,7 +12,12 @@
 		"check:format:fix": "biome format ./src --check --write",
 		"csv:validate": "node scripts/validate-csv.js",
 		"csv:normalize": "node scripts/normalize-csv.js --inplace",
-		"build:sdk": "cd sdk/typescript && npm run build"
+		"build:sdk": "cd sdk/typescript && npm run build",
+		"prepare": "husky install",
+		"check:backend": "biome check ./src",
+		"check:frontend": "cd frontend && bun run check",
+		"check:all": "bun run check:backend && bun run check:frontend",
+		"ci-local": "bun run check:all && bun run build:sdk && cd frontend && npm run build"
 	},
 	"dependencies": {
 		"@huggingface/inference": "^4.8.0",
@@ -31,10 +36,28 @@
 		"zod": "^4.1.4"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.1.4",
+		"@biomejs/biome": "2.2.2",
+		"husky": "^8.0.0",
+		"lint-staged": "^13.2.3",
 		"@types/bun": "latest",
 		"@types/papaparse": "^5.3.16",
 		"csv-parse": "^6.1.0",
 		"csv-stringify": "^6.6.0"
+	},
+	"lint-staged": {
+		"src/**/*.{ts,tsx,js,jsx}": [
+			"biome format --write",
+			"biome check --fix"
+		],
+		"frontend/src/**/*.{ts,tsx,js,jsx}": [
+			"bash -c 'cd frontend && biome format --write \"${0#frontend/}\"'",
+			"bash -c 'cd frontend && biome check --fix \"${0#frontend/}\"'"
+		],
+		"src/**/*.{css,scss}": [
+			"biome format --write"
+		],
+		"frontend/src/**/*.{css,scss}": [
+			"bash -c 'cd frontend && biome format --write \"${0#frontend/}\"'"
+		]
 	}
 }

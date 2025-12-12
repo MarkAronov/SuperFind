@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run heavier checks before push - run backend & frontend checks
+bun run check:all
+
+# Also build SDK and frontend to catch build-time errors
+bun run build:sdk
+cd frontend && npm run build

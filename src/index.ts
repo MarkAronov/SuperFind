@@ -147,13 +147,11 @@ const runInitialization = async (): Promise<void> => {
 			const envValidation = validateEnvironment();
 			if (!envValidation.valid) {
 				log("CONFIG_VALIDATION_FAILED");
-				envValidation.errors.forEach((error) =>
-					log("CONFIG_ERROR", { error }, 1),
-				);
+				for (const error of envValidation.errors) {
+					log("CONFIG_ERROR", { error }, 1);
+				}
 				throw new Error("Environment configuration invalid");
-			}
-
-			// Step 1: Initialize external services first (Qdrant, etc.)
+			} // Step 1: Initialize external services first (Qdrant, etc.)
 			await initializeExternalServices();
 
 			// Step 2: Initialize AI Service (now that Qdrant is ready)
@@ -227,3 +225,4 @@ app.route("/parser", parserApp);
 app.route("/ai", aiRouter);
 
 export default app;
+// test

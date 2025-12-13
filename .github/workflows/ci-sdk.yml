@@ -12,29 +12,13 @@ on:
 jobs:
   sdk-build-test:
     name: Build & Test SDK
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install SDK dependencies
-        run: |
-          cd sdk/typescript
-          npm ci
-      - name: Build SDK
-        run: |
-          cd sdk/typescript
-          npm run build
-      - name: Run SDK TypeScript checks
-        run: |
-          cd sdk/typescript
-          npx tsc --noEmit
-      - name: Run SDK tests
-        env:
-          NODE_OPTIONS: --experimental-fetch
-        run: |
-          cd sdk/typescript
-          npm test
+    uses: ./.github/workflows/reusable/node-workflow.yml
+    with:
+      working-directory: sdk/typescript
+      node-version: '20'
+      cache-dependency-path: sdk/typescript/package-lock.json
+      install: 'true'
+      run-lint: 'true'
+      run-typecheck: 'true'
+      run-build: 'true'
+      run-test: 'true'

@@ -143,9 +143,9 @@ const runInitialization = async (): Promise<void> => {
 			const envValidation = validateEnvironment();
 			if (!envValidation.valid) {
 				log("CONFIG_VALIDATION_FAILED");
-				envValidation.errors.forEach((error) =>
-					log("CONFIG_ERROR", { error }, 1),
-				);
+				envValidation.errors.forEach((error) => {
+					log("CONFIG_ERROR", { error }, 1);
+				});
 				throw new Error("Environment configuration invalid");
 			}
 

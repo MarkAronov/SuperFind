@@ -78,6 +78,23 @@ bun run dev
 
 Access the app at `http://localhost:5173`
 
+## SDKs
+
+We provide a TypeScript SDK for easy integration with SkillVector's API.
+
+Install and use the SDK:
+
+```bash
+# from project root
+npm run build:sdk
+# or
+cd sdk/typescript && npm run build
+```
+
+Once built you can publish or use the compiled package, or use the `SkillVectorClient` in your projects as shown in `sdk/typescript/README.md`.
+
+There's also a frontend SDK docs page available in the running app at `/sdk` that provides quick examples and links.
+
 
 ## API Usage- [Bun](https://bun.sh) 1.0+
 
@@ -207,6 +224,12 @@ curl "https://<app>.onrender.com/api/search?query=developer"
 
 ## Contributing
 Contributions are welcome! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to SkillVector.
+
+## Code of Conduct
+Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to help keep the community welcoming and inclusive.
+
+## Security
+If you discover a security vulnerability, please see our [Security Policy](SECURITY.md) for details on responsible disclosure.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

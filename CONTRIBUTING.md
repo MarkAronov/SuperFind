@@ -6,6 +6,8 @@ Thank you for your interest in contributing to SkillVector! This document provid
 
 Please be respectful and inclusive in all interactions. We're committed to providing a welcoming environment for all contributors.
 
+Please review our [Code of Conduct](CODE_OF_CONDUCT.md) and follow it when contributing or communicating with project members.
+
 ## Getting Started
 
 ### Prerequisites
@@ -137,6 +139,8 @@ Please be respectful and inclusive in all interactions. We're committed to provi
 - Provide clear reproduction steps for bugs
 - Include environment information (OS, Node version, etc.)
 - Use descriptive titles and detailed descriptions
+
+If you discover a security vulnerability, please follow the guidelines in [SECURITY.md](SECURITY.md) and contact the maintainers privately by email as described in the security policy.
 
 ## Questions?
 

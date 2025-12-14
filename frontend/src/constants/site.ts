@@ -27,6 +27,8 @@ export const EXTERNAL_LINKS = {
 	issues: "https://github.com/MarkAronov/SkillVector/issues",
 	discussions: "https://github.com/MarkAronov/SkillVector/discussions",
 	releases: "https://github.com/MarkAronov/SkillVector/releases",
+	sdkTypescript:
+		"https://github.com/MarkAronov/SkillVector/tree/main/sdk/typescript",
 } as const;
 
 // Helper to create mailto links

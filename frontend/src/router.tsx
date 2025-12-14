@@ -33,6 +33,11 @@ const FeaturesPage = lazy(() =>
 		default: m.FeaturesPage,
 	})),
 );
+const SdkDocsPage = lazy(() =>
+	import("./components/pages/SdkDocsPage").then((m) => ({
+		default: m.SdkDocsPage,
+	})),
+);
 const HowItWorksPage = lazy(() =>
 	import("./components/pages/HowItWorksPage").then((m) => ({
 		default: m.HowItWorksPage,
@@ -149,6 +154,12 @@ const cookiesRoute = createRoute({
 	component: CookiesPage,
 });
 
+const sdkRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/sdk",
+	component: SdkDocsPage,
+});
+
 // Hidden route - browse all people (not in nav)
 const browseRoute = createRoute({
 	getParentRoute: () => rootRoute,
@@ -170,6 +181,7 @@ const routeTree = rootRoute.addChildren([
 	privacyRoute,
 	termsRoute,
 	cookiesRoute,
+	sdkRoute,
 	browseRoute,
 ]);
 

@@ -2,7 +2,9 @@ import {
 	useNavigate,
 	useSearch as useSearchParams,
 } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
+import type { SearchResult } from "@/types/search.types";
 import { Card } from "../atoms/Card";
 import { SearchBar } from "../molecules/SearchBar";
 import { SearchResults } from "../organisms/SearchResults";
@@ -12,9 +14,47 @@ export function SearchPage() {
 	const navigate = useNavigate();
 	const searchParams = useSearchParams({ from: "/" });
 	const query = (searchParams as { q?: string }).q || "";
-	const { data, isLoading, error, refetch } = useSearch(query);
+	const [offset, setOffset] = useState(0);
+	const [accumulatedData, setAccumulatedData] = useState<SearchResult | null>(
+		null,
+	);
+	const limit = 10;
+
+	const { data, isLoading, error, refetch } = useSearch(query, {
+		enabled: true,
+		limit,
+		offset,
+	});
+
+	// Accumulate results when new data arrives
+	useEffect(() => {
+		if (data) {
+			if (offset === 0) {
+				// First page - replace all data
+				setAccumulatedData(data);
+			} else {
+				// Subsequent pages - append to existing data
+				setAccumulatedData((prev) => {
+					if (!prev) return data;
+					return {
+						...data,
+						people: [...(prev.people || []), ...(data.people || [])],
+					};
+				});
+			}
+		}
+	}, [data, offset]);
+
+	// Reset accumulated data when query changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: query change should reset state
+	useEffect(() => {
+		setOffset(0);
+		setAccumulatedData(null);
+	}, [query]);
 
 	const handleSearch = (newQuery: string, forceRefetch?: boolean) => {
+		setOffset(0);
+		setAccumulatedData(null);
 		if (forceRefetch && newQuery === query) {
 			// Same query - just refetch
 			refetch();
@@ -22,13 +62,18 @@ export function SearchPage() {
 			navigate({
 				to: "/",
 				search: newQuery.trim() ? { q: newQuery } : {},
-				replace: true,
 			});
 		}
 	};
 
+	const handleLoadMore = () => {
+		if (accumulatedData?.hasMore) {
+			setOffset((prev) => prev + limit);
+		}
+	};
+
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate className="bg-transparent" title={query || "Search"}>
 			<div className="max-w-5xl mx-auto">
 				{/* Hero Section */}
 
@@ -61,9 +106,33 @@ export function SearchPage() {
 				)}
 
 				{/* Search Results */}
-				{data && <SearchResults data={data} isLoading={isLoading} />}
+				{accumulatedData && (
+					<SearchResults data={accumulatedData} isLoading={isLoading} />
+				)}
 
-				{/* Hint for browse all - subtle Easter egg */}
+				{/* Load More Button */}
+				{accumulatedData?.hasMore && (
+					<div className="mt-8 flex justify-center">
+						<button
+							type="button"
+							onClick={handleLoadMore}
+							disabled={isLoading}
+							className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						>
+							{isLoading ? "Loading..." : "Load More Results"}
+						</button>
+					</div>
+				)}
+
+				{/* Pagination Info */}
+				{accumulatedData?.people && accumulatedData.people.length > 0 && (
+					<div className="mt-4 text-center text-sm text-muted-foreground">
+						Showing {accumulatedData.people.length} of{" "}
+						{accumulatedData.total || accumulatedData.people.length} results
+					</div>
+				)}
+
+				{/* Hint for browse all*/}
 				{!query && (
 					<div className="mt-8 text-center">
 						<p className="text-xs text-muted-foreground/50">

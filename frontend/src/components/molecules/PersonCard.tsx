@@ -16,7 +16,7 @@ interface PersonCardProps {
 export function PersonCard({ person }: PersonCardProps) {
 	const p = person.person;
 	return (
-		<Card className="hover:shadow-lg transition-shadow cursor-pointer">
+		<Card className="hover:shadow-lg transition-shadow">
 			<CardHeader>
 				<CardTitle className="text-lg">{p.name || "Unknown"}</CardTitle>
 				<CardDescription className="text-sm">

@@ -1,5 +1,6 @@
-import { documentExistsByMD5, generateMD5, storeDocument } from "../database";
+import { documentExistsByHash, storeDocument } from "../database";
 import type { Person, PersonMetadata } from "../types/person";
+import { generatePersonHash } from "../types/person";
 import { log } from "../utils/logger";
 import {
 	createPersonContent,
@@ -31,8 +32,16 @@ export const extractAndStoreEntities = async (
 	if (Array.isArray(processedData)) {
 		for (const item of processedData) {
 			if (item && typeof item === "object") {
+				// Use description as context for enhancement, or empty string if not available
+				// Do NOT use originalContent (full file) as it causes cross-contamination
+				const itemRecord = item as Record<string, unknown>;
+				const itemContext =
+					typeof itemRecord.description === "string"
+						? itemRecord.description
+						: "";
+
 				// Enhance person data with better extraction
-				const enhancedItem = enhancePersonData(item as Person, originalContent);
+				const enhancedItem = enhancePersonData(item as Person, itemContext);
 
 				// Validate person has required fields
 				const validation = validatePersonData(enhancedItem);
@@ -64,9 +73,9 @@ export const extractAndStoreEntities = async (
 					email: enhancedItem.email,
 				};
 
-				// Check if this specific person already exists using content hash
-				const personMD5 = generateMD5(personContent);
-				const existsResult = await documentExistsByMD5(personMD5, "people");
+				// Check if this specific person already exists using person identity hash
+				const personHash = generatePersonHash(enhancedItem);
+				const existsResult = await documentExistsByHash(personHash, "people");
 
 				if (existsResult.success && existsResult.data) {
 					context.dupes += 1;
@@ -74,18 +83,18 @@ export const extractAndStoreEntities = async (
 						"PARSER_DUPLICATE_SKIPPED",
 						{
 							name: enhancedItem.name || "Unknown",
-							md5: personMD5,
+							hash: personHash,
 						},
 						2,
 					);
 					continue; // Skip duplicates entirely
 				}
 
-				// Store each person as separate vector
+				// Store each person as separate vector (pass the hash for storage)
 				const storeResult = await storeDocument(
 					personContent,
 					enhancedItem,
-					entityMetadata,
+					{ ...entityMetadata, personHash },
 					"people", // Use separate collection for people
 				);
 
@@ -152,9 +161,9 @@ export const extractAndStoreEntities = async (
 			email: enhancedData.email,
 		};
 
-		// Check if this specific person already exists using content hash
-		const personMD5 = generateMD5(personContent);
-		const existsResult = await documentExistsByMD5(personMD5, "people");
+		// Check if this specific person already exists using person identity hash
+		const personHash = generatePersonHash(enhancedData);
+		const existsResult = await documentExistsByHash(personHash, "people");
 
 		let storeResult: { success: boolean; error?: string };
 		if (existsResult.success && existsResult.data) {
@@ -163,7 +172,7 @@ export const extractAndStoreEntities = async (
 				"PARSER_DUPLICATE_SKIPPED",
 				{
 					name: enhancedData.name || "Unknown",
-					md5: personMD5,
+					hash: personHash,
 				},
 				2,
 			);
@@ -172,7 +181,7 @@ export const extractAndStoreEntities = async (
 			storeResult = await storeDocument(
 				personContent,
 				enhancedData,
-				entityMetadata,
+				{ ...entityMetadata, personHash },
 				"people",
 			);
 		}

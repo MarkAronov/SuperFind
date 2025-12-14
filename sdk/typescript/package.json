@@ -1,0 +1,29 @@
+{
+	"name": "@skillvector/sdk",
+	"version": "0.1.0",
+	"description": "TypeScript SDK for SkillVector - AI semantic search",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"test": "vitest --run --reporter dot",
+		"example": "npm run build && node dist/example.js"
+	},
+	"keywords": [
+		"skillvector",
+		"sdk",
+		"typescript",
+		"qdrant",
+		"ai"
+	],
+	"license": "MIT",
+	"devDependencies": {
+		"typescript": "^5.7.2",
+		"vitest": "4.0.15",
+		"@types/node": "25.0.1"
+	}
+}

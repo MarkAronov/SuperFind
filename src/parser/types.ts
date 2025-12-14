@@ -36,7 +36,6 @@ export interface ProcessedFile {
 	fileName: string;
 	filePath: string;
 	dataType: "csv" | "json" | "text";
-	md5Hash: string;
 	alreadyExists: boolean;
 	storedInQdrant: boolean;
 	processedData?: object;

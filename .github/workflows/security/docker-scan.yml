@@ -5,7 +5,7 @@ on:
     branches: [ "main", "develop" ]
     paths:
       - 'Dockerfile'
-      - '.github/workflows/docker-scan.yml'
+      - '.github/workflows/security/docker-scan.yml'
   pull_request:
     branches: [ "main", "develop" ]
     paths:

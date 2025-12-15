@@ -31,12 +31,16 @@ jobs:
               - 'package.json'
               - 'tsconfig.json'
               - 'bun.lockb'
+              - '.github/workflows/**'
             frontend:
               - 'frontend/**'
+              - '.github/workflows/**'
             sdk:
               - 'sdk/**'
+              - '.github/workflows/**'
             docker:
               - 'Dockerfile'
+              - '.github/workflows/**'
 
   # ------------------------------------------------------------------
   # BACKEND JOBS

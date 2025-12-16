@@ -23,7 +23,7 @@
 		"test": "echo 'No tests yet' && exit 0",
 		"build:backend": "echo 'Backend builds at runtime with Bun' && exit 0",
 		"build:frontend": "cd frontend && npm run build",
-		"build:storybook": "cd frontend && npm run build-storybook",
+		"build:storybook": "cd frontend && bun run build:storybook",
 		"audit:backend": "bun audit || echo 'Bun audit failed'",
 		"audit:frontend": "cd frontend && bun audit || echo 'Frontend audit failed'",
 		"audit:sdk": "cd sdk/typescript && bun audit || echo 'SDK audit failed'",

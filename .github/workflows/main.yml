@@ -56,25 +56,13 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
+      - run: bun audit || echo "Bun audit failed"
       - run: bun run lint
       - run: bunx tsc --noEmit
       - run: bun test
         continue-on-error: true
       - run: bun run build --dry-run || echo "No build script defined"
         continue-on-error: true
-
-  backend-audit:
-    needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' || github.event_name == 'schedule' }}
-    name: Backend Security Audit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-      - run: bun audit || echo "Bun audit not available/failed"
 
   # ------------------------------------------------------------------
   # FRONTEND JOBS
@@ -92,6 +80,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'frontend/package-lock.json'
       - run: npm ci
+        working-directory: frontend
+      - run: npm audit --audit-level=high || echo "NPM audit failed"
         working-directory: frontend
       - run: npm run lint
         working-directory: frontend
@@ -121,21 +111,6 @@ jobs:
         working-directory: frontend
         continue-on-error: true
 
-  frontend-audit:
-    needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' || github.event_name == 'schedule' }}
-    name: Frontend Security Audit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-        working-directory: frontend
-      - run: bun audit || echo "Bun audit completed with warnings"
-        working-directory: frontend
-
   # ------------------------------------------------------------------
   # SDK JOBS
   # ------------------------------------------------------------------
@@ -155,26 +130,12 @@ jobs:
           cache: 'npm'
           cache-dependency-path: sdk/typescript/package-lock.json
       - run: npm ci
+      - run: npm audit --audit-level=high || echo "NPM audit failed"
       - run: npm run build
       - run: npx tsc --noEmit
       - run: npm test
         env:
           NODE_OPTIONS: --experimental-fetch
-
-  sdk-audit:
-    needs: changes
-    if: ${{ needs.changes.outputs.sdk == 'true' || github.event_name == 'schedule' }}
-    name: SDK Security Audit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-      - run: bun install --frozen-lockfile
-        working-directory: sdk/typescript
-      - run: bun audit || echo "Bun audit completed with warnings"
-        working-directory: sdk/typescript
 
   # ------------------------------------------------------------------
   # GLOBAL SECURITY & UTILS
@@ -182,7 +143,7 @@ jobs:
   docker-scan:
     needs: changes
     if: ${{ needs.changes.outputs.docker == 'true' || github.event_name == 'schedule' }}
-    name: Docker Security Scan
+    name: Security - Docker Scan
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -206,7 +167,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
   codeql-analyze:
-    name: CodeQL Analysis
+    name: Security - CodeQL Analysis
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

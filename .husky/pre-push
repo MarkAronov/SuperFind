@@ -5,35 +5,43 @@ echo "🔍 Running comprehensive pre-push checks..."
 echo ""
 
 # 1. Linting & Formatting (catches code style issues)
-echo "→ [1/5] Linting code..."
+echo "→ [1/6] Linting code..."
 bun run check:backend || exit 1
 bun run check:frontend || exit 1
 echo "✓ Linting passed"
 echo ""
 
 # 2. Type Checking (catches type errors)
-echo "→ [2/5] Type checking..."
+echo "→ [2/6] Type checking..."
 bun run typecheck:backend || exit 1
 bun run typecheck:frontend || exit 1
 echo "✓ Type checking passed"
 echo ""
 
 # 3. Running Tests (catches logic bugs & runtime errors)
-echo "→ [3/5] Running tests..."
+echo "→ [3/6] Running tests..."
 bun run test || exit 1
 echo "✓ Tests passed"
 echo ""
 
-# 4. Building SDK (catches build failures)
-echo "→ [4/5] Building SDK..."
-bun run build:sdk || exit 1
-echo "✓ SDK build passed"
+# 4. Security Audits (catches vulnerabilities)
+echo "→ [4/6] Running security audits..."
+bun run audit:all || exit 1
+echo "✓ Security audits passed"
 echo ""
 
-# 5. Building Frontend (catches build failures)
-echo "→ [5/5] Building frontend..."
+# 5. Builds (catches build failures)
+echo "→ [5/6] Running builds..."
+bun run build:sdk || exit 1
 bun run build:frontend || exit 1
-echo "✓ Frontend build passed"
+bun run build:storybook || exit 1
+echo "✓ Builds passed"
+echo ""
+
+# 6. Docker Check (catches containerization issues)
+echo "→ [6/6] Verifying Docker build..."
+docker build . --file Dockerfile --quiet > /dev/null || exit 1
+echo "✓ Docker build passed"
 echo ""
 
 echo "✅ All pre-push checks passed! Safe to push."

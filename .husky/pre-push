@@ -40,8 +40,12 @@ echo ""
 
 # 6. Docker Check (catches containerization issues)
 echo "→ [6/6] Verifying Docker build..."
-docker build . --file Dockerfile --quiet > /dev/null || exit 1
-echo "✓ Docker build passed"
+if docker info > /dev/null 2>&1; then
+    docker build . --file Dockerfile --quiet > /dev/null || exit 1
+    echo "✓ Docker build passed"
+else
+    echo "⚠️ Docker is not running. Skipping Docker build check."
+fi
 echo ""
 
 echo "✅ All pre-push checks passed! Safe to push."

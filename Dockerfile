@@ -11,7 +11,7 @@ RUN cd /temp/dev && bun install --frozen-lockfile
 # Copy production dependencies
 RUN mkdir -p /temp/prod
 COPY package.json bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --omit=dev
+RUN cd /temp/prod && bun install --frozen-lockfile
 
 # Copy source code and build
 FROM base AS prerelease

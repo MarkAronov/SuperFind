@@ -5,13 +5,13 @@ WORKDIR /app
 # Install dependencies
 FROM base AS install
 RUN mkdir -p /temp/dev
-COPY package.json bun.lock* /temp/dev/
+COPY package.json bun.lock /temp/dev/
 RUN cd /temp/dev && bun install --frozen-lockfile
 
 # Copy production dependencies
 RUN mkdir -p /temp/prod
-COPY package.json bun.lock* /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+COPY package.json bun.lock /temp/prod/
+RUN cd /temp/prod && bun install --frozen-lockfile
 
 # Copy source code and build
 FROM base AS prerelease
@@ -26,8 +26,8 @@ COPY --from=prerelease /app/package.json .
 COPY --from=prerelease /app/tsconfig.json .
 
 # Create non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 bunuser
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid nodejs bunuser
 USER bunuser
 
 # Expose port

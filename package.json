@@ -42,7 +42,7 @@
 		"@langchain/qdrant": "^1.0.1",
 		"@qdrant/js-client-rest": "^1.15.1",
 		"hono": "^4.9.0",
-		"hono-rate-limiter": "^0.4.2",
+		"hono-rate-limiter": "^0.5.1",
 		"langchain": "^1.1.5",
 		"papaparse": "^5.5.3",
 		"zod": "^4.1.4"

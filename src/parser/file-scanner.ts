@@ -63,16 +63,43 @@ const getFilesFromDirectory = async (
 
 		for (const entry of entries) {
 			const filePath = path.join(dirPath, entry);
-			const stats = await fs.stat(filePath);
 
-			if (stats.isFile() && isValidFileType(entry, type)) {
-				const content = await fs.readFile(filePath, "utf-8");
+			// Open the file handle and perform stat/read operations on the
+			// same file descriptor to avoid TOCTOU (time-of-check to time-of-use)
+			// races flagged by static analysis (e.g., CodeQL).
+			let handle: fs.FileHandle | undefined;
+
+			try {
+				handle = await fs.open(filePath, "r");
+				const stats = await handle.stat();
+
+				if (!stats.isFile() || !isValidFileType(entry, type)) {
+					continue;
+				}
+
+				const content = await handle.readFile({ encoding: "utf-8" });
 				files.push({
 					path: filePath,
 					name: entry,
 					type,
 					content,
 				});
+			} catch (error) {
+				// Log and continue; a permissions or transient FS error for a
+				// single file shouldn't stop the whole directory scan.
+				log(
+					"PARSER_FILE_READ_ERROR",
+					{ path: filePath, error: String(error) },
+					2,
+				);
+			} finally {
+				if (handle) {
+					try {
+						await handle.close();
+					} catch {
+						// ignore close errors
+					}
+				}
 			}
 		}
 	} catch (error) {

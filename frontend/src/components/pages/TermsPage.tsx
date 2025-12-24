@@ -1,5 +1,9 @@
 import { CONTACT } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { CardSection } from "../atoms/CardSection";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
 type TermsSection = {
@@ -75,76 +79,58 @@ const termsSections: TermsSection[] = [
 export const TermsPage = () => {
 	return (
 		<PageTemplate className="bg-transparent">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Terms of Service
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						The rules and guidelines for using SkillVector
-					</p>
-					<p className="text-sm text-muted-foreground mt-4">
-						Last updated: November 24, 2025
-					</p>
-				</div>
+			{/* Hero Section */}
+			<Hero
+				title="Terms of Service"
+				subtitle="The rules and guidelines for using SkillVector"
+			/>
+			<Text variant="muted" className="text-center mt-4">
+				Last updated: November 24, 2025
+			</Text>
 
-				{/* Terms Sections */}
-				<ul className="space-y-6 lg:space-y-8 mb-16">
-					{termsSections.map((section) => (
-						<li key={section.title}>
-							<Card
-								aria-label={section.title}
-								className="p-6 hover:shadow-lg transition-shadow"
-							>
-								<h2 className="text-xl lg:text-2xl font-bold mb-3 lg:mb-4">
-									{section.title}
-								</h2>
+			{/* Terms Sections */}
+			<Grid variant="features">
+				{termsSections.map((section) => (
+					<CardSection key={section.title} aria-label={section.title}>
+						<Heading variant="subsection" className="mb-3 lg:mb-4">
+							{section.title}
+						</Heading>
 
-								{section.content && (
-									<p className="text-xs lg:text-sm text-muted-foreground leading-relaxed mb-3">
-										{section.content}
-									</p>
-								)}
+						{section.content && (
+							<Text variant="small" className="mb-3">
+								{section.content}
+							</Text>
+						)}
 
-								{section.items && (
-									<ul className="space-y-2 text-xs lg:text-sm text-muted-foreground">
-										{section.items.map((item) => (
-											<li key={item} className="flex gap-2">
-												<span className="text-primary">•</span>
-												<span>{item}</span>
-											</li>
-										))}
-									</ul>
-								)}
-							</Card>
-						</li>
-					))}
+						{section.items && (
+							<ul className="space-y-2 text-xs lg:text-sm text-muted-foreground">
+								{section.items.map((item) => (
+									<li key={item} className="flex gap-2">
+										<span className="text-primary">•</span>
+										<span>{item}</span>
+									</li>
+								))}
+							</ul>
+						)}
+					</CardSection>
+				))}
 
-					{/* Contact Section */}
-					<li>
-						<Card
-							aria-label="Contact Information"
-							className="p-6 hover:shadow-lg transition-shadow"
+				{/* Contact Section */}
+				<CardSection aria-label="Contact Information">
+					<Heading variant="subsection" className="mb-3 lg:mb-4">
+						10. Contact Information
+					</Heading>
+					<Text variant="small">
+						For questions about these Terms of Service, please contact:{" "}
+						<a
+							href={`mailto:${CONTACT.email}`}
+							className="text-primary hover:underline"
 						>
-							<h2 className="text-xl lg:text-2xl font-bold mb-3 lg:mb-4">
-								10. Contact Information
-							</h2>
-							<p className="text-xs lg:text-sm text-muted-foreground leading-relaxed">
-								For questions about these Terms of Service, please contact:{" "}
-								<a
-									href={`mailto:${CONTACT.email}`}
-									className="text-primary hover:underline"
-								>
-									{CONTACT.email}
-								</a>
-							</p>
-						</Card>
-					</li>
-				</ul>
-			</div>
+							{CONTACT.email}
+						</a>
+					</Text>
+				</CardSection>
+			</Grid>
 		</PageTemplate>
 	);
 };

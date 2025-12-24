@@ -1,14 +1,74 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, Monitor, Moon, Sun, X } from "lucide-react";
+import { Menu, Monitor, Moon, Search, Sun, X } from "lucide-react";
 import { useState } from "react";
 import { SOCIAL_LINKS } from "@/constants/site";
 import { useTheme } from "../../hooks/useTheme";
 import { Glass } from "../atoms/Glass";
 import { Logo } from "../atoms/Logo";
 
+const navigationItems = [
+	{ to: "/", label: "Search" },
+	{ to: "/features", label: "Features" },
+	{ to: "/api", label: "API" },
+	{ to: "/sdk", label: "SDK" },
+	{ href: SOCIAL_LINKS.github, label: "GitHub", external: true },
+];
+
+const themeIcons = {
+	system: Monitor,
+	light: Sun,
+	dark: Moon,
+};
+
+const themeLabels = {
+	system: "System Theme",
+	light: "Light Theme",
+	dark: "Dark Theme",
+};
+
 export function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const { theme, toggleTheme } = useTheme();
+
+	const ThemeIcon = themeIcons[theme];
+	const themeLabel = themeLabels[theme];
+
+	const renderNavLink = (
+		item: (typeof navigationItems)[0],
+		isMobile = false,
+	) => {
+		const className = isMobile
+			? "text-muted-foreground hover:text-primary transition-colors font-medium"
+			: "text-foreground/90 hover:text-primary transition-colors font-medium text-sm lg:text-base";
+
+		const onClick = isMobile ? () => setMobileMenuOpen(false) : undefined;
+
+		if (item.external) {
+			return (
+				<a
+					key={item.label}
+					href={item.href}
+					target="_blank"
+					rel="noopener noreferrer"
+					className={className}
+					onClick={onClick}
+				>
+					{item.label}
+				</a>
+			);
+		}
+
+		return (
+			<Link
+				key={item.label}
+				to={item.to}
+				className={className}
+				onClick={onClick}
+			>
+				{item.label}
+			</Link>
+		);
+	};
 
 	return (
 		<Glass
@@ -29,41 +89,12 @@ export function Header() {
 								SkillVector
 							</span>
 						</Link>
+
 						{/* Desktop Navigation */}
 						<div className="hidden md:flex items-center gap-4 lg:gap-6">
-							<Link
-								to="/"
-								className="text-foreground/90 hover:text-primary transition-colors font-medium text-sm lg:text-base"
-							>
-								Search
-							</Link>
-							<Link
-								to="/features"
-								className="text-foreground/90 hover:text-primary transition-colors font-medium text-sm lg:text-base"
-							>
-								Features
-							</Link>
-							<Link
-								to="/api"
-								className="text-foreground/90 hover:text-primary transition-colors font-medium"
-							>
-								API
-							</Link>
-							<Link
-								to="/sdk"
-								className="text-foreground/90 hover:text-primary transition-colors font-medium"
-							>
-								SDK
-							</Link>
-							<a
-								href={SOCIAL_LINKS.github}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-foreground/90 hover:text-primary transition-colors font-medium"
-							>
-								GitHub
-							</a>
-						</div>{" "}
+							{navigationItems.map((item) => renderNavLink(item))}
+						</div>
+
 						{/* Theme Toggle */}
 						<div className="hidden md:flex items-center">
 							<button
@@ -73,89 +104,46 @@ export function Header() {
 								aria-label={`Current theme: ${theme}. Click to toggle.`}
 								title={`Theme: ${theme}`}
 							>
-								{theme === "system" && <Monitor className="h-5 w-5" />}
-								{theme === "light" && <Sun className="h-5 w-5" />}
-								{theme === "dark" && <Moon className="h-5 w-5" />}
+								<ThemeIcon className="h-5 w-5" />
 							</button>
 						</div>
-						{/* Mobile Menu Button */}
-						<button
-							type="button"
-							onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-							className="md:hidden p-2 text-muted-foreground"
-							aria-label="Toggle menu"
-						>
-							{mobileMenuOpen ? (
-								<X className="h-6 w-6" />
-							) : (
-								<Menu className="h-6 w-6" />
-							)}
-						</button>
+
+						{/* Mobile Search and Menu */}
+						<div className="md:hidden flex items-center gap-2">
+							<Link
+								to="/"
+								className="p-2 text-muted-foreground hover:text-primary transition-colors"
+								aria-label="Search"
+							>
+								<Search className="h-6 w-6" />
+							</Link>
+							<button
+								type="button"
+								onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+								className="p-2 text-muted-foreground"
+								aria-label="Toggle menu"
+							>
+								{mobileMenuOpen ? (
+									<X className="h-6 w-6" />
+								) : (
+									<Menu className="h-6 w-6" />
+								)}
+							</button>
+						</div>
 					</div>
 
 					{/* Mobile Navigation */}
 					{mobileMenuOpen && (
 						<div className="md:hidden py-4">
 							<div className="flex flex-col gap-4">
-								<Link
-									to="/"
-									className="text-muted-foreground hover:text-primary transition-colors font-medium"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									Search
-								</Link>
-								<Link
-									to="/features"
-									className="text-muted-foreground hover:text-primary transition-colors font-medium"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									Features
-								</Link>
-								<Link
-									to="/api"
-									className="text-muted-foreground hover:text-primary transition-colors font-medium"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									API
-								</Link>
-								<Link
-									to="/sdk"
-									className="text-muted-foreground hover:text-primary transition-colors font-medium"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									SDK
-								</Link>
-								<a
-									href={SOCIAL_LINKS.github}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-muted-foreground hover:text-primary transition-colors font-medium"
-								>
-									GitHub
-								</a>
+								{navigationItems.map((item) => renderNavLink(item, true))}
 								<button
 									type="button"
 									onClick={toggleTheme}
 									className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-medium"
 								>
-									{theme === "system" && (
-										<>
-											<Monitor className="h-5 w-5" />
-											<span>System Theme</span>
-										</>
-									)}
-									{theme === "light" && (
-										<>
-											<Sun className="h-5 w-5" />
-											<span>Light Theme</span>
-										</>
-									)}
-									{theme === "dark" && (
-										<>
-											<Moon className="h-5 w-5" />
-											<span>Dark Theme</span>
-										</>
-									)}
+									<ThemeIcon className="h-5 w-5" />
+									<span>{themeLabel}</span>
 								</button>
 							</div>
 						</div>

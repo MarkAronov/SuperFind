@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
 import { Brain, Search, Upload, Zap } from "lucide-react";
 import type { ReactNode } from "react";
+import { ActionButton } from "../atoms/ActionButton";
 import { Card } from "../atoms/Card";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -167,20 +167,16 @@ export const HowItWorksPage = () => {
 						Experience semantic search in action with our live demo
 					</p>
 					<div className="flex gap-4 justify-center flex-wrap">
-						<Link
-							to="/"
-							aria-label="Try Demo"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
-						>
+						<ActionButton to="/" aria-label="Try Demo">
 							Try Demo
-						</Link>
-						<Link
+						</ActionButton>
+						<ActionButton
 							to="/api"
+							variant="outline"
 							aria-label="View API Docs"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 border border-border rounded-lg hover:bg-white/10 transition-colors font-medium"
 						>
 							View API Docs
-						</Link>
+						</ActionButton>
 					</div>
 				</Card>
 			</div>

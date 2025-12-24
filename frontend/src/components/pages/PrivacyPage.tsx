@@ -1,5 +1,9 @@
 import { CONTACT } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { CardSection } from "../atoms/CardSection";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
 type PrivacySection = {
@@ -91,90 +95,72 @@ const privacySections: PrivacySection[] = [
 export const PrivacyPage = () => {
 	return (
 		<PageTemplate className="bg-transparent">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Privacy Policy
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						How we collect, use, and protect your information
-					</p>
-					<p className="text-sm text-muted-foreground mt-4">
-						Last updated: November 24, 2025
-					</p>
-				</div>
+			{/* Hero Section */}
+			<Hero
+				title="Privacy Policy"
+				subtitle="How we collect, use, and protect your information"
+			/>
+			<Text variant="muted" className="text-center mt-4">
+				Last updated: November 24, 2025
+			</Text>
 
-				{/* Privacy Sections */}
-				<ul className="space-y-6 lg:space-y-8 mb-16">
-					{privacySections.map((section) => (
-						<li key={section.title}>
-							<Card
-								aria-label={section.title}
-								className="p-6 hover:shadow-lg transition-shadow"
-							>
-								<h2 className="text-xl lg:text-2xl font-bold mb-3 lg:mb-4">
-									{section.title}
-								</h2>
+			{/* Privacy Sections */}
+			<Grid variant="features">
+				{privacySections.map((section) => (
+					<CardSection key={section.title} aria-label={section.title}>
+						<Heading variant="subsection" className="mb-3 lg:mb-4">
+							{section.title}
+						</Heading>
 
-								{section.content && (
-									<p className="text-xs lg:text-sm text-muted-foreground leading-relaxed mb-3">
-										{section.content}
-									</p>
-								)}
+						{section.content && (
+							<Text variant="small" className="mb-3">
+								{section.content}
+							</Text>
+						)}
 
-								{section.subsections && (
-									<div className="space-y-3 lg:space-y-4 text-xs lg:text-sm text-muted-foreground">
-										{section.subsections.map((sub) => (
-											<div key={sub.title}>
-												<h3 className="font-semibold text-foreground mb-2">
-													{sub.title}
-												</h3>
-												<p className="leading-relaxed">{sub.content}</p>
-											</div>
-										))}
+						{section.subsections && (
+							<div className="space-y-3 lg:space-y-4">
+								{section.subsections.map((sub) => (
+									<div key={sub.title}>
+										<Text variant="subheading" className="mb-2">
+											{sub.title}
+										</Text>
+										<Text variant="small">{sub.content}</Text>
 									</div>
-								)}
+								))}
+							</div>
+						)}
 
-								{section.items && (
-									<ul className="space-y-2 text-xs lg:text-sm text-muted-foreground">
-										{section.items.map((item) => (
-											<li key={item} className="flex gap-2">
-												<span className="text-primary">•</span>
-												<span>{item}</span>
-											</li>
-										))}
-									</ul>
-								)}
-							</Card>
-						</li>
-					))}
+						{section.items && (
+							<ul className="space-y-2 text-xs lg:text-sm text-muted-foreground">
+								{section.items.map((item) => (
+									<li key={item} className="flex gap-2">
+										<span className="text-primary">•</span>
+										<span>{item}</span>
+									</li>
+								))}
+							</ul>
+						)}
+					</CardSection>
+				))}
 
-					{/* Contact Section */}
-					<li>
-						<Card
-							aria-label="Contact Us"
-							className="p-6 hover:shadow-lg transition-shadow"
+				{/* Contact Section */}
+				<CardSection aria-label="Contact Us">
+					<Heading variant="subsection" className="mb-3 lg:mb-4">
+						9. Contact Us
+					</Heading>
+					<Text variant="small">
+						If you have questions about this Privacy Policy or how we handle
+						your data, please contact us at:{" "}
+						<a
+							href={`mailto:${CONTACT.email}`}
+							className="text-primary hover:underline"
 						>
-							<h2 className="text-xl lg:text-2xl font-bold mb-3 lg:mb-4">
-								9. Contact Us
-							</h2>
-							<p className="text-xs lg:text-sm text-muted-foreground leading-relaxed">
-								If you have questions about this Privacy Policy or how we handle
-								your data, please contact us at:{" "}
-								<a
-									href={`mailto:${CONTACT.email}`}
-									className="text-primary hover:underline"
-								>
-									{CONTACT.email}
-								</a>
-							</p>
-						</Card>
-					</li>
-				</ul>
-			</div>
+							{CONTACT.email}
+						</a>
+					</Text>
+				</CardSection>
+			</Grid>
 		</PageTemplate>
 	);
 };

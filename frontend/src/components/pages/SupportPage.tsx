@@ -1,7 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Book, Github, Mail, MessageCircle } from "lucide-react";
 import { CONTACT, EXTERNAL_LINKS } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { ActionButton } from "../atoms/ActionButton";
+import { CardSection } from "../atoms/CardSection";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
 const supportOptions = [
@@ -69,99 +74,89 @@ const faqs = [
 
 export const SupportPage = () => {
 	return (
-		<PageTemplate>
+		<PageTemplate className="bg-transparent">
 			{/* Hero Section */}
-			<div className="text-center mb-16">
-				<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-					<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-						Support
-					</span>
-				</h1>
-				<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-					Get help with SkillVector and find answers to common questions
-				</p>
-			</div>
+			<Hero
+				title="Support"
+				subtitle="Get help with SkillVector and find answers to common questions"
+			/>
 
 			{/* Support Options */}
-			<ul className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-8 mb-16">
+			<Grid variant="cards">
 				{supportOptions.map((option) => (
-					<li key={option.title}>
-						<Card
-							aria-label={option.title}
-							className="p-6 hover:shadow-lg transition-shadow text-center h-full"
-						>
-							<div className="mb-4 text-primary flex justify-center">
-								{option.icon}
-							</div>
-							<h3 className="text-xl font-semibold mb-2">{option.title}</h3>
-							<p className="text-muted-foreground mb-4">{option.description}</p>
-							{option.isInternal ? (
-								<Link
-									to={option.href}
-									aria-label={option.linkText}
-									className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
-								>
-									{option.linkText}
-								</Link>
-							) : (
-								<a
-									href={option.href}
-									target={
-										option.href.startsWith("mailto:") ? undefined : "_blank"
-									}
-									rel={
-										option.href.startsWith("mailto:")
-											? undefined
-											: "noopener noreferrer"
-									}
-									aria-label={option.linkText}
-									className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
-								>
-									{option.linkText}
-								</a>
-							)}
-						</Card>
-					</li>
+					<CardSection
+						key={option.title}
+						aria-label={option.title}
+						className="text-center"
+					>
+						<div className="mb-4 text-primary flex justify-center">
+							{option.icon}
+						</div>
+						<Heading variant="subsection" className="mb-2">
+							{option.title}
+						</Heading>
+						<Text className="mb-4">{option.description}</Text>
+						{option.isInternal ? (
+							<Link
+								to={option.href}
+								aria-label={option.linkText}
+								className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
+							>
+								{option.linkText}
+							</Link>
+						) : (
+							<a
+								href={option.href}
+								target={
+									option.href.startsWith("mailto:") ? undefined : "_blank"
+								}
+								rel={
+									option.href.startsWith("mailto:")
+										? undefined
+										: "noopener noreferrer"
+								}
+								aria-label={option.linkText}
+								className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
+							>
+								{option.linkText}
+							</a>
+						)}
+					</CardSection>
 				))}
-			</ul>
+			</Grid>
 
 			{/* FAQ Section */}
-			<section className="max-w-4xl mx-auto mb-16">
-				<h2 className="text-2xl font-bold mb-8 text-center">
+			<section>
+				<Heading variant="section" className="mb-8 text-center">
 					Frequently Asked Questions
-				</h2>
-				<ul className="space-y-6">
+				</Heading>
+				<Grid variant="features">
 					{faqs.map((faq) => (
-						<li key={faq.question}>
-							<Card
-								aria-label={faq.question}
-								className="p-6 hover:shadow-lg transition-shadow"
-							>
-								<h3 className="text-xl font-semibold mb-2">{faq.question}</h3>
-								<p className="text-muted-foreground">{faq.answer}</p>
-							</Card>
-						</li>
+						<CardSection key={faq.question} aria-label={faq.question}>
+							<Heading variant="subsection" className="mb-2">
+								{faq.question}
+							</Heading>
+							<Text>{faq.answer}</Text>
+						</CardSection>
 					))}
-				</ul>
+				</Grid>
 			</section>
 
 			{/* CTA Section */}
-			<Card
-				aria-label="Contact support"
-				className="text-center p-12 max-w-4xl mx-auto hover:shadow-lg transition-shadow"
-			>
-				<h2 className="text-3xl font-bold mb-4">Still Need Help?</h2>
-				<p className="text-xl text-muted-foreground mb-6">
+			<CardSection aria-label="Contact support" className="text-center">
+				<Heading variant="section" className="mb-4">
+					Still Need Help?
+				</Heading>
+				<Text variant="lead" className="mb-6">
 					Our team is ready to assist you with any questions or issues.
-				</p>
-				<a
+				</Text>
+				<ActionButton
 					href={`mailto:${CONTACT.email}`}
 					aria-label="Contact our support team"
-					className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block"
 				>
 					Contact Support
-				</a>
-			</Card>
+				</ActionButton>
+			</CardSection>
 		</PageTemplate>
 	);
 };

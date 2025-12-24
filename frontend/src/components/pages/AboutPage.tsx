@@ -1,5 +1,10 @@
 import { Heart, Target, Users, Zap } from "lucide-react";
-import { Card } from "../atoms/Card";
+import { CardSection } from "../atoms/CardSection";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { PageContainer } from "../atoms/PageContainer";
+import { Text } from "../atoms/Text";
 import { FeatureCard } from "../molecules/FeatureCard";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -50,43 +55,30 @@ const techStack = [
 export const AboutPage = () => {
 	return (
 		<PageTemplate className="bg-transparent">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						About{" "}
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							SkillVector
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Revolutionizing professional search with AI-powered semantic
-						matching that understands skills, not just keywords.
-					</p>
-				</div>
+			<PageContainer>
+				<Hero
+					title="About"
+					brand="SkillVector"
+					subtitle="Revolutionizing professional search with AI-powered semantic matching that understands skills, not just keywords."
+				/>
 
 				{/* Mission Section */}
-				<Card
-					aria-label="Our Mission"
-					className="p-6 hover:shadow-lg transition-shadow mb-8 lg:mb-12"
-				>
-					<h2 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6">
-						Our Mission
-					</h2>
-					<p className="text-sm lg:text-base text-muted-foreground leading-relaxed mb-4">
+				<CardSection aria-label="Our Mission" className="mb-8 lg:mb-12">
+					<Heading variant="section">Our Mission</Heading>
+					<Text className="mb-4">
 						SkillVector was built to solve a fundamental problem in talent
 						discovery: traditional keyword-based search fails to capture the
 						nuanced relationships between skills, experiences, and expertise.
-					</p>
-					<p className="text-sm lg:text-base text-muted-foreground leading-relaxed">
+					</Text>
+					<Text>
 						By leveraging advanced AI embeddings and vector similarity search,
 						we enable organizations to find the right professionals based on
 						what they can do, not just what keywords appear in their profiles.
-					</p>
-				</Card>
+					</Text>
+				</CardSection>
 
 				{/* Values Grid */}
-				<ul className="grid sm:grid-cols-2 gap-4 lg:gap-6 mb-8 lg:mb-12">
+				<Grid variant="features">
 					{values.map(({ icon, title, description }) => (
 						<li key={title}>
 							<FeatureCard
@@ -97,30 +89,23 @@ export const AboutPage = () => {
 							/>
 						</li>
 					))}
-				</ul>
+				</Grid>
 
 				{/* Technology Stack Section */}
-				<Card
-					aria-label="Technology Stack"
-					className="p-6 hover:shadow-lg transition-shadow"
-				>
-					<h2 className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6">
-						Technology Stack
-					</h2>
+				<CardSection aria-label="Technology Stack">
+					<Heading variant="section">Technology Stack</Heading>
 					<ul className="space-y-4">
 						{techStack.map(({ title, description }) => (
 							<li key={title}>
-								<h3 className="text-base lg:text-lg font-semibold mb-2">
+								<Text variant="subheading" className="mb-2">
 									{title}
-								</h3>
-								<p className="text-xs lg:text-sm text-muted-foreground">
-									{description}
-								</p>
+								</Text>
+								<Text variant="small">{description}</Text>
 							</li>
 						))}
 					</ul>
-				</Card>
-			</div>
+				</CardSection>
+			</PageContainer>
 		</PageTemplate>
 	);
 };

@@ -1,4 +1,5 @@
 import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { ActionButton } from "../atoms/ActionButton";
 import { Card } from "../atoms/Card";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -109,13 +110,12 @@ export const BlogPage = () => {
 							placeholder="Enter your email"
 							className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
 						/>
-						<button
-							type="button"
+						<ActionButton
+							onClick={() => {}}
 							aria-label="Subscribe to newsletter"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
 						>
 							Subscribe
-						</button>
+						</ActionButton>
 					</div>
 				</Card>
 			</div>

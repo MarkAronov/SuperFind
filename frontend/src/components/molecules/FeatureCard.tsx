@@ -21,7 +21,7 @@ export function FeatureCard({
 	return (
 		<Card
 			aria-label={title}
-			className={`p-6 hover:shadow-lg transition-shadow ${className || ""}`}
+			className={`p-6 transition-shadow ${className || ""}`}
 		>
 			<div className="flex gap-4 items-start">
 				<div className={`shrink-0 ${iconColor}`}>{icon}</div>

@@ -32,6 +32,7 @@
 		"ci-local": "bun run check:all && bun run typecheck:all && bun run test && bun run build:all"
 	},
 	"dependencies": {
+		"@getbrevo/brevo": "^3.0.1",
 		"@huggingface/inference": "^4.8.0",
 		"@langchain/anthropic": "^1.2.3",
 		"@langchain/community": "^1.0.7",

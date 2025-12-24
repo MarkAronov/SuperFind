@@ -34,7 +34,7 @@ export const Default: Story = {
 
 export const FeatureCard: Story = {
 	render: () => (
-		<Card className="p-6 hover:shadow-lg transition-shadow max-w-sm">
+		<Card className="p-6 transition-shadow max-w-sm">
 			<div className="mb-4 text-primary">
 				<Search className="h-6 w-6" />
 			</div>

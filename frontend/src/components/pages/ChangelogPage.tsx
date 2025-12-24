@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight, GitCommit, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { EXTERNAL_LINKS } from "@/constants/site";
+import { ActionButton } from "../atoms/ActionButton";
 import { Card } from "../atoms/Card";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -291,15 +292,12 @@ export const ChangelogPage = () => {
 					<p className="text-base lg:text-xl text-muted-foreground mb-6">
 						Follow our GitHub repository for the latest updates and releases
 					</p>
-					<a
+					<ActionButton
 						href={EXTERNAL_LINKS.releases}
-						target="_blank"
-						rel="noopener noreferrer"
 						aria-label="View Changelog on GitHub"
-						className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block"
 					>
 						View on GitHub
-					</a>
+					</ActionButton>
 				</Card>
 			</div>
 		</PageTemplate>

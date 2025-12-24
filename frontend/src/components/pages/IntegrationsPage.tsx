@@ -14,7 +14,13 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { EXTERNAL_LINKS, SOCIAL_LINKS } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { ActionButton } from "../atoms/ActionButton";
+import { CardSection } from "../atoms/CardSection";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { StatusBadge } from "../atoms/StatusBadge";
+import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
 type Integration = {
@@ -29,27 +35,6 @@ type IntegrationCategory = {
 	title: string;
 	description: string;
 	integrations: Integration[];
-};
-
-const StatusBadge = ({ status }: { status: Integration["status"] }) => {
-	const styles = {
-		ready: "bg-success/10 dark:bg-success/20 text-success dark:text-success",
-		soon: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300",
-		planned:
-			"bg-gray-100 dark:bg-foreground/30 text-muted-foreground dark:text-gray-300",
-	};
-	const labels = {
-		ready: "Production Ready",
-		soon: "Coming Soon",
-		planned: "Planned",
-	};
-	return (
-		<span
-			className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${styles[status]}`}
-		>
-			{labels[status]}
-		</span>
-	);
 };
 
 const categories: IntegrationCategory[] = [
@@ -205,117 +190,99 @@ export const IntegrationsPage = () => {
 	const navigate = useNavigate();
 	return (
 		<PageTemplate className="bg-transparent">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						Powerful{" "}
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Integrations
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Connect SkillVector with your favorite tools and services for
-						seamless talent search.
-					</p>
-				</div>
+			{/* Hero Section */}
+			<Hero
+				title="Powerful Integrations"
+				subtitle="Connect SkillVector with your favorite tools and services for seamless talent search."
+			/>
 
-				{/* Integration Categories */}
-				{categories.map((category) => (
-					<section key={category.title} className="mb-12 lg:mb-16">
-						<div className="flex items-center gap-3 mb-6">
-							<div className="text-primary">{category.icon}</div>
-							<div>
-								<h2 className="text-xl lg:text-2xl font-bold">
-									{category.title}
-								</h2>
-								<p className="text-muted-foreground">{category.description}</p>
-							</div>
+			{/* Integration Categories */}
+			{categories.map((category) => (
+				<section key={category.title} className="mb-12 lg:mb-16">
+					<div className="flex items-center gap-3 mb-6">
+						<div className="text-primary">{category.icon}</div>
+						<div>
+							<Heading variant="section">{category.title}</Heading>
+							<Text className="text-muted-foreground">
+								{category.description}
+							</Text>
 						</div>
-
-						<ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							{category.integrations.map((integration) => (
-								<li key={integration.title}>
-									<Card
-										aria-label={integration.title}
-										className="p-6 hover:shadow-lg transition-shadow h-full"
-									>
-										<div className="flex gap-4 items-start">
-											<div className="shrink-0 text-primary">
-												{integration.icon}
-											</div>
-											<div className="flex-1 min-w-0">
-												<div className="flex items-center gap-2 mb-2 flex-wrap">
-													<h3 className="text-lg lg:text-xl font-semibold">
-														{integration.title}
-													</h3>
-													<StatusBadge status={integration.status} />
-												</div>
-												<p className="text-sm lg:text-base text-muted-foreground">
-													{integration.description}
-												</p>
-												{integration.title === "TypeScript SDK" && (
-													<div className="mt-4">
-														<button
-															type="button"
-															onClick={() => navigate({ to: "/sdk" })}
-															className="inline-block px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
-														>
-															View SDK
-														</button>
-														<a
-															href={EXTERNAL_LINKS.sdkTypescript}
-															target="_blank"
-															rel="noopener noreferrer"
-															className="ml-3 inline-block px-3 py-1.5 border border-border rounded-lg hover:bg-muted transition-colors text-sm font-medium"
-														>
-															View on GitHub
-														</a>
-													</div>
-												)}
-											</div>
-										</div>
-									</Card>
-								</li>
-							))}
-						</ul>
-					</section>
-				))}
-
-				{/* CTA Section */}
-				<Card
-					aria-label="Request custom integration"
-					className="text-center p-8 lg:p-12 hover:shadow-lg transition-shadow"
-				>
-					<h2 className="text-2xl lg:text-3xl font-bold mb-4">
-						Need a Custom Integration?
-					</h2>
-					<p className="text-base lg:text-xl text-muted-foreground mb-6">
-						SkillVector is open source and extensible. Build your own or request
-						new integrations.
-					</p>
-					<div className="flex gap-4 justify-center flex-wrap">
-						<a
-							href={SOCIAL_LINKS.github}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label="View SkillVector on GitHub"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
-						>
-							View on GitHub
-						</a>
-						<a
-							href={EXTERNAL_LINKS.discussions}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label="Request new integration"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 border border-border rounded-lg hover:bg-white/10 transition-colors font-medium"
-						>
-							Request Integration
-						</a>
 					</div>
-				</Card>
-			</div>
+
+					<Grid variant="cards">
+						{category.integrations.map((integration) => (
+							<CardSection
+								key={integration.title}
+								aria-label={integration.title}
+							>
+								<div className="flex gap-4 items-start">
+									<div className="shrink-0 text-primary">
+										{integration.icon}
+									</div>
+									<div className="flex-1 min-w-0">
+										<div className="flex items-center gap-2 mb-2 flex-wrap">
+											<Heading variant="subsection">
+												{integration.title}
+											</Heading>
+											<StatusBadge status={integration.status} />
+										</div>
+										<Text variant="small">{integration.description}</Text>
+										{integration.title === "TypeScript SDK" && (
+											<div className="mt-4 flex gap-3">
+												<ActionButton
+													variant="primary"
+													onClick={() => navigate({ to: "/sdk" })}
+												>
+													View SDK
+												</ActionButton>
+												<ActionButton
+													variant="outline"
+													href={EXTERNAL_LINKS.sdkTypescript}
+													external
+												>
+													View on GitHub
+												</ActionButton>
+											</div>
+										)}
+									</div>
+								</div>
+							</CardSection>
+						))}
+					</Grid>
+				</section>
+			))}
+
+			{/* CTA Section */}
+			<CardSection
+				aria-label="Request custom integration"
+				className="text-center"
+			>
+				<Heading variant="section" className="mb-4">
+					Need a Custom Integration?
+				</Heading>
+				<Text variant="lead" className="mb-6">
+					SkillVector is open source and extensible. Build your own or request
+					new integrations.
+				</Text>
+				<div className="flex gap-4 justify-center flex-wrap">
+					<ActionButton
+						variant="primary"
+						href={SOCIAL_LINKS.github}
+						external
+						ariaLabel="View SkillVector on GitHub"
+					>
+						View on GitHub
+					</ActionButton>
+					<ActionButton
+						variant="outline"
+						href={EXTERNAL_LINKS.discussions}
+						external
+						ariaLabel="Request new integration"
+					>
+						Request Integration
+					</ActionButton>
+				</div>
+			</CardSection>
 		</PageTemplate>
 	);
 };

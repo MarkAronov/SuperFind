@@ -1,6 +1,7 @@
 import { Cookie, Info, Settings, Shield } from "lucide-react";
 import type { ReactNode } from "react";
 import { CONTACT } from "@/constants/site";
+import { ActionButton } from "../atoms/ActionButton";
 import { Card } from "../atoms/Card";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -214,12 +215,9 @@ export const CookiesPage = () => {
 						If you have any questions about how we use cookies, please contact
 						us
 					</p>
-					<a
-						href={`mailto:${CONTACT.privacyEmail}`}
-						className="inline-flex px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
-					>
+					<ActionButton href={`mailto:${CONTACT.privacyEmail}`}>
 						Contact Privacy Team
-					</a>
+					</ActionButton>
 				</Card>
 			</div>
 		</PageTemplate>

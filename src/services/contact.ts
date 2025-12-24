@@ -4,6 +4,15 @@ import {
 } from "@getbrevo/brevo";
 import { z } from "zod";
 
+// Define error type for Brevo API errors
+interface BrevoApiError {
+	message: string;
+	status?: number;
+	response?: {
+		data?: unknown;
+	};
+}
+
 // Initialize Brevo with API key
 const apiInstance = new TransactionalEmailsApi();
 const apiKey = process.env.BREVO_API_KEY;
@@ -79,15 +88,16 @@ export const sendContactEmail = async (
 			});
 			await apiInstance.sendTransacEmail(sendSmtpEmail);
 			console.log("Brevo email sent successfully:");
-		} catch (brevoError: any) {
+		} catch (brevoError: unknown) {
+			const error = brevoError as BrevoApiError;
 			console.error("Brevo API error:", {
-				message: brevoError.message,
-				status: brevoError.status,
-				response: brevoError.response?.data,
+				message: error.message,
+				status: error.status,
+				response: error.response?.data,
 			});
 			return {
 				success: false,
-				error: `Email service error: ${brevoError.message || "Unknown error"}`,
+				error: `Email service error: ${error.message || "Unknown error"}`,
 			};
 		}
 

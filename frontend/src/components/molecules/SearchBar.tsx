@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type KeyboardEvent, useEffect, useState } from "react";
 import { Glass } from "../atoms/Glass";
 
 interface SearchBarProps {
@@ -28,7 +28,7 @@ export function SearchBar({
 		}
 	};
 
-	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+	const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter" && !isLoading) {
 			handleSearch();
 		}
@@ -37,6 +37,7 @@ export function SearchBar({
 	return (
 		<Glass
 			variant="card"
+			constrain
 			className="w-full flex items-center rounded-full overflow-hidden p-0"
 		>
 			<input

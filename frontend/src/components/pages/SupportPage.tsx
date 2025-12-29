@@ -2,10 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { Book, Github, Mail, MessageCircle } from "lucide-react";
 import { CONTACT, EXTERNAL_LINKS } from "@/constants/site";
 import { ActionButton } from "../atoms/ActionButton";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
+import { Link as AtomsLink } from "../atoms/Link";
+import { Section } from "../atoms/Section";
 import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -74,7 +77,7 @@ const faqs = [
 
 export const SupportPage = () => {
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate title="Support">
 			{/* Hero Section */}
 			<Hero
 				title="Support"
@@ -84,79 +87,75 @@ export const SupportPage = () => {
 			{/* Support Options */}
 			<Grid variant="cards">
 				{supportOptions.map((option) => (
-					<CardSection
-						key={option.title}
-						aria-label={option.title}
-						className="text-center"
-					>
-						<div className="mb-4 text-primary flex justify-center">
-							{option.icon}
-						</div>
-						<Heading variant="subsection" className="mb-2">
-							{option.title}
-						</Heading>
-						<Text className="mb-4">{option.description}</Text>
-						{option.isInternal ? (
-							<Link
-								to={option.href}
-								aria-label={option.linkText}
-								className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
-							>
-								{option.linkText}
-							</Link>
-						) : (
-							<a
-								href={option.href}
-								target={
-									option.href.startsWith("mailto:") ? undefined : "_blank"
-								}
-								rel={
-									option.href.startsWith("mailto:")
-										? undefined
-										: "noopener noreferrer"
-								}
-								aria-label={option.linkText}
-								className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
-							>
-								{option.linkText}
-							</a>
-						)}
-					</CardSection>
+					<Card variant="hover" key={option.title} aria-label={option.title}>
+						<CardContent centered>
+							<Div className="mb-4 text-primary flex justify-center">
+								{option.icon}
+							</Div>
+							<Heading variant="subsection" className="mb-2">
+								{option.title}
+							</Heading>
+							<Text className="mb-4">{option.description}</Text>
+							{option.isInternal ? (
+								<Link
+									to={option.href}
+									aria-label={option.linkText}
+									className="inline-flex items-center gap-2 text-primary dark:text-primary font-medium hover:underline"
+								>
+									{option.linkText}
+								</Link>
+							) : (
+								<AtomsLink
+									href={option.href}
+									external={!option.href.startsWith("mailto:")}
+									variant="primary"
+									aria-label={option.linkText}
+									className="inline-flex items-center gap-2 font-medium hover:underline"
+								>
+									{option.linkText}
+								</AtomsLink>
+							)}
+						</CardContent>
+					</Card>
 				))}
 			</Grid>
 
 			{/* FAQ Section */}
-			<section>
+			<Section>
 				<Heading variant="section" className="mb-8 text-center">
 					Frequently Asked Questions
 				</Heading>
 				<Grid variant="features">
 					{faqs.map((faq) => (
-						<CardSection key={faq.question} aria-label={faq.question}>
-							<Heading variant="subsection" className="mb-2">
-								{faq.question}
-							</Heading>
-							<Text>{faq.answer}</Text>
-						</CardSection>
+						<Card variant="hover" key={faq.question} aria-label={faq.question}>
+							<CardContent>
+								<Heading variant="subsection" className="mb-2">
+									{faq.question}
+								</Heading>
+								<Text>{faq.answer}</Text>
+							</CardContent>
+						</Card>
 					))}
 				</Grid>
-			</section>
+			</Section>
 
 			{/* CTA Section */}
-			<CardSection aria-label="Contact support" className="text-center">
-				<Heading variant="section" className="mb-4">
-					Still Need Help?
-				</Heading>
-				<Text variant="lead" className="mb-6">
-					Our team is ready to assist you with any questions or issues.
-				</Text>
-				<ActionButton
-					href={`mailto:${CONTACT.email}`}
-					aria-label="Contact our support team"
-				>
-					Contact Support
-				</ActionButton>
-			</CardSection>
+			<Card variant="hover" aria-label="Contact support">
+				<CardContent centered>
+					<Heading variant="section" className="mb-4">
+						Still Need Help?
+					</Heading>
+					<Text variant="lead" className="mb-6">
+						Our team is ready to assist you with any questions or issues.
+					</Text>
+					<ActionButton
+						href={`mailto:${CONTACT.email}`}
+						aria-label="Contact our support team"
+					>
+						Contact Support
+					</ActionButton>
+				</CardContent>
+			</Card>
 		</PageTemplate>
 	);
 };

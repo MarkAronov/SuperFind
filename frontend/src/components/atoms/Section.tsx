@@ -1,9 +1,9 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 type SectionVariant = "default" | "hero" | "spaced" | "compact";
 
-interface SectionProps extends React.ComponentProps<"section"> {
+interface SectionProps extends ComponentProps<"section"> {
 	variant?: SectionVariant;
 }
 

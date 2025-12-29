@@ -1,9 +1,9 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 import { Heading } from "./Heading";
 import { Text } from "./Text";
 
-interface HeroProps extends React.ComponentProps<"div"> {
+interface HeroProps extends ComponentProps<"div"> {
 	title: string;
 	subtitle: string;
 	brand?: string;

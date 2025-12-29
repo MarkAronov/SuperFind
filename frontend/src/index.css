@@ -193,10 +193,11 @@
 
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		border-color: var(--color-border);
+		outline-color: oklch(from var(--color-ring) l c h / 0.5);
 	}
 	body {
-		@apply text-foreground;
+		color: var(--color-foreground);
 		font-family: var(--font-sans);
 		font-weight: 300; /* Light as default */
 		letter-spacing: 0.01em;
@@ -269,15 +270,20 @@
 		position: absolute;
 		inset: 0;
 		border-radius: inherit;
-		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-		opacity: 0.04;
+		/* Noise background (tiled) - allow size/position customization via CSS vars */
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+		background-repeat: repeat;
+		background-size: var(--noise-size, 800px 800px);
+		background-position: var(--noise-x, 0px) var(--noise-y, 0px);
+		opacity: var(--glass-noise-opacity, 0.04);
 		pointer-events: none;
 		mix-blend-mode: overlay;
 	}
 
 	/* Slightly heavier glass card variant used for panels */
 	.glass-card {
-		@apply px-6 py-6 rounded-xl;
+		padding: 1.5rem 1.5rem;
+		border-radius: 0.75rem;
 		--glass-bg-alpha: 0.4;
 	}
 
@@ -295,8 +301,40 @@
 		opacity: 0.05;
 	}
 
-	/* Dark mode adjustments */
-	:root.dark .glass,
+	/* Avatar: nonagon-shaped (matches site logo outline) */
+	.avatar-nonagon {
+		/* Use the same 9-point polygon as the logo path (percent coords) */
+		clip-path: polygon(
+			50% 3%,
+			80.195% 13.998%,
+			96.248% 41.842%,
+			90.702% 73.5%,
+			66.07% 94.167%,
+			33.926% 94.167%,
+			9.298% 73.5%,
+			3.752% 41.842%,
+			19.805% 13.998%
+		);
+		-webkit-clip-path: polygon(
+			50% 3%,
+			80.195% 13.998%,
+			96.248% 41.842%,
+			90.702% 73.5%,
+			66.07% 94.167%,
+			33.926% 94.167%,
+			9.298% 73.5%,
+			3.752% 41.842%,
+			19.805% 13.998%
+		);
+		overflow: hidden;
+		display: inline-grid;
+		place-items: center;
+	}
+
+	/* Fallback for older browsers - preserve rounded look */
+	.avatar-nonagon.fallback {
+		border-radius: 0.5rem;
+	}
 	.dark .glass {
 		--glass-bg-rgb: 20, 20, 28;
 		--glass-bg-alpha: 0.45;
@@ -353,3 +391,11 @@
 		background-color: oklch(100% 0 0);
 	}
 }
+
+/* Hide Scalar's theme toggle to force it to follow app theme */
+.scalar-wrapper [data-testid="theme-toggle"],
+.scalar-wrapper button[aria-label*="theme" i],
+.scalar-wrapper button[aria-label*="dark" i] {
+	display: none;
+}
+

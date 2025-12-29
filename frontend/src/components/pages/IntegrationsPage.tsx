@@ -15,10 +15,12 @@ import {
 import type { ReactNode } from "react";
 import { EXTERNAL_LINKS, SOCIAL_LINKS } from "@/constants/site";
 import { ActionButton } from "../atoms/ActionButton";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
+import { Section } from "../atoms/Section";
 import { StatusBadge } from "../atoms/StatusBadge";
 import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
@@ -189,100 +191,103 @@ const categories: IntegrationCategory[] = [
 export const IntegrationsPage = () => {
 	const navigate = useNavigate();
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate title="Integrations">
 			{/* Hero Section */}
 			<Hero
-				title="Powerful Integrations"
+				title="Powerful "
+				brand="Integrations"
 				subtitle="Connect SkillVector with your favorite tools and services for seamless talent search."
 			/>
 
 			{/* Integration Categories */}
 			{categories.map((category) => (
-				<section key={category.title} className="mb-12 lg:mb-16">
-					<div className="flex items-center gap-3 mb-6">
-						<div className="text-primary">{category.icon}</div>
-						<div>
+				<Section key={category.title} className="mb-12 lg:mb-16">
+					<Div variant="flex" className="mb-6">
+						<Div className="text-primary">{category.icon}</Div>
+						<Div>
 							<Heading variant="section">{category.title}</Heading>
 							<Text className="text-muted-foreground">
 								{category.description}
 							</Text>
-						</div>
-					</div>
+						</Div>
+					</Div>
 
 					<Grid variant="cards">
 						{category.integrations.map((integration) => (
-							<CardSection
+							<Card
+								variant="hover"
 								key={integration.title}
 								aria-label={integration.title}
 							>
-								<div className="flex gap-4 items-start">
-									<div className="shrink-0 text-primary">
-										{integration.icon}
-									</div>
-									<div className="flex-1 min-w-0">
-										<div className="flex items-center gap-2 mb-2 flex-wrap">
-											<Heading variant="subsection">
-												{integration.title}
-											</Heading>
-											<StatusBadge status={integration.status} />
-										</div>
-										<Text variant="small">{integration.description}</Text>
-										{integration.title === "TypeScript SDK" && (
-											<div className="mt-4 flex gap-3">
-												<ActionButton
-													variant="primary"
-													onClick={() => navigate({ to: "/sdk" })}
-												>
-													View SDK
-												</ActionButton>
-												<ActionButton
-													variant="outline"
-													href={EXTERNAL_LINKS.sdkTypescript}
-													external
-												>
-													View on GitHub
-												</ActionButton>
-											</div>
-										)}
-									</div>
-								</div>
-							</CardSection>
+								<CardContent>
+									<Div variant="flex">
+										<Div className="shrink-0 text-primary">
+											{integration.icon}
+										</Div>
+										<Div className="flex-1 min-w-0">
+											<Div className="flex items-center gap-2 mb-2 flex-wrap">
+												<Heading variant="subsection">
+													{integration.title}
+												</Heading>
+												<StatusBadge status={integration.status} />
+											</Div>
+											<Text variant="small">{integration.description}</Text>
+											{integration.title === "TypeScript SDK" && (
+												<Div className="mt-4 flex gap-3">
+													<ActionButton
+														variant="primary"
+														onClick={() => navigate({ to: "/sdk" })}
+													>
+														View SDK
+													</ActionButton>
+													<ActionButton
+														variant="outline"
+														href={EXTERNAL_LINKS.sdkTypescript}
+														external
+													>
+														View on GitHub
+													</ActionButton>
+												</Div>
+											)}
+										</Div>
+									</Div>
+								</CardContent>
+							</Card>
 						))}
 					</Grid>
-				</section>
+				</Section>
 			))}
 
 			{/* CTA Section */}
-			<CardSection
-				aria-label="Request custom integration"
-				className="text-center"
-			>
-				<Heading variant="section" className="mb-4">
-					Need a Custom Integration?
-				</Heading>
-				<Text variant="lead" className="mb-6">
-					SkillVector is open source and extensible. Build your own or request
-					new integrations.
-				</Text>
-				<div className="flex gap-4 justify-center flex-wrap">
-					<ActionButton
-						variant="primary"
-						href={SOCIAL_LINKS.github}
-						external
-						ariaLabel="View SkillVector on GitHub"
-					>
-						View on GitHub
-					</ActionButton>
-					<ActionButton
-						variant="outline"
-						href={EXTERNAL_LINKS.discussions}
-						external
-						ariaLabel="Request new integration"
-					>
-						Request Integration
-					</ActionButton>
-				</div>
-			</CardSection>
+			<Card variant="hover" aria-label="Request custom integration">
+				<CardContent centered>
+					<Heading variant="section" className="mb-4">
+						Need a Custom Integration?
+					</Heading>
+					<Text variant="lead" className="mb-6">
+						SkillVector is open source and extensible. Build your own or request
+						new integrations.
+					</Text>
+					<div className="flex gap-4 justify-center flex-wrap">
+						<ActionButton
+							variant="primary"
+							href={SOCIAL_LINKS.github}
+							external
+							ariaLabel="View SkillVector on GitHub"
+						>
+							View on GitHub
+						</ActionButton>
+						<ActionButton
+							variant="outline"
+							href={EXTERNAL_LINKS.discussions}
+							external
+							ariaLabel="Request new integration"
+						>
+							Request Integration
+						</ActionButton>
+					</div>
+				</CardContent>
+			</Card>
 		</PageTemplate>
 	);
 };

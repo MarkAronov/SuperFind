@@ -13,6 +13,10 @@ const AboutPage = lazy(() =>
 		default: m.AboutPage,
 	})),
 );
+// ApiPage is the largest chunk (Scalar) - definitely lazy load
+const ApiPage = lazy(() =>
+	import("./components/pages/ApiPage").then((m) => ({ default: m.ApiPage })),
+);
 const ChangelogPage = lazy(() =>
 	import("./components/pages/ChangelogPage").then((m) => ({
 		default: m.ChangelogPage,
@@ -63,10 +67,7 @@ const TermsPage = lazy(() =>
 		default: m.TermsPage,
 	})),
 );
-// ApiPage is the largest chunk (Scalar) - definitely lazy load
-const ApiPage = lazy(() =>
-	import("./pages/ApiPage").then((m) => ({ default: m.ApiPage })),
-);
+
 // Hidden route - browse all people
 const BrowsePage = lazy(() =>
 	import("./components/pages/BrowsePage").then((m) => ({

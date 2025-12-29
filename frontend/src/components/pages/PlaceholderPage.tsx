@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { ActionButton } from "../atoms/ActionButton";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent } from "../atoms/Card";
 import { Glass } from "../atoms/Glass";
 import { Heading } from "../atoms/Heading";
 import { Text } from "../atoms/Text";
@@ -16,9 +16,14 @@ export const PlaceholderPage = ({
 	description,
 }: PlaceholderPageProps) => {
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate title={title}>
 			<section className="py-12 lg:py-16">
-				<Glass variant="pronounced" className="max-w-3xl mx-auto text-center">
+				<Glass
+					variant="pronounced"
+					constrain
+					maxWidthClass="max-w-3xl"
+					className="text-center"
+				>
 					<Heading variant="hero" className="mb-4">
 						{title}
 					</Heading>
@@ -31,8 +36,8 @@ export const PlaceholderPage = ({
 			</section>
 
 			<section className="py-8 lg:py-12">
-				<div className="max-w-3xl mx-auto">
-					<CardSection aria-label="Under Construction" className="text-center">
+				<Card variant="hover" aria-label="Under Construction">
+					<CardContent centered>
 						<Text className="mb-6">
 							This page is currently under construction. Check back soon for
 							updates!
@@ -41,8 +46,8 @@ export const PlaceholderPage = ({
 							<ArrowLeft className="h-4 w-4" />
 							Back to Search
 						</ActionButton>
-					</CardSection>
-				</div>
+					</CardContent>
+				</Card>
 			</section>
 		</PageTemplate>
 	);

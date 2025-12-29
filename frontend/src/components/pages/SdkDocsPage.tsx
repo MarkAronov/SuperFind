@@ -1,4 +1,8 @@
-import { Card } from "../atoms/Card";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
+import { Heading } from "../atoms/Heading";
+import { List, ListItem } from "../atoms/List";
+import { Text } from "../atoms/Text";
 import { CodeBlock } from "../molecules/CodeBlock";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -14,35 +18,47 @@ export const SdkDocsPage = () => {
 
 	return (
 		<PageTemplate title="SDK">
-			<div className="max-w-5xl mx-auto">
-				<div className="mb-8">
-					<h1 className="text-3xl font-bold mb-2">SDKs</h1>
-					<p className="text-muted-foreground">
-						TypeScript SDK for SkillVector — quick-start and examples
-					</p>
-				</div>
-				<div className="grid gap-6">
-					<Card className="p-6">
-						<h2 className="text-lg font-semibold mb-2">Install</h2>
+			<Div className="mb-8">
+				<Heading variant="section" className="mb-2">
+					SDKs
+				</Heading>
+				<Text variant="muted">
+					TypeScript SDK for SkillVector — quick-start and examples
+				</Text>
+			</Div>
+			<Div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<Card variant="hover" fill>
+					<CardContent>
+						<Heading as="h2" variant="card" className="mb-2">
+							Install
+						</Heading>
 						<CodeBlock language="bash" code={install} />
-					</Card>
+					</CardContent>
+				</Card>
 
-					<Card className="p-6">
-						<h2 className="text-lg font-semibold mb-2">Quick Start</h2>
+				<Card variant="hover" fill>
+					<CardContent>
+						<Heading as="h2" variant="card" className="mb-2">
+							Quick Start
+						</Heading>
 						<CodeBlock language="ts" code={quickUse} />
-					</Card>
+					</CardContent>
+				</Card>
 
-					<Card className="p-6">
-						<h2 className="text-lg font-semibold mb-2">Features</h2>
-						<ul className="list-disc pl-6">
-							<li>Search & pagination helpers</li>
-							<li>Filters support with `searchWithFilters`</li>
-							<li>Retries and exponential backoff</li>
-							<li>TypeScript types for strict typing</li>
-						</ul>
-					</Card>
-				</div>
-			</div>
+				<Card variant="hover" fill>
+					<CardContent>
+						<Heading as="h2" variant="card" className="mb-2">
+							Features
+						</Heading>
+						<List variant="disc">
+							<ListItem>Search & pagination helpers</ListItem>
+							<ListItem>Filters support with `searchWithFilters`</ListItem>
+							<ListItem>Retries and exponential backoff</ListItem>
+							<ListItem>TypeScript types for strict typing</ListItem>
+						</List>
+					</CardContent>
+				</Card>
+			</Div>
 		</PageTemplate>
 	);
 };

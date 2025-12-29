@@ -9,10 +9,12 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { ActionButton } from "../atoms/ActionButton";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
+import { Span } from "../atoms/Span";
 import { StatusBadge } from "../atoms/StatusBadge";
 import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
@@ -90,7 +92,7 @@ const levelToStatus = (
 
 export const TutorialsPage = () => {
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate title="Tutorials">
 			{/* Hero Section */}
 			<Hero
 				title="Tutorials"
@@ -100,59 +102,71 @@ export const TutorialsPage = () => {
 			{/* Tutorials Grid */}
 			<Grid variant="cards">
 				{tutorials.map((tutorial) => (
-					<CardSection key={tutorial.title} aria-label={tutorial.title}>
-						<div className="flex items-start justify-between mb-4">
-							<div className="text-primary">{tutorial.icon}</div>
-							<StatusBadge status={levelToStatus(tutorial.level)} />
-						</div>
-						<Heading
-							variant="subsection"
-							className="mb-2 group-hover:text-primary transition-colors"
-						>
-							{tutorial.title}
-						</Heading>
-						<Text className="mb-4">{tutorial.description}</Text>
-						<div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-							<span className="flex items-center gap-1">
-								<Clock className="h-4 w-4" />
-								{tutorial.duration}
-							</span>
-						</div>
-						<div className="flex flex-wrap gap-2">
-							{tutorial.topics.map((topic) => (
-								<span
-									key={topic}
-									className="px-2 py-1 bg-muted/50 rounded text-xs"
-								>
-									{topic}
-								</span>
-							))}
-						</div>
-						<div className="flex items-center gap-2 text-primary font-medium mt-4">
-							Start Tutorial
-							<ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-						</div>
-					</CardSection>
+					<Card
+						variant="hover"
+						key={tutorial.title}
+						aria-label={tutorial.title}
+					>
+						<CardContent>
+							<Div className="flex items-start justify-between mb-4">
+								<Div className="text-primary">{tutorial.icon}</Div>
+								<StatusBadge status={levelToStatus(tutorial.level)} />
+							</Div>
+							<Heading
+								variant="subsection"
+								className="mb-2 group-hover:text-primary transition-colors"
+							>
+								{tutorial.title}
+							</Heading>
+							<Text className="mb-4">{tutorial.description}</Text>
+							<Div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+								<Span className="flex items-center gap-1">
+									<Clock className="h-4 w-4" />
+									{tutorial.duration}
+								</Span>
+							</Div>
+							<Div className="flex flex-wrap gap-2">
+								{tutorial.topics.map((topic) => (
+									<Span
+										key={topic}
+										className="px-2 py-1 bg-muted/50 rounded text-xs"
+									>
+										{topic}
+									</Span>
+								))}
+							</Div>
+							<Div className="flex items-center gap-2 text-primary font-medium mt-4">
+								Start Tutorial
+								<ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+							</Div>
+						</CardContent>
+					</Card>
 				))}
 			</Grid>
 
 			{/* CTA Section */}
-			<CardSection aria-label="Request a tutorial" className="text-center">
-				<Heading variant="section" className="mb-4">
-					Need Help With Something Specific?
-				</Heading>
-				<Text variant="lead" className="mb-6">
-					Check our documentation or reach out to the community for support
-				</Text>
-				<div className="flex gap-4 justify-center flex-wrap">
-					<ActionButton variant="primary" to="/api" ariaLabel="View API Docs">
-						API Documentation
-					</ActionButton>
-					<ActionButton variant="outline" to="/support" ariaLabel="Get Support">
-						Get Support
-					</ActionButton>
-				</div>
-			</CardSection>
+			<Card variant="hover" aria-label="Request a tutorial">
+				<CardContent centered>
+					<Heading variant="section" className="mb-4">
+						Need Help With Something Specific?
+					</Heading>
+					<Text variant="lead" className="mb-6">
+						Check our documentation or reach out to the community for support
+					</Text>
+					<Div className="flex gap-4 justify-center flex-wrap">
+						<ActionButton variant="primary" to="/api" ariaLabel="View API Docs">
+							API Documentation
+						</ActionButton>
+						<ActionButton
+							variant="outline"
+							to="/support"
+							ariaLabel="Get Support"
+						>
+							Get Support
+						</ActionButton>
+					</Div>
+				</CardContent>
+			</Card>
 		</PageTemplate>
 	);
 };

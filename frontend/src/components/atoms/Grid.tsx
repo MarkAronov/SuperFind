@@ -1,9 +1,9 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 type GridVariant = "features" | "cards" | "responsive";
 
-interface GridProps extends React.ComponentProps<"ul"> {
+interface GridProps extends ComponentProps<"ul"> {
 	variant?: GridVariant;
 	as?: "ul" | "div";
 }

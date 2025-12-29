@@ -1,4 +1,4 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 type TextVariant =
@@ -10,7 +10,7 @@ type TextVariant =
 	| "heading"
 	| "subheading";
 
-interface TextProps extends React.ComponentProps<"p"> {
+interface TextProps extends ComponentProps<"p"> {
 	variant?: TextVariant;
 }
 

@@ -68,9 +68,6 @@
 		],
 		"src/**/*.{css,scss}": [
 			"biome format --write"
-		],
-		"frontend/src/**/*.{css,scss}": [
-			"bash -c 'cd frontend && biome format --write \"${0#frontend/}\"'"
 		]
 	}
 }

@@ -1,8 +1,11 @@
 import { CONTACT } from "@/constants/site";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
+import { Link } from "../atoms/Link";
+import { List, ListItem } from "../atoms/List";
 import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -94,10 +97,11 @@ const privacySections: PrivacySection[] = [
 
 export const PrivacyPage = () => {
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate title="Privacy Policy">
 			{/* Hero Section */}
 			<Hero
-				title="Privacy Policy"
+				title="Privacy "
+				brand="Policy"
 				subtitle="How we collect, use, and protect your information"
 			/>
 			<Text variant="muted" className="text-center mt-4">
@@ -107,59 +111,64 @@ export const PrivacyPage = () => {
 			{/* Privacy Sections */}
 			<Grid variant="features">
 				{privacySections.map((section) => (
-					<CardSection key={section.title} aria-label={section.title}>
-						<Heading variant="subsection" className="mb-3 lg:mb-4">
-							{section.title}
-						</Heading>
+					<Card variant="hover" key={section.title} aria-label={section.title}>
+						<CardContent>
+							<Heading variant="subsection" className="mb-3 lg:mb-4">
+								{section.title}
+							</Heading>
 
-						{section.content && (
-							<Text variant="small" className="mb-3">
-								{section.content}
-							</Text>
-						)}
+							{section.content && (
+								<Text variant="small" className="mb-3">
+									{section.content}
+								</Text>
+							)}
 
-						{section.subsections && (
-							<div className="space-y-3 lg:space-y-4">
-								{section.subsections.map((sub) => (
-									<div key={sub.title}>
-										<Text variant="subheading" className="mb-2">
-											{sub.title}
-										</Text>
-										<Text variant="small">{sub.content}</Text>
-									</div>
-								))}
-							</div>
-						)}
+							{section.subsections && (
+								<Div className="space-y-3 lg:space-y-4">
+									{section.subsections.map((sub) => (
+										<Div key={sub.title}>
+											<Text variant="subheading" className="mb-2">
+												{sub.title}
+											</Text>
+											<Text variant="small">{sub.content}</Text>
+										</Div>
+									))}
+								</Div>
+							)}
 
-						{section.items && (
-							<ul className="space-y-2 text-xs lg:text-sm text-muted-foreground">
-								{section.items.map((item) => (
-									<li key={item} className="flex gap-2">
-										<span className="text-primary">•</span>
-										<span>{item}</span>
-									</li>
-								))}
-							</ul>
-						)}
-					</CardSection>
+							{section.items && (
+								<List variant="spaced">
+									{section.items.map((item) => (
+										<ListItem key={item} variant="bullet">
+											{item}
+										</ListItem>
+									))}
+								</List>
+							)}
+						</CardContent>
+					</Card>
 				))}
 
 				{/* Contact Section */}
-				<CardSection aria-label="Contact Us">
-					<Heading variant="subsection" className="mb-3 lg:mb-4">
-						9. Contact Us
-					</Heading>
-					<Text variant="small">
-						If you have questions about this Privacy Policy or how we handle
-						your data, please contact us at:{" "}
-						<a
-							href={`mailto:${CONTACT.email}`}
-							className="text-primary hover:underline"
-						>
-							{CONTACT.email}
-						</a>
-					</Text>
-				</CardSection>
+				<Card variant="hover" aria-label="Contact Us">
+					<CardContent>
+						<Heading variant="subsection" className="mb-3 lg:mb-4">
+							9. Contact Us
+						</Heading>
+						<Text variant="small">
+							If you have questions about this Privacy Policy or how we handle
+							your data, please contact us at:{" "}
+							<Link
+								href={`mailto:${CONTACT.email}`}
+								variant="primary"
+								external={false}
+								className="hover:underline"
+							>
+								{CONTACT.email}
+							</Link>
+						</Text>
+					</CardContent>
+				</Card>
 			</Grid>
 		</PageTemplate>
 	);

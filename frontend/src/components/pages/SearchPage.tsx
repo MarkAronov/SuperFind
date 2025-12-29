@@ -5,8 +5,11 @@ import {
 import { useEffect, useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
 import type { SearchResult } from "@/types/search.types";
-import { CardSection } from "../atoms/CardSection";
+import { Button } from "../atoms/Button";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
 import { Hero } from "../atoms/Hero";
+import { Link } from "../atoms/Link";
 import { Text } from "../atoms/Text";
 import { SearchBar } from "../molecules/SearchBar";
 import { SearchResults } from "../organisms/SearchResults";
@@ -75,10 +78,11 @@ export function SearchPage() {
 	};
 
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate>
 			{/* Hero Section */}
 			<Hero
-				title="Find the Perfect Talent"
+				title="Find the "
+				brand="Perfect Talent"
 				subtitle="Semantic search powered by AI. Search by skills, experience, location, and more."
 			/>
 
@@ -92,9 +96,13 @@ export function SearchPage() {
 
 			{/* Error Message */}
 			{error && (
-				<CardSection className="mt-4 bg-red-100 text-red-700">
-					<strong>Error:</strong> {error.message}
-				</CardSection>
+				<Card variant="hover" className="mt-4 bg-red-100 text-red-700">
+					<CardContent>
+						<Text>
+							<strong>Error:</strong> {error.message}
+						</Text>
+					</CardContent>
+				</Card>
 			)}
 
 			{/* Search Results */}
@@ -104,41 +112,39 @@ export function SearchPage() {
 
 			{/* Load More Button */}
 			{accumulatedData?.hasMore && (
-				<div className="mt-8 flex justify-center">
-					<button
+				<Div variant="center" className="mt-8">
+					<Button
 						type="button"
 						onClick={handleLoadMore}
 						disabled={isLoading}
-						className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						className="max-w-xs"
 					>
 						{isLoading ? "Loading..." : "Load More Results"}
-					</button>
-				</div>
+					</Button>
+				</Div>
 			)}
 
 			{/* Pagination Info */}
 			{accumulatedData?.people && accumulatedData.people.length > 0 && (
-				<div className="mt-4 text-center text-sm text-muted-foreground">
-					Showing {accumulatedData.people.length} of{" "}
-					{accumulatedData.total || accumulatedData.people.length} results
-				</div>
+				<Div variant="center" className="mt-4">
+					<Text variant="small">
+						Showing {accumulatedData.people.length} of{" "}
+						{accumulatedData.total || accumulatedData.people.length} results
+					</Text>
+				</Div>
 			)}
 
 			{/* Hint for browse all*/}
 			{!query && (
-				<div className="mt-8 text-center">
+				<Div variant="center" className="mt-8">
 					<Text variant="caption">
 						Tip: Visit{" "}
-						<button
-							type="button"
-							onClick={() => navigate({ to: "/people" })}
-							className="underline hover:text-muted-foreground/70 transition-colors"
-						>
+						<Link to="/people" variant="underline">
 							/people
-						</button>{" "}
+						</Link>{" "}
 						to see everyone
 					</Text>
-				</div>
+				</Div>
 			)}
 		</PageTemplate>
 	);

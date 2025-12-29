@@ -39,7 +39,52 @@ const mockPersonStringSkills: PersonSearchResult = {
 		email: "john.smith@example.com",
 		description: "Product manager with expertise in agile methodologies.",
 	},
-	score: 0.88,
+	score: 0.45,
+};
+
+const mockPersonLow: PersonSearchResult = {
+	id: "3",
+	person: {
+		name: "Sam Low",
+		role: "Junior Dev",
+		location: "Austin, TX",
+		experience: "1 year",
+		experience_years: 1,
+		skills: "HTML; CSS",
+		email: "sam.low@example.com",
+		description: "Early career developer",
+	},
+	score: 0.12,
+};
+
+const mockPersonMid: PersonSearchResult = {
+	id: "4",
+	person: {
+		name: "Alex Mid",
+		role: "Engineer",
+		location: "Berlin, Germany",
+		experience: "4 years",
+		experience_years: 4,
+		skills: ["React", "TypeScript"],
+		email: "alex.mid@example.com",
+		description: "Mid-level engineer",
+	},
+	score: 0.5,
+};
+
+const mockPersonHigh: PersonSearchResult = {
+	id: "5",
+	person: {
+		name: "Pat High",
+		role: "Senior Engineer",
+		location: "Toronto, Canada",
+		experience: "10 years",
+		experience_years: 10,
+		skills: ["Systems", "Architecture"],
+		email: "pat.high@example.com",
+		description: "Seasoned architect",
+	},
+	score: 0.92,
 };
 
 export const Default: Story = {
@@ -70,4 +115,34 @@ export const NonClickable: Story = {
 				"Person cards are no longer clickable — they are static cards. Click behavior was removed to avoid accidental navigation.",
 		},
 	},
+};
+
+export const GridView: Story = {
+	render: () => (
+		<div className="w-full">
+			<div className="grid gap-4 md:grid-cols-2">
+				<PersonCard person={mockPerson} view="grid" />
+				<PersonCard person={mockPersonStringSkills} view="grid" />
+			</div>
+		</div>
+	),
+};
+
+export const RowView: Story = {
+	render: () => (
+		<div className="w-full space-y-4">
+			<PersonCard person={mockPerson} view="row" />
+			<PersonCard person={mockPersonStringSkills} view="row" />
+		</div>
+	),
+};
+
+export const RelevanceLevels: Story = {
+	render: () => (
+		<div className="w-full space-y-4">
+			<PersonCard person={mockPersonLow} view="row" />
+			<PersonCard person={mockPersonMid} view="row" />
+			<PersonCard person={mockPersonHigh} view="row" />
+		</div>
+	),
 };

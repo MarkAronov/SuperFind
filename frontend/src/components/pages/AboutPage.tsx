@@ -1,11 +1,10 @@
 import { Heart, Target, Users, Zap } from "lucide-react";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent, CardHeader } from "../atoms/Card";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
-import { PageContainer } from "../atoms/PageContainer";
+import { List, ListItem } from "../atoms/List";
 import { Text } from "../atoms/Text";
-import { FeatureCard } from "../molecules/FeatureCard";
 import { PageTemplate } from "../templates/PageTemplate";
 
 const values = [
@@ -54,16 +53,17 @@ const techStack = [
 
 export const AboutPage = () => {
 	return (
-		<PageTemplate className="bg-transparent">
-			<PageContainer>
-				<Hero
-					title="About"
-					brand="SkillVector"
-					subtitle="Revolutionizing professional search with AI-powered semantic matching that understands skills, not just keywords."
-				/>
+		<PageTemplate title="About">
+			{/* Hero Section */}
+			<Hero
+				title="About"
+				brand="SkillVector"
+				subtitle="Revolutionizing professional search with AI-powered semantic matching that understands skills, not just keywords."
+			/>
 
-				{/* Mission Section */}
-				<CardSection aria-label="Our Mission" className="mb-8 lg:mb-12">
+			{/* Mission Section */}
+			<Card variant="hover" aria-label="Our Mission" className="mb-8 lg:mb-12">
+				<CardContent>
 					<Heading variant="section">Our Mission</Heading>
 					<Text className="mb-4">
 						SkillVector was built to solve a fundamental problem in talent
@@ -75,37 +75,40 @@ export const AboutPage = () => {
 						we enable organizations to find the right professionals based on
 						what they can do, not just what keywords appear in their profiles.
 					</Text>
-				</CardSection>
+				</CardContent>
+			</Card>
+			{/* Values Grid */}
+			<Grid variant="features">
+				{values.map(({ icon, title, description }) => (
+					<ListItem key={title}>
+						<Card variant="hover" aria-label={title} className="h-full">
+							<CardHeader icon={icon}>
+								<Heading as="h3" variant="card" className="mb-2">
+									{title}
+								</Heading>
+								<Text variant="muted">{description}</Text>
+							</CardHeader>
+						</Card>
+					</ListItem>
+				))}
+			</Grid>
 
-				{/* Values Grid */}
-				<Grid variant="features">
-					{values.map(({ icon, title, description }) => (
-						<li key={title}>
-							<FeatureCard
-								icon={icon}
-								title={title}
-								description={description}
-								className="h-full"
-							/>
-						</li>
-					))}
-				</Grid>
-
-				{/* Technology Stack Section */}
-				<CardSection aria-label="Technology Stack">
+			{/* Technology Stack Section */}
+			<Card variant="hover" aria-label="Technology Stack">
+				<CardContent>
 					<Heading variant="section">Technology Stack</Heading>
-					<ul className="space-y-4">
+					<List variant="spaced">
 						{techStack.map(({ title, description }) => (
-							<li key={title}>
+							<ListItem key={title}>
 								<Text variant="subheading" className="mb-2">
 									{title}
 								</Text>
 								<Text variant="small">{description}</Text>
-							</li>
+							</ListItem>
 						))}
-					</ul>
-				</CardSection>
-			</PageContainer>
+					</List>
+				</CardContent>
+			</Card>
 		</PageTemplate>
 	);
 };

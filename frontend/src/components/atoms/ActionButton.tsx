@@ -15,7 +15,7 @@ interface ActionButtonProps {
 }
 
 const baseStyles =
-	"inline-flex items-center gap-2 px-5 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors font-medium text-sm lg:text-base";
+	"inline-flex items-center gap-2 px-5 lg:px-6 py-2.5 lg:py-3 rounded-lg transition-colors font-medium text-sm lg:text-base max-w-xs justify-center";
 
 const variantStyles = {
 	primary: "bg-primary text-white hover:bg-primary/90 disabled:opacity-50",

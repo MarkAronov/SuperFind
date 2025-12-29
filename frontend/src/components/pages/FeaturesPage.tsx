@@ -8,12 +8,12 @@ import {
 	Zap,
 } from "lucide-react";
 import { ActionButton } from "../atoms/ActionButton";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent, CardHeader } from "../atoms/Card";
 import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
-import { PageContainer } from "../atoms/PageContainer";
+import { ListItem } from "../atoms/List";
 import { Text } from "../atoms/Text";
-import { FeatureCard } from "../molecules/FeatureCard";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export const FeaturesPage = () => {
@@ -57,30 +57,33 @@ export const FeaturesPage = () => {
 	];
 
 	return (
-		<PageTemplate className="bg-transparent" title="Features">
-			<PageContainer>
-				<Hero
-					title="Powerful Features for"
-					brand="Modern Talent Search"
-					subtitle="Leverage cutting-edge AI and vector search technology to find the perfect candidates faster than ever."
-				/>
+		<PageTemplate title="Features">
+			{/* Hero Section */}
+			<Hero
+				title="Powerful Features for"
+				brand="Modern Talent Search"
+				subtitle="Leverage cutting-edge AI and vector search technology to find the perfect candidates faster than ever."
+			/>
 
-				{/* Features Grid */}
-				<Grid variant="cards">
-					{features.map((feature) => (
-						<li key={feature.title}>
-							<FeatureCard
-								icon={feature.icon}
-								title={feature.title}
-								description={feature.description}
-								className="h-full"
-							/>
-						</li>
-					))}
-				</Grid>
+			{/* Features Grid */}
+			<Grid variant="cards">
+				{features.map((feature) => (
+					<ListItem key={feature.title}>
+						<Card variant="hover" aria-label={feature.title} className="h-full">
+							<CardHeader icon={feature.icon}>
+								<Heading as="h3" variant="card" className="mb-2">
+									{feature.title}
+								</Heading>
+								<Text variant="muted">{feature.description}</Text>
+							</CardHeader>
+						</Card>
+					</ListItem>
+				))}
+			</Grid>
 
-				{/* CTA Section */}
-				<CardSection aria-label="Call to action" className="text-center">
+			{/* Call to Action */}
+			<Card variant="hover" aria-label="Call to action">
+				<CardContent centered>
 					<Text variant="heading" className="mb-4">
 						Ready to get started?
 					</Text>
@@ -99,8 +102,8 @@ export const FeaturesPage = () => {
 							View API Docs
 						</ActionButton>
 					</div>
-				</CardSection>
-			</PageContainer>
+				</CardContent>
+			</Card>
 		</PageTemplate>
 	);
 };

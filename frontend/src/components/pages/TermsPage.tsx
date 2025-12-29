@@ -1,8 +1,10 @@
 import { CONTACT } from "@/constants/site";
-import { CardSection } from "../atoms/CardSection";
+import { Card, CardContent } from "../atoms/Card";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
+import { Link } from "../atoms/Link";
+import { List, ListItem } from "../atoms/List";
 import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
@@ -78,10 +80,11 @@ const termsSections: TermsSection[] = [
 
 export const TermsPage = () => {
 	return (
-		<PageTemplate className="bg-transparent">
+		<PageTemplate>
 			{/* Hero Section */}
 			<Hero
-				title="Terms of Service"
+				title="Terms of"
+				brand="Service"
 				subtitle="The rules and guidelines for using SkillVector"
 			/>
 			<Text variant="muted" className="text-center mt-4">
@@ -91,45 +94,50 @@ export const TermsPage = () => {
 			{/* Terms Sections */}
 			<Grid variant="features">
 				{termsSections.map((section) => (
-					<CardSection key={section.title} aria-label={section.title}>
-						<Heading variant="subsection" className="mb-3 lg:mb-4">
-							{section.title}
-						</Heading>
+					<Card variant="hover" key={section.title} aria-label={section.title}>
+						<CardContent>
+							<Heading variant="subsection" className="mb-3 lg:mb-4">
+								{section.title}
+							</Heading>
 
-						{section.content && (
-							<Text variant="small" className="mb-3">
-								{section.content}
-							</Text>
-						)}
+							{section.content && (
+								<Text variant="small" className="mb-3">
+									{section.content}
+								</Text>
+							)}
 
-						{section.items && (
-							<ul className="space-y-2 text-xs lg:text-sm text-muted-foreground">
-								{section.items.map((item) => (
-									<li key={item} className="flex gap-2">
-										<span className="text-primary">•</span>
-										<span>{item}</span>
-									</li>
-								))}
-							</ul>
-						)}
-					</CardSection>
+							{section.items && (
+								<List variant="spaced">
+									{section.items.map((item) => (
+										<ListItem key={item} variant="bullet">
+											{item}
+										</ListItem>
+									))}
+								</List>
+							)}
+						</CardContent>
+					</Card>
 				))}
 
 				{/* Contact Section */}
-				<CardSection aria-label="Contact Information">
-					<Heading variant="subsection" className="mb-3 lg:mb-4">
-						10. Contact Information
-					</Heading>
-					<Text variant="small">
-						For questions about these Terms of Service, please contact:{" "}
-						<a
-							href={`mailto:${CONTACT.email}`}
-							className="text-primary hover:underline"
-						>
-							{CONTACT.email}
-						</a>
-					</Text>
-				</CardSection>
+				<Card variant="hover" aria-label="Contact Information">
+					<CardContent>
+						<Heading variant="subsection" className="mb-3 lg:mb-4">
+							10. Contact Information
+						</Heading>
+						<Text variant="small">
+							For questions about these Terms of Service, please contact:{" "}
+							<Link
+								href={`mailto:${CONTACT.email}`}
+								variant="primary"
+								external={false}
+								className="hover:underline"
+							>
+								{CONTACT.email}
+							</Link>
+						</Text>
+					</CardContent>
+				</Card>
 			</Grid>
 		</PageTemplate>
 	);

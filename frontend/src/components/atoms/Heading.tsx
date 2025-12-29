@@ -1,10 +1,10 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 type HeadingVariant = "hero" | "section" | "subsection" | "card";
 
-interface HeadingProps extends React.ComponentProps<HeadingLevel> {
+interface HeadingProps extends ComponentProps<HeadingLevel> {
 	as?: HeadingLevel;
 	variant?: HeadingVariant;
 }

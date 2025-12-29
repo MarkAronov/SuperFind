@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { PersonSearchResult, SearchResult } from "@/types/search.types";
 import { Button } from "../atoms/Button";
 import { Card } from "../atoms/Card";

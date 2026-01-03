@@ -90,11 +90,11 @@ export const HowItWorksPage = () => {
 							<Div className="flex flex-col md:flex-row gap-6 items-start">
 								<Div className={`shrink-0 ${step.color}`}>{step.icon}</Div>
 								<Div className="flex-1">
-									<Div className="flex items-center gap-3 mb-3">
-										<Span className={`text-sm font-bold ${step.color}`}>
+									<Div className="flex items-baseline gap-3 mb-3">
+										<Span className={`text-xl font-bold ${step.color}`}>
 											STEP {step.step}
 										</Span>
-										<Heading as="h3" variant="card">
+										<Heading as="h3" variant="card" className="mb-0">
 											{step.title}
 										</Heading>
 									</Div>

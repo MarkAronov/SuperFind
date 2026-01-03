@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { ExternalLink, Github, Linkedin, Mail } from "lucide-react";
 import {
 	CONTACT,
 	EXTERNAL_LINKS,
@@ -33,6 +33,7 @@ const footerSections = [
 				label: "Documentation",
 				external: true,
 			},
+			{ to: "/sdk", label: "SDK" },
 			{ to: "/support", label: "Support" },
 			{ to: "/changelog", label: "Changelog" },
 		],
@@ -91,9 +92,10 @@ export const Footer = () => {
 													href={link.href}
 													target="_blank"
 													rel="noopener noreferrer"
-													className="text-foreground/80 hover:text-foreground/95 transition-colors"
+													className="text-foreground/80 hover:text-foreground/95 transition-colors inline-flex items-center gap-1"
 												>
 													{link.label}
+													<ExternalLink className="h-3 w-3" />
 												</a>
 											) : (
 												<Link

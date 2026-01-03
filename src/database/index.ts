@@ -890,6 +890,9 @@ export const hybridSearch = async (
 			result.length,
 		);
 
+		// Define type for payload with optional _boostedBy property
+		type BoostedPayload = Record<string, unknown> & { _boostedBy?: string };
+
 		// Apply metadata-based relevance boost when query matches structured fields
 		// (role/title and skills). This is applied BEFORE the relevance threshold filter.
 		const queryLower = query.toLowerCase();
@@ -941,14 +944,14 @@ export const hybridSearch = async (
 			}
 
 			if (boostReasons.length > 0) {
-				(point.payload as any)._boostedBy = boostReasons.join("+");
+				(point.payload as BoostedPayload)._boostedBy = boostReasons.join("+");
 			}
 
 			return { ...point, score };
 		});
 
 		const boostedCount = boostedResults.filter(
-			(p) => (p.payload as any)?._boostedBy,
+			(p) => (p.payload as BoostedPayload)._boostedBy,
 		).length;
 		console.log("[hybridSearch] Metadata-boosted results count:", boostedCount);
 

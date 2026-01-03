@@ -86,10 +86,7 @@ export const HowItWorksPage = () => {
 			<List variant="spaced" className="mb-16">
 				{steps.map((step) => (
 					<ListItem key={step.step}>
-						<Card
-							aria-label={step.title}
-							className="p-6 hover:shadow-lg transition-shadow"
-						>
+						<Card aria-label={step.title} className="p-6">
 							<Div className="flex flex-col md:flex-row gap-6 items-start">
 								<Div className={`shrink-0 ${step.color}`}>{step.icon}</Div>
 								<Div className="flex-1">
@@ -162,10 +159,7 @@ export const HowItWorksPage = () => {
 			</List>
 
 			{/* CTA Section */}
-			<Card
-				aria-label="Try the demo"
-				className="text-center p-8 lg:p-12 hover:shadow-lg transition-shadow"
-			>
+			<Card aria-label="Try the demo" className="text-center p-8 lg:p-12">
 				<Heading variant="section" className="mb-4">
 					Ready to Try It?
 				</Heading>

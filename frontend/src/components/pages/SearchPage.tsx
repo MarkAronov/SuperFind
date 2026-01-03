@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
 import type { SearchResult } from "@/types/search.types";
 import { Button } from "../atoms/Button";
-import { Card, CardContent } from "../atoms/Card";
 import { Div } from "../atoms/Div";
 import { Hero } from "../atoms/Hero";
 import { Link } from "../atoms/Link";
 import { Text } from "../atoms/Text";
+import { ErrorMessage } from "../molecules/ErrorMessage";
 import { SearchBar } from "../molecules/SearchBar";
 import { SearchResults } from "../organisms/SearchResults";
 import { PageTemplate } from "../templates/PageTemplate";
@@ -95,15 +95,7 @@ export function SearchPage() {
 			/>
 
 			{/* Error Message */}
-			{error && (
-				<Card variant="hover" className="mt-4 bg-red-100 text-red-700">
-					<CardContent>
-						<Text>
-							<strong>Error:</strong> {error.message}
-						</Text>
-					</CardContent>
-				</Card>
-			)}
+			{error && <ErrorMessage message={error.message} className="mt-4" />}
 
 			{/* Search Results */}
 			{accumulatedData && (

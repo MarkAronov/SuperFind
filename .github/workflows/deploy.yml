@@ -1,0 +1,61 @@
+name: "Deploy"
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  # ------------------------------------------------------------------
+  # STORYBOOK DEPLOYMENT
+  # ------------------------------------------------------------------
+  deploy-storybook:
+    name: Deploy Storybook to GitHub Pages
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - run: bun install
+        working-directory: frontend
+      - run: bun run build:storybook
+        working-directory: frontend
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/storybook-static
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ------------------------------------------------------------------
+  # OPENAPI GENERATION
+  # ------------------------------------------------------------------
+  generate-openapi:
+    name: Generate & Commit OpenAPI Spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - run: bun install
+      - run: bun run generate:openapi
+      - name: Commit OpenAPI spec
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add frontend/public/openapi.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: auto-generate OpenAPI spec [skip ci]"
+          git push

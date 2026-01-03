@@ -80,7 +80,8 @@ export const SupportPage = () => {
 		<PageTemplate title="Support">
 			{/* Hero Section */}
 			<Hero
-				title="Support"
+				title=""
+				brand="Support"
 				subtitle="Get help with SkillVector and find answers to common questions"
 			/>
 

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { PersonSearchResult, SearchResult } from "@/types/search.types";
-import { Button } from "../atoms/Button";
 import { Card } from "../atoms/Card";
 import { PersonCard } from "../molecules/PersonCard";
+import { ViewToggle } from "../molecules/ViewToggle";
 
 interface SearchResultsProps {
 	data: SearchResult;
@@ -214,26 +214,7 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 					</h2>
 
 					{/* View Toggle */}
-					<div className="flex items-center gap-2">
-						<Button
-							size="sm"
-							variant={view === "grid" ? "outline" : "default"}
-							onClick={() => setView("grid")}
-							aria-pressed={view === "grid"}
-							title="Grid view"
-						>
-							Grid
-						</Button>
-						<Button
-							size="sm"
-							variant={view === "row" ? "outline" : "default"}
-							onClick={() => setView("row")}
-							aria-pressed={view === "row"}
-							title="List view"
-						>
-							List
-						</Button>
-					</div>
+					<ViewToggle view={view} onViewChange={setView} />
 				</div>
 
 				{uniquePeople.length > 0 ? (

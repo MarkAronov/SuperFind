@@ -5,7 +5,7 @@ const meta: Meta<typeof BlogPage> = {
 	title: "Pages/BlogPage",
 	component: BlogPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

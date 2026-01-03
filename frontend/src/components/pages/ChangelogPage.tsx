@@ -9,6 +9,8 @@ import { Link } from "../atoms/Link";
 import { List, ListItem } from "../atoms/List";
 import { Span } from "../atoms/Span";
 import { Text } from "../atoms/Text";
+import { ErrorMessage } from "../molecules/ErrorMessage";
+import { LoadingState } from "../molecules/LoadingState";
 import { PageTemplate } from "../templates/PageTemplate";
 
 interface GitHubRelease {
@@ -114,27 +116,21 @@ export const ChangelogPage = () => {
 			/>
 
 			{/* Loading State */}
-			{loading && (
-				<Div variant="center" className="py-12">
-					<Text variant="muted">Loading releases...</Text>
-				</Div>
-			)}
+			{loading && <LoadingState message="Loading releases..." />}
 
 			{/* Error State */}
 			{error && (
-				<Card variant="hover" className="mb-6 border-destructive">
-					<CardContent>
-						<Text className="text-destructive">
-							Failed to load releases: {error}
-						</Text>
-						<Text variant="small" className="mt-2">
-							You can view releases directly on{" "}
-							<Link href={EXTERNAL_LINKS.releases} external variant="primary">
-								GitHub
-							</Link>
-						</Text>
-					</CardContent>
-				</Card>
+				<ErrorMessage
+					message={`Failed to load releases: ${error}`}
+					className="mb-6"
+				>
+					<Text variant="small" className="mt-2">
+						You can view releases directly on{" "}
+						<Link href={EXTERNAL_LINKS.releases} external variant="primary">
+							GitHub
+						</Link>
+					</Text>
+				</ErrorMessage>
 			)}
 
 			{/* Releases */}
@@ -289,7 +285,7 @@ export const ChangelogPage = () => {
 			{/* CTA Section */}
 			<Card
 				aria-label="View releases on GitHub"
-				className="text-center p-8 lg:p-12 hover:shadow-lg transition-shadow"
+				className="text-center p-8 lg:p-12"
 			>
 				<Heading variant="section" className="mb-4">
 					Stay Updated

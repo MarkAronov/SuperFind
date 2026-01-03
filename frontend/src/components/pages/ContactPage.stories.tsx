@@ -5,7 +5,7 @@ const meta: Meta<typeof ContactPage> = {
 	title: "Pages/ContactPage",
 	component: ContactPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

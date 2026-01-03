@@ -5,7 +5,7 @@ const meta: Meta<typeof FeaturesPage> = {
 	title: "Pages/FeaturesPage",
 	component: FeaturesPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

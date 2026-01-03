@@ -4,6 +4,9 @@ import { Footer } from "./Footer";
 const meta: Meta<typeof Footer> = {
 	title: "Organisms/Footer",
 	component: Footer,
+	parameters: {
+		layout: "centered",
+	},
 };
 
 export default meta;

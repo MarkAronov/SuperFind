@@ -1,26 +1,17 @@
+import type { Meta, StoryObj } from "@storybook/react";
 import { PlaceholderPage } from "./PlaceholderPage";
 
-export default {
+const meta: Meta<typeof PlaceholderPage> = {
 	title: "Pages/PlaceholderPage",
 	component: PlaceholderPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 
-export const Default = () => (
-	<PlaceholderPage
-		title="Coming Soon"
-		description="This feature is under development."
-	/>
-);
+export default meta;
+type Story = StoryObj<typeof PlaceholderPage>;
 
-export const WithoutDescription = () => (
-	<PlaceholderPage title="Under Construction" />
-);
-export const CustomContent = () => (
-	<PlaceholderPage
-		title="New Feature"
-		description="We are working on something exciting. Stay tuned!"
-	/>
-);
+export const Default: Story = {
+	render: () => <PlaceholderPage />,
+};

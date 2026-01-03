@@ -5,7 +5,7 @@ const meta: Meta<typeof ApiPage> = {
 	title: "Pages/ApiPage",
 	component: ApiPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 
@@ -13,9 +13,5 @@ export default meta;
 type Story = StoryObj<typeof ApiPage>;
 
 export const Default: Story = {
-	render: () => (
-		<div style={{ padding: 20, maxWidth: 1200 }}>
-			<ApiPage />
-		</div>
-	),
+	render: () => <ApiPage />,
 };

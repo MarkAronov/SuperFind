@@ -1,37 +1,43 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo "🔍 Running comprehensive pre-push checks..."
+echo "[>>] Running comprehensive pre-push checks..."
+echo ""
+
+# 0. Generate OpenAPI spec
+echo "→ [0/6] Generating OpenAPI spec..."
+bun run generate:openapi || exit 1
+echo "✓ OpenAPI spec generated"
 echo ""
 
 # 1. Linting & Formatting (catches code style issues)
-echo "→ [1/6] Linting code..."
+echo "→ [1/7] Linting code..."
 bun run check:backend || exit 1
 bun run check:frontend || exit 1
 echo "✓ Linting passed"
 echo ""
 
 # 2. Type Checking (catches type errors)
-echo "→ [2/6] Type checking..."
+echo "→ [2/7] Type checking..."
 bun run typecheck:backend || exit 1
 bun run typecheck:frontend || exit 1
 echo "✓ Type checking passed"
 echo ""
 
 # 3. Running Tests (catches logic bugs & runtime errors)
-echo "→ [3/6] Running tests..."
+echo "→ [3/7] Running tests..."
 bun run test || exit 1
 echo "✓ Tests passed"
 echo ""
 
 # 4. Security Audits (catches vulnerabilities)
-echo "→ [4/6] Running security audits..."
+echo "→ [4/7] Running security audits..."
 bun run audit:all || exit 1
 echo "✓ Security audits passed"
 echo ""
 
 # 5. Builds (catches build failures)
-echo "→ [5/6] Running builds..."
+echo "→ [5/7] Running builds..."
 bun run build:sdk || exit 1
 bun run build:frontend || exit 1
 bun run build:storybook || exit 1
@@ -39,13 +45,13 @@ echo "✓ Builds passed"
 echo ""
 
 # 6. Docker Check (catches containerization issues)
-echo "→ [6/6] Verifying Docker build..."
+echo "→ [6/7] Verifying Docker build..."
 if docker info > /dev/null 2>&1; then
     docker build . --file Dockerfile --quiet > /dev/null || exit 1
     echo "✓ Docker build passed"
 else
-    echo "⚠️ Docker is not running. Skipping Docker build check."
+    echo "[WARN] Docker is not running. Skipping Docker build check."
 fi
 echo ""
 
-echo "✅ All pre-push checks passed! Safe to push."
+echo "[OK] All pre-push checks passed! Safe to push."

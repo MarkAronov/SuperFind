@@ -5,7 +5,7 @@ const meta: Meta<typeof ChangelogPage> = {
 	title: "Pages/ChangelogPage",
 	component: ChangelogPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

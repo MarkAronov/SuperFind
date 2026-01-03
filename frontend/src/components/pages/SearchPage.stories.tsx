@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SearchPage } from "./SearchPage";
 
-// Note: SearchPage uses router hooks (useNavigate, useSearch)
-// The Storybook preview provides a router context with "/" route
 const meta: Meta<typeof SearchPage> = {
 	title: "Pages/SearchPage",
 	component: SearchPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

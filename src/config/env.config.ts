@@ -59,15 +59,15 @@ export const logCurrentConfiguration = () => {
 	separator();
 
 	// Available AI Providers
-	console.log("\n🤖 Available AI Providers:");
+	console.log("\n[AI] Available AI Providers:");
 	Object.entries(config.api_keys).forEach(([provider, available]) => {
 		const model = config.ai_models[provider as keyof typeof config.ai_models];
-		const status = available ? "✅" : "❌";
+		const status = available ? "[OK]" : "[X]";
 		console.log(`    ${status} ${provider.toUpperCase()}: ${model}`);
 	});
 
 	// Embedding Models
-	console.log("\n🔍 Embedding Models:");
+	console.log("\n[SEARCH] Embedding Models:");
 	console.log(`    OpenAI Small: ${config.embedding_models.openai_small}`);
 	console.log(`    OpenAI Large: ${config.embedding_models.openai_large}`);
 	console.log(`    Ollama Local: ${config.embedding_models.ollama}`);
@@ -75,18 +75,18 @@ export const logCurrentConfiguration = () => {
 	console.log(`    Google: ${config.embedding_models.google}`);
 
 	// Qdrant Configuration
-	console.log("\n🗃️  Vector Database:");
+	console.log("\n[DB] Vector Database:");
 	console.log(
 		`    Qdrant: ${config.qdrant.protocol}://${config.qdrant.host}:${config.qdrant.port}`,
 	);
 	console.log(
-		`    API Key: ${config.qdrant.has_api_key ? "✅ Configured" : "❌ Not set"}`,
+		`    API Key: ${config.qdrant.has_api_key ? "[OK] Configured" : "[X] Not set"}`,
 	);
 
 	// Startup Options
-	console.log("\n⚙️  Startup Options:");
+	console.log("\n[*] Startup Options:");
 	console.log(
-		`    Skip Static Data: ${config.options.skip_static_data ? "✅ Yes" : "❌ No"}`,
+		`    Skip Static Data: ${config.options.skip_static_data ? "[OK] Yes" : "[X] No"}`,
 	);
 
 	separator();

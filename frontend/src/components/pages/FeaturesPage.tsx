@@ -7,13 +7,11 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
-import { ActionButton } from "../atoms/ActionButton";
-import { Card, CardContent, CardHeader } from "../atoms/Card";
 import { Grid } from "../atoms/Grid";
-import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
 import { ListItem } from "../atoms/List";
-import { Text } from "../atoms/Text";
+import { CTACard } from "../molecules/CTACard";
+import { IconCard } from "../molecules/IconCard";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export const FeaturesPage = () => {
@@ -60,8 +58,8 @@ export const FeaturesPage = () => {
 		<PageTemplate title="Features">
 			{/* Hero Section */}
 			<Hero
-				title="Powerful Features for"
-				brand="Modern Talent Search"
+				title="Powerful "
+				brand="Features"
 				subtitle="Leverage cutting-edge AI and vector search technology to find the perfect candidates faster than ever."
 			/>
 
@@ -69,41 +67,35 @@ export const FeaturesPage = () => {
 			<Grid variant="cards">
 				{features.map((feature) => (
 					<ListItem key={feature.title}>
-						<Card variant="hover" aria-label={feature.title} className="h-full">
-							<CardHeader icon={feature.icon}>
-								<Heading as="h3" variant="card" className="mb-2">
-									{feature.title}
-								</Heading>
-								<Text variant="muted">{feature.description}</Text>
-							</CardHeader>
-						</Card>
+						<IconCard
+							icon={feature.icon}
+							title={feature.title}
+							description={feature.description}
+						/>
 					</ListItem>
 				))}
 			</Grid>
 
 			{/* Call to Action */}
-			<Card variant="hover" aria-label="Call to action">
-				<CardContent centered>
-					<Text variant="heading" className="mb-4">
-						Ready to get started?
-					</Text>
-					<Text variant="lead" className="mb-6">
-						Try SkillVector today and experience the future of talent search.
-					</Text>
-					<div className="flex flex-wrap gap-4 justify-center">
-						<ActionButton to="/" aria-label="Try Search">
+			<CTACard
+				title="Ready to get started?"
+				description="Try SkillVector today and experience the future of talent search."
+				primaryAction={{
+					label: (
+						<>
 							Try Search <ArrowRight className="h-4 w-4" />
-						</ActionButton>
-						<ActionButton
-							to="/api"
-							variant="outline"
-							aria-label="View API Docs"
-						>
-							View API Docs
-						</ActionButton>
-					</div>
-				</CardContent>
-			</Card>
+						</>
+					) as unknown as string,
+					to: "/",
+					ariaLabel: "Try Search",
+				}}
+				secondaryAction={{
+					label: "View API Docs",
+					to: "/api",
+					variant: "outline",
+					ariaLabel: "View API Docs",
+				}}
+			/>
 		</PageTemplate>
 	);
 };

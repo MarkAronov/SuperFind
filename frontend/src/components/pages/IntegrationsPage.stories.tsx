@@ -5,7 +5,7 @@ const meta: Meta<typeof IntegrationsPage> = {
 	title: "Pages/IntegrationsPage",
 	component: IntegrationsPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

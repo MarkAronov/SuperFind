@@ -65,14 +65,14 @@ export function PersonCard({ person, view = "grid" }: PersonCardProps) {
 
 	if (view === "row") {
 		return (
-			<Card className="transition-shadow hover:shadow-md">
+			<Card>
 				<div className="md:flex items-center gap-4 p-4">
 					{/* Main */}
 					<div className="flex-1 min-w-0">
 						<div className="flex items-start justify-between gap-4">
 							<div className="min-w-0">
 								<div className="flex items-center gap-3">
-									<div className="w-9 h-9 shrink-0 avatar-nonagon bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm">
+									<div className="w-14 h-14 shrink-0 avatar-nonagon bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm">
 										{initials}
 									</div>
 									<Text className="text-lg font-semibold truncate">
@@ -143,10 +143,10 @@ export function PersonCard({ person, view = "grid" }: PersonCardProps) {
 
 	// Grid / default card
 	return (
-		<Card className="transition-shadow hover:shadow-md">
+		<Card className="flex flex-col justify-between h-full">
 			<CardHeader>
 				<div className="flex items-center gap-3">
-					<div className="w-9 h-9 shrink-0 avatar-nonagon bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm">
+					<div className="w-14 h-14 shrink-0 avatar-nonagon bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm">
 						{initials}
 					</div>
 					<div className="min-w-0">
@@ -159,7 +159,7 @@ export function PersonCard({ person, view = "grid" }: PersonCardProps) {
 					</div>
 				</div>{" "}
 			</CardHeader>
-			<CardContent className="space-y-4">
+			<CardContent className="space-y-4 flex-1">
 				{/* Location and Experience */}
 				{(p.location ||
 					(p.experience_years && Number(p.experience_years) > 0)) && (
@@ -210,7 +210,7 @@ export function PersonCard({ person, view = "grid" }: PersonCardProps) {
 				)}
 			</CardContent>
 
-			<CardFooter className="border-t pt-4">
+			<CardFooter className="pt-4">
 				<Badge variant="default" className={`${relevanceClass} text-xs`}>
 					Relevance: {(person.score * 100).toFixed(1)}%
 				</Badge>

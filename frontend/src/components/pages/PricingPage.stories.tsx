@@ -5,7 +5,7 @@ const meta: Meta<typeof PricingPage> = {
 	title: "Pages/PricingPage",
 	component: PricingPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

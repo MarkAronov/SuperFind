@@ -1,10 +1,17 @@
+import type { Meta, StoryObj } from "@storybook/react";
 import { Logo } from "./Logo";
 
-export default {
+const meta: Meta<typeof Logo> = {
 	title: "Atoms/Logo",
 	component: Logo,
+	parameters: {
+		layout: "centered",
+	},
 };
 
-export const Small = () => <Logo size="sm" />;
-export const Medium = () => <Logo size="md" />;
-export const Large = () => <Logo size="lg" />;
+export default meta;
+type Story = StoryObj<typeof Logo>;
+
+export const Default: Story = {
+	render: () => <Logo />,
+};

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { usePeople } from "@/hooks/usePeople";
-import { Button } from "../atoms/Button";
-import { Card, CardContent } from "../atoms/Card";
 import { Div } from "../atoms/Div";
 import { Hero } from "../atoms/Hero";
 import { Text } from "../atoms/Text";
+import { ErrorMessage } from "../molecules/ErrorMessage";
+import { LoadingState } from "../molecules/LoadingState";
 import { PersonCard } from "../molecules/PersonCard";
+import { ViewToggle } from "../molecules/ViewToggle";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export function BrowsePage() {
@@ -35,24 +36,9 @@ export function BrowsePage() {
 				subtitle="Browse all professionals in our database"
 			/>
 
-			{isLoading && (
-				<Div variant="center" className="py-12">
-					<Div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent" />
-					<Text variant="muted" className="mt-4">
-						Loading people...
-					</Text>
-				</Div>
-			)}
+			{isLoading && <LoadingState message="Loading people..." />}
 
-			{error && (
-				<Card variant="hover" className="mt-4 bg-red-100 text-red-700">
-					<CardContent>
-						<Text>
-							<strong>Error:</strong> {error.message}
-						</Text>
-					</CardContent>
-				</Card>
-			)}
+			{error && <ErrorMessage message={error.message} />}
 
 			{/* People List */}
 			{data && (
@@ -61,26 +47,7 @@ export function BrowsePage() {
 						<Text variant="muted">
 							Found <strong>{data.count}</strong> people
 						</Text>
-						<div className="flex items-center gap-2">
-							<Button
-								size="sm"
-								variant={view === "grid" ? "outline" : "default"}
-								onClick={() => setView("grid")}
-								aria-pressed={view === "grid"}
-								title="Grid view"
-							>
-								Grid
-							</Button>
-							<Button
-								size="sm"
-								variant={view === "row" ? "outline" : "default"}
-								onClick={() => setView("row")}
-								aria-pressed={view === "row"}
-								title="List view"
-							>
-								List
-							</Button>
-						</div>
+						<ViewToggle view={view} onViewChange={setView} />
 					</div>
 
 					<Div

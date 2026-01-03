@@ -1,10 +1,11 @@
 import { Heart, Target, Users, Zap } from "lucide-react";
-import { Card, CardContent, CardHeader } from "../atoms/Card";
+import { Card, CardContent } from "../atoms/Card";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
 import { List, ListItem } from "../atoms/List";
 import { Text } from "../atoms/Text";
+import { IconCard } from "../molecules/IconCard";
 import { PageTemplate } from "../templates/PageTemplate";
 
 const values = [
@@ -81,14 +82,7 @@ export const AboutPage = () => {
 			<Grid variant="features">
 				{values.map(({ icon, title, description }) => (
 					<ListItem key={title}>
-						<Card variant="hover" aria-label={title} className="h-full">
-							<CardHeader icon={icon}>
-								<Heading as="h3" variant="card" className="mb-2">
-									{title}
-								</Heading>
-								<Text variant="muted">{description}</Text>
-							</CardHeader>
-						</Card>
+						<IconCard icon={icon} title={title} description={description} />
 					</ListItem>
 				))}
 			</Grid>

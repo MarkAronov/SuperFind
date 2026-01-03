@@ -1,14 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Check } from "lucide-react";
 import { Card, CardContent } from "../atoms/Card";
 import { Div } from "../atoms/Div";
 import { Grid } from "../atoms/Grid";
 import { Heading } from "../atoms/Heading";
 import { Hero } from "../atoms/Hero";
-import { List, ListItem } from "../atoms/List";
 import { Section } from "../atoms/Section";
 import { Span } from "../atoms/Span";
 import { Text } from "../atoms/Text";
+import { FeatureList } from "../molecules/FeatureList";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export const PricingPage = () => {
@@ -106,14 +105,7 @@ export const PricingPage = () => {
 									{plan.description}
 								</Text>
 							</Div>
-							<List variant="spaced" className="mb-8">
-								{plan.features.map((feature) => (
-									<ListItem key={feature} variant="bullet">
-										<Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-										<Text>{feature}</Text>
-									</ListItem>
-								))}
-							</List>
+							<FeatureList features={plan.features} className="mb-8" />
 							<Link
 								to="/contact"
 								aria-label={`${plan.cta} for ${plan.name} plan`}

@@ -5,7 +5,7 @@ const meta: Meta<typeof TermsPage> = {
 	title: "Pages/TermsPage",
 	component: TermsPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

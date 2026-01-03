@@ -18,8 +18,8 @@ interface CardProps extends ComponentProps<"div"> {
 
 const variantClasses: Record<CardVariant, string> = {
 	default: "",
-	hover: "hover:shadow-lg transition-shadow",
-	feature: "hover:shadow-lg transition-shadow",
+	hover: "",
+	feature: "",
 };
 
 function Card({
@@ -38,12 +38,31 @@ function Card({
 			variant="card"
 			data-slot="card"
 			className={cn(
-				"text-card-foreground flex flex-col border",
+				"text-card-foreground flex flex-col",
+				"border-2 border-white/20 dark:border-white/10",
+				// Main depth shadows
+				"shadow-[0_2px_4px_rgba(0,0,0,0.05),0_8px_16px_rgba(0,0,0,0.08),0_20px_40px_rgba(0,0,0,0.12)]",
+				"dark:shadow-[0_2px_4px_rgba(0,0,0,0.3),0_8px_16px_rgba(0,0,0,0.4),0_20px_40px_rgba(0,0,0,0.5)]",
+				"relative overflow-hidden z-10",
+				// Side edges for thickness
+				"*:relative *:z-10",
+				"transform-gpu",
 				variantClasses[variant],
 				fillClass,
 				minHClass,
 				className,
 			)}
+			style={{
+				boxShadow: `
+					0 2px 4px rgba(0, 0, 0, 0.05),
+					0 8px 16px rgba(0, 0, 0, 0.08),
+					0 20px 40px rgba(0, 0, 0, 0.12),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3),
+					inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+					inset 2px 0 0 rgba(255, 255, 255, 0.1),
+					inset -2px 0 0 rgba(0, 0, 0, 0.1)
+				`,
+			}}
 			{...props}
 		>
 			{children}
@@ -65,14 +84,10 @@ function CardHeader({
 }: CardHeaderProps) {
 	if (icon) {
 		return (
-			<div
-				data-slot="card-header"
-				className={cn("px-6 pt-6", className)}
-				{...props}
-			>
-				<div className="flex gap-4 items-start">
+			<div data-slot="card-header" className={cn("p-6", className)} {...props}>
+				<div className="flex flex-col items-center text-center gap-4">
 					<div className={cn("shrink-0", iconColor)}>{icon}</div>
-					<div className="flex-1 min-w-0">{children}</div>
+					<div className="w-full">{children}</div>
 				</div>
 			</div>
 		);

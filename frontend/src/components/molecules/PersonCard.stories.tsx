@@ -17,10 +17,15 @@ export const Default: Story = {
 		<PersonCard
 			person={{
 				id: "1",
-				name: "John Doe",
-				title: "Software Engineer",
-				skills: ["TypeScript", "React"],
 				score: 0.95,
+				person: {
+					name: "John Doe",
+					role: "Software Engineer",
+					location: "San Francisco, CA",
+					skills: ["TypeScript", "React"],
+					experience: "5 years",
+					email: "john@example.com",
+				},
 			}}
 		/>
 	),

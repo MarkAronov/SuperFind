@@ -14,6 +14,8 @@ type Story = StoryObj<typeof SearchResults>;
 
 export const Default: Story = {
 	render: () => (
-		<SearchResults data={{ results: [], totalCount: 0, query: "" }} />
+		<SearchResults
+			data={{ success: true, query: "test", answer: "No results", people: [] }}
+		/>
 	),
 };

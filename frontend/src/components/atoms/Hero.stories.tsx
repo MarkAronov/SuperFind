@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof Hero>;
 
 export const Default: Story = {
-	render: () => <Hero />,
+	render: () => <Hero title="Welcome" subtitle="This is a hero component" />,
 };

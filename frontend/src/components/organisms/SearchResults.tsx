@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { PersonSearchResult, SearchResult } from "@/types/search.types";
 import { Card } from "../atoms/Card";
 import { PersonCard } from "../molecules/PersonCard";
+import { ViewToggle } from "../molecules/ViewToggle";
 
 interface SearchResultsProps {
 	data: SearchResult;
@@ -149,6 +150,22 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 		return Array.from(seen.values()).sort((a, b) => b.score - a.score);
 	}, [people]);
 
+	// Persisted view preference (grid | row)
+	const [view, setView] = useState<"grid" | "row">(() => {
+		try {
+			const v = localStorage.getItem("resultsView");
+			return v === "row" ? "row" : "grid";
+		} catch {
+			return "grid";
+		}
+	});
+
+	useEffect(() => {
+		try {
+			localStorage.setItem("resultsView", view);
+		} catch {}
+	}, [view]);
+
 	if (isLoading) {
 		return (
 			<div className="mt-4 text-center text-muted-foreground">Searching...</div>
@@ -180,27 +197,48 @@ export function SearchResults({ data, isLoading }: SearchResultsProps) {
 
 			{/* Results Section */}
 			<div>
-				<h2 className="text-xl font-semibold mb-4">
-					{uniquePeople.length > 0 ? (
-						<>
-							Found {uniquePeople.length} people
-							{uniquePeople.length !== people.length && (
-								<span className="text-sm text-muted-foreground ml-2">
-									({people.length - uniquePeople.length} duplicates removed)
-								</span>
-							)}
-						</>
-					) : (
-						"No results found"
-					)}
-				</h2>
+				<div className="flex items-center justify-between mb-4">
+					<h2 className="text-xl font-semibold">
+						{uniquePeople.length > 0 ? (
+							<>
+								Found {uniquePeople.length} people
+								{uniquePeople.length !== people.length && (
+									<span className="text-sm text-muted-foreground ml-2">
+										({people.length - uniquePeople.length} duplicates removed)
+									</span>
+								)}
+							</>
+						) : (
+							"No results found"
+						)}
+					</h2>
+
+					{/* View Toggle */}
+					<ViewToggle view={view} onViewChange={setView} />
+				</div>
 
 				{uniquePeople.length > 0 ? (
-					<div className="grid gap-4">
-						{uniquePeople.map((item, index) => (
-							<PersonCard key={`${item.person.name}-${index}`} person={item} />
-						))}
-					</div>
+					view === "grid" ? (
+						<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+							{uniquePeople.map((item, index) => (
+								<PersonCard
+									key={`${item.person.name}-${index}`}
+									person={item}
+									view="grid"
+								/>
+							))}
+						</div>
+					) : (
+						<div className="space-y-4">
+							{uniquePeople.map((item, index) => (
+								<PersonCard
+									key={`${item.person.name}-${index}`}
+									person={item}
+									view="row"
+								/>
+							))}
+						</div>
+					)
 				) : (
 					<Card className="p-6 text-center text-muted-foreground">
 						<p>No people found matching your search criteria.</p>

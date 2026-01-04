@@ -1,7 +1,17 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { useId } from "react";
-import { CONTACT } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { type ChangeEvent, type FormEvent, useId, useState } from "react";
+import { CONTACT, SITE_CONFIG } from "@/constants/site";
+import { Button } from "../atoms/Button";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { Input } from "../atoms/Input";
+import { Label } from "../atoms/Label";
+import { Link } from "../atoms/Link";
+import { Text } from "../atoms/Text";
+import { Textarea } from "../atoms/Textarea";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export const ContactPage = () => {
@@ -9,148 +19,164 @@ export const ContactPage = () => {
 	const emailId = useId();
 	const messageId = useId();
 
-	return (
-		<PageTemplate className="bg-transparent">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						Get in{" "}
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Touch
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Have questions? We'd love to hear from you.
-					</p>
-				</div>
+	const [formData, setFormData] = useState({
+		name: "",
+		email: "",
+		message: "",
+	});
+	const [status, setStatus] = useState<
+		"idle" | "sending" | "success" | "error"
+	>("idle");
+	const [errorMessage, setErrorMessage] = useState("");
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-					{/* Contact Form */}
-					<Card
-						aria-label="Contact form"
-						className="p-6 hover:shadow-lg transition-shadow"
-					>
-						<form className="space-y-6">
-							<div>
-								<label
-									htmlFor={nameId}
-									className="block text-sm font-medium mb-2"
-								>
-									Name
-								</label>
-								<input
+	const handleInputChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		const { name, value } = e.target;
+		setFormData((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const handleSubmit = async (e: FormEvent) => {
+		e.preventDefault();
+		setStatus("sending");
+		setErrorMessage("");
+
+		try {
+			const response = await fetch(`${SITE_CONFIG.apiBaseUrl}/contact`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+
+			if (response.ok) {
+				setStatus("success");
+				setFormData({ name: "", email: "", message: "" });
+			} else {
+				const error = await response.json();
+				setStatus("error");
+				setErrorMessage(error.error || "Failed to send message");
+			}
+		} catch (_error) {
+			setStatus("error");
+			setErrorMessage("Network error. Please try again.");
+		}
+	};
+
+	return (
+		<PageTemplate title="Contact">
+			{/* Hero Section */}
+			<Hero
+				title="Get in"
+				brand="Touch"
+				subtitle="Have questions? We'd love to hear from you."
+			/>
+
+			{/* Contact Form and Information */}
+			<Grid variant="responsive" className="grid-cols-1 md:grid-cols-1">
+				{/* Contact Form */}
+				<Card variant="hover" aria-label="Contact form">
+					<CardContent>
+						<form onSubmit={handleSubmit} className="space-y-6">
+							<Div>
+								<Label htmlFor={nameId}>Name</Label>
+								<Input
 									type="text"
 									id={nameId}
-									className="w-full px-4 py-2 border border-border bg-background rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+									name="name"
+									value={formData.name}
+									onChange={handleInputChange}
+									required
 									placeholder="Your name"
 								/>
-							</div>
-							<div>
-								<label
-									htmlFor={emailId}
-									className="block text-sm font-medium mb-2"
-								>
-									Email
-								</label>
-								<input
+							</Div>
+							<Div>
+								<Label htmlFor={emailId}>Email</Label>
+								<Input
 									type="email"
 									id={emailId}
-									className="w-full px-4 py-2 border border-border bg-background rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+									name="email"
+									value={formData.email}
+									onChange={handleInputChange}
+									required
 									placeholder="your@email.com"
 								/>
-							</div>
-							<div>
-								<label
-									htmlFor={messageId}
-									className="block text-sm font-medium mb-2"
-								>
-									Message
-								</label>
-								<textarea
+							</Div>
+							<Div>
+								<Label htmlFor={messageId}>Message</Label>
+								<Textarea
 									id={messageId}
+									name="message"
+									value={formData.message}
+									onChange={handleInputChange}
+									required
 									rows={5}
-									className="w-full px-4 py-2 border border-border bg-background rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
 									placeholder="How can we help?"
 								/>
-							</div>
-							<button
+							</Div>
+							{status === "error" && (
+								<Text className="text-red-500">{errorMessage}</Text>
+							)}
+							{status === "success" && (
+								<Text className="text-green-500">
+									Message sent successfully!
+								</Text>
+							)}
+							<Button
 								type="submit"
+								disabled={status === "sending"}
 								aria-label="Send Message"
-								className="w-full px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
+								className="w-full lg:w-auto lg:max-w-xs lg:mx-auto"
 							>
-								Send Message
-							</button>
+								{status === "sending" ? "Sending..." : "Send Message"}
+							</Button>
 						</form>
-					</Card>
+					</CardContent>
+				</Card>
 
-					{/* Contact Information */}
-					<div className="space-y-6">
-						<Card
-							aria-label="Contact information"
-							className="p-6 hover:shadow-lg transition-shadow"
-						>
-							<h2 className="text-xl font-semibold mb-6">
-								Contact Information
-							</h2>
-							<div className="space-y-4">
-								<div className="flex items-start gap-3">
-									<Mail className="h-6 w-6 text-primary mt-1" />
-									<div>
-										<h3 className="font-semibold">Email</h3>
-										<a
-											href={`mailto:${CONTACT.email}`}
-											className="text-muted-foreground hover:text-primary"
-										>
-											{CONTACT.email}
-										</a>
-									</div>
-								</div>
-								<div className="flex items-start gap-3">
-									<MapPin className="h-6 w-6 text-primary mt-1" />
-									<div>
-										<h3 className="font-semibold">Location</h3>
-										<p className="text-muted-foreground">
-											San Francisco, CA
-											<br />
-											United States
-										</p>
-									</div>
-								</div>
-								<div className="flex items-start gap-3">
-									<Phone className="h-6 w-6 text-primary mt-1" />
-									<div>
-										<h3 className="font-semibold">Phone</h3>
-										<a
-											href="tel:+1234567890"
-											className="text-muted-foreground hover:text-primary"
-										>
-											+1 (234) 567-890
-										</a>
-									</div>
-								</div>
-							</div>
-						</Card>
-
-						<Card
-							aria-label="Enterprise support"
-							className="p-6 hover:shadow-lg transition-shadow"
-						>
-							<h3 className="font-semibold mb-2">Enterprise Support</h3>
-							<p className="text-muted-foreground mb-4">
-								Need dedicated support or custom solutions? Contact our
-								enterprise team.
-							</p>
-							<a
-								href={`mailto:${CONTACT.enterpriseEmail}`}
-								className="text-primary hover:underline font-medium"
-							>
-								{CONTACT.enterpriseEmail}
-							</a>
-						</Card>
-					</div>
-				</div>
-			</div>
+				{/* Contact Information */}
+				<Card variant="hover" aria-label="Contact information">
+					<CardContent>
+						<Heading as="h2" variant="card" className="mb-6">
+							Contact Information
+						</Heading>
+						<Div variant="spacer">
+							<Div variant="flex">
+								<Mail className="h-6 w-6 text-primary mt-1" />
+								<Div>
+									<Heading as="h3" variant="card">
+										Email
+									</Heading>
+									<Link href={`mailto:${CONTACT.email}`} variant="muted">
+										{CONTACT.email}
+									</Link>
+								</Div>
+							</Div>
+							<Div variant="flex">
+								<MapPin className="h-6 w-6 text-primary mt-1" />
+								<Div>
+									<Heading as="h3" variant="card">
+										Location
+									</Heading>
+									<Text variant="muted">Israel</Text>
+								</Div>
+							</Div>
+							<Div variant="flex">
+								<Phone className="h-6 w-6 text-primary mt-1" />
+								<Div>
+									<Heading as="h3" variant="card">
+										Phone
+									</Heading>
+									<Link href="tel:+1234567890" variant="muted">
+										N/A
+									</Link>
+								</Div>
+							</Div>
+						</Div>
+					</CardContent>
+				</Card>
+			</Grid>
 		</PageTemplate>
 	);
 };

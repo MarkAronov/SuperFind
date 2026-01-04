@@ -1,7 +1,21 @@
 import { Cookie, Info, Settings, Shield } from "lucide-react";
 import type { ReactNode } from "react";
 import { CONTACT } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { ActionButton } from "../atoms/ActionButton";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
+import { Heading } from "../atoms/Heading";
+import { List, ListItem } from "../atoms/List";
+import { Span } from "../atoms/Span";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "../atoms/Table";
+import { Text } from "../atoms/Text";
 import { PageTemplate } from "../templates/PageTemplate";
 
 type CookieCategory = {
@@ -69,159 +83,142 @@ const cookieCategories: CookieCategory[] = [
 
 export const CookiesPage = () => {
 	return (
-		<PageTemplate className="bg-transparent">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Cookie Policy
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Learn how SkillVector uses cookies to enhance your experience
-					</p>
-					<p className="text-sm text-muted-foreground mt-4">
-						Last updated: January 2025
-					</p>
-				</div>
+		<PageTemplate title="Cookie Policy">
+			{/* Hero Section */}
+			<Div className="text-center mb-16">
+				<Heading variant="hero">
+					<Span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+						Cookie Policy
+					</Span>
+				</Heading>
+				<Text variant="lead" className="max-w-2xl mx-auto">
+					Learn how SkillVector uses cookies to enhance your experience
+				</Text>
+				<Text variant="small" className="mt-4">
+					Last updated: January 2025
+				</Text>
+			</Div>
 
-				{/* Introduction */}
-				<Card
-					aria-label="Introduction"
-					className="p-6 lg:p-8 mb-8 hover:shadow-lg transition-shadow"
-				>
-					<div className="flex items-center gap-3 mb-4">
+			{/* Introduction */}
+			<Card variant="hover" aria-label="Introduction" className="mb-8">
+				<CardContent>
+					<Div variant="flex" className="mb-4">
 						<Cookie className="h-6 w-6 text-primary" />
-						<h2 className="text-xl lg:text-2xl font-bold">What Are Cookies?</h2>
-					</div>
-					<p className="text-sm lg:text-base text-muted-foreground leading-relaxed">
+						<Heading variant="subsection">What Are Cookies?</Heading>
+					</Div>
+					<Text variant="muted">
 						Cookies are small text files that are stored on your device when you
 						visit a website. They help websites remember your preferences,
 						understand how you use the site, and provide a better user
 						experience. SkillVector uses cookies sparingly and only for
 						essential functionality.
-					</p>
-				</Card>
+					</Text>
+				</CardContent>
+			</Card>
 
-				{/* Cookie Categories */}
-				<div className="space-y-6 mb-16">
-					{cookieCategories.map((category) => (
-						<Card
-							key={category.title}
-							aria-label={category.title}
-							className="p-6 lg:p-8 hover:shadow-lg transition-shadow"
-						>
-							<div className="flex items-center gap-3 mb-4">
-								<div className="text-primary">{category.icon}</div>
-								<h2 className="text-xl lg:text-2xl font-bold">
-									{category.title}
-								</h2>
-							</div>
-							<p className="text-sm lg:text-base text-muted-foreground mb-6">
+			{/* Cookie Categories */}
+			<Div variant="spacer" className="mb-16">
+				{cookieCategories.map((category) => (
+					<Card
+						variant="hover"
+						key={category.title}
+						aria-label={category.title}
+					>
+						<CardContent>
+							<Div variant="flex" className="mb-4">
+								<Div className="text-primary">{category.icon}</Div>
+								<Heading variant="subsection">{category.title}</Heading>
+							</Div>
+							<Text variant="muted" className="mb-6">
 								{category.description}
-							</p>
-							<div className="overflow-x-auto">
-								<table className="w-full text-sm">
-									<thead>
-										<tr className="border-b border-border">
-											<th className="text-left py-3 px-4 font-semibold">
-												Cookie Name
-											</th>
-											<th className="text-left py-3 px-4 font-semibold">
-												Purpose
-											</th>
-											<th className="text-left py-3 px-4 font-semibold">
-												Duration
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										{category.cookies.map((cookie) => (
-											<tr
-												key={cookie.name}
-												className="border-b border-border/50 last:border-0"
-											>
-												<td className="py-3 px-4 font-mono text-xs lg:text-sm">
-													{cookie.name}
-												</td>
-												<td className="py-3 px-4 text-muted-foreground">
-													{cookie.purpose}
-												</td>
-												<td className="py-3 px-4 text-muted-foreground">
-													{cookie.duration}
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						</Card>
-					))}
-				</div>
+							</Text>
+							<Table>
+								<TableHeader>
+									<TableRow>
+										<TableHead>Cookie Name</TableHead>
+										<TableHead>Purpose</TableHead>
+										<TableHead>Duration</TableHead>
+									</TableRow>
+								</TableHeader>
+								<TableBody>
+									{category.cookies.map((cookie) => (
+										<TableRow key={cookie.name}>
+											<TableCell variant="code">{cookie.name}</TableCell>
+											<TableCell variant="muted">{cookie.purpose}</TableCell>
+											<TableCell variant="muted">{cookie.duration}</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</CardContent>
+					</Card>
+				))}
+			</Div>
 
-				{/* Managing Cookies */}
-				<Card
-					aria-label="Managing cookies"
-					className="p-6 lg:p-8 mb-8 hover:shadow-lg transition-shadow"
-				>
-					<h2 className="text-xl lg:text-2xl font-bold mb-4">
+			{/* Managing Cookies */}
+			<Card variant="hover" aria-label="Managing cookies" className="mb-8">
+				<CardContent>
+					<Heading variant="subsection" className="mb-4">
 						Managing Your Cookie Preferences
-					</h2>
-					<div className="space-y-4 text-sm lg:text-base text-muted-foreground">
-						<p>
+					</Heading>
+					<Div variant="spacer">
+						<Text variant="muted">
 							Most web browsers allow you to control cookies through their
 							settings. You can usually find these options in the "Privacy" or
 							"Security" section of your browser's settings menu.
-						</p>
-						<p>
+						</Text>
+						<Text variant="muted">
 							Please note that disabling essential cookies may affect the
 							functionality of SkillVector. Some features may not work as
 							expected without certain cookies.
-						</p>
-						<h3 className="text-lg font-semibold text-foreground mt-6 mb-2">
+						</Text>
+						<Heading as="h3" variant="card" className="mt-6 mb-2">
 							How to Manage Cookies in Popular Browsers:
-						</h3>
-						<ul className="list-disc list-inside space-y-2 ml-4">
-							<li>
-								<strong>Chrome:</strong> Settings → Privacy and security →
-								Cookies
-							</li>
-							<li>
-								<strong>Firefox:</strong> Settings → Privacy & Security →
-								Cookies
-							</li>
-							<li>
-								<strong>Safari:</strong> Preferences → Privacy → Manage Website
-								Data
-							</li>
-							<li>
-								<strong>Edge:</strong> Settings → Cookies and site permissions
-							</li>
-						</ul>
-					</div>
-				</Card>
+						</Heading>
+						<List variant="disc">
+							<ListItem>
+								<Span>
+									<strong>Chrome:</strong> Settings → Privacy and security →
+									Cookies
+								</Span>
+							</ListItem>
+							<ListItem>
+								<Span>
+									<strong>Firefox:</strong> Settings → Privacy & Security →
+									Cookies
+								</Span>
+							</ListItem>
+							<ListItem>
+								<Span>
+									<strong>Safari:</strong> Preferences → Privacy → Manage
+									Website Data
+								</Span>
+							</ListItem>
+							<ListItem>
+								<Span>
+									<strong>Edge:</strong> Settings → Cookies and site permissions
+								</Span>
+							</ListItem>
+						</List>
+					</Div>
+				</CardContent>
+			</Card>
 
-				{/* Contact */}
-				<Card
-					aria-label="Questions"
-					className="text-center p-8 lg:p-12 hover:shadow-lg transition-shadow"
-				>
-					<h2 className="text-2xl lg:text-3xl font-bold mb-4">
+			{/* Contact */}
+			<Card variant="hover" aria-label="Questions">
+				<CardContent centered>
+					<Heading variant="section" className="mb-4">
 						Questions About Our Cookie Policy?
-					</h2>
-					<p className="text-base lg:text-xl text-muted-foreground mb-6">
+					</Heading>
+					<Text variant="lead" className="mb-6">
 						If you have any questions about how we use cookies, please contact
 						us
-					</p>
-					<a
-						href={`mailto:${CONTACT.privacyEmail}`}
-						className="inline-flex px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
-					>
+					</Text>
+					<ActionButton href={`mailto:${CONTACT.privacyEmail}`}>
 						Contact Privacy Team
-					</a>
-				</Card>
-			</div>
+					</ActionButton>
+				</CardContent>
+			</Card>
 		</PageTemplate>
 	);
 };

@@ -1,7 +1,16 @@
 import { ChevronLeft, ChevronRight, GitCommit, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { EXTERNAL_LINKS } from "@/constants/site";
-import { Card } from "../atoms/Card";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { Link } from "../atoms/Link";
+import { List, ListItem } from "../atoms/List";
+import { Span } from "../atoms/Span";
+import { Text } from "../atoms/Text";
+import { ErrorMessage } from "../molecules/ErrorMessage";
+import { LoadingState } from "../molecules/LoadingState";
 import { PageTemplate } from "../templates/PageTemplate";
 
 interface GitHubRelease {
@@ -98,84 +107,76 @@ export const ChangelogPage = () => {
 	};
 
 	return (
-		<PageTemplate className="bg-transparent" title="Changelog">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Changelog
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Track the evolution of SkillVector with our version history
-					</p>
-				</div>
+		<PageTemplate title="Changelog">
+			{/* Hero Section */}
+			<Hero
+				title="Version"
+				brand="Changelog"
+				subtitle="Track the evolution of SkillVector with our version history"
+			/>
 
-				{/* Loading State */}
-				{loading && (
-					<div className="text-center py-12">
-						<p className="text-muted-foreground">Loading releases...</p>
-					</div>
-				)}
+			{/* Loading State */}
+			{loading && <LoadingState message="Loading releases..." />}
 
-				{/* Error State */}
-				{error && (
-					<Card className="p-6 mb-6 border-destructive">
-						<p className="text-destructive">Failed to load releases: {error}</p>
-						<p className="text-muted-foreground text-sm mt-2">
-							You can view releases directly on{" "}
-							<a
-								href={EXTERNAL_LINKS.releases}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-primary hover:underline"
-							>
-								GitHub
-							</a>
-						</p>
-					</Card>
-				)}
+			{/* Error State */}
+			{error && (
+				<ErrorMessage
+					message={`Failed to load releases: ${error}`}
+					className="mb-6"
+				>
+					<Text variant="small" className="mt-2">
+						You can view releases directly on{" "}
+						<Link href={EXTERNAL_LINKS.releases} external variant="primary">
+							GitHub
+						</Link>
+					</Text>
+				</ErrorMessage>
+			)}
 
-				{/* Releases */}
-				{!loading && !error && (
-					<>
-						<ul className="space-y-6 mb-8">
-							{currentReleases.length === 0 ? (
-								<Card className="p-6 text-center">
-									<p className="text-muted-foreground">
-										No releases available yet.
-									</p>
-								</Card>
-							) : (
-								currentReleases.map((release) => (
-									<li key={release.version}>
-										<Card
-											aria-label={`Version ${release.version}`}
-											className="p-6 hover:shadow-lg transition-shadow"
-										>
-											<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-												<div className="flex items-center gap-3">
-													<div className="text-primary">
+			{/* Releases */}
+			{!loading && !error && (
+				<>
+					<List variant="spaced" className="mb-8">
+						{currentReleases.length === 0 ? (
+							<Card variant="hover">
+								<CardContent centered>
+									<Text variant="muted">No releases available yet.</Text>
+								</CardContent>
+							</Card>
+						) : (
+							currentReleases.map((release) => (
+								<ListItem key={release.version}>
+									<Card
+										variant="hover"
+										aria-label={`Version ${release.version}`}
+									>
+										<CardContent>
+											<Div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+												<Div variant="flex">
+													<Div className="text-primary">
 														<Tag className="h-6 w-6" />
-													</div>
-													<div>
-														<h2 className="text-xl font-semibold flex items-center gap-2">
-															<a
+													</Div>
+													<Div>
+														<Heading
+															as="h2"
+															variant="card"
+															className="flex items-center gap-2"
+														>
+															<Link
 																href={release.url}
-																target="_blank"
-																rel="noopener noreferrer"
+																external
+																variant="default"
 																className="hover:text-primary transition-colors"
 															>
 																v{release.version}
-															</a>
+															</Link>
 															{release.isPrerelease && (
-																<span className="text-xs px-2 py-0.5 bg-amber-500/10 text-amber-500 rounded">
+																<Span className="text-xs px-2 py-0.5 bg-amber-500/10 text-amber-500 rounded">
 																	Pre-release
-																</span>
+																</Span>
 															)}
-														</h2>
-														<p className="text-sm text-muted-foreground">
+														</Heading>
+														<Text variant="small">
 															{new Date(release.date).toLocaleDateString(
 																"en-US",
 																{
@@ -184,124 +185,115 @@ export const ChangelogPage = () => {
 																	year: "numeric",
 																},
 															)}
-														</p>
-													</div>
-												</div>
-											</div>
+														</Text>
+													</Div>
+												</Div>
+											</Div>
 
-											<ul className="space-y-3">
+											<List variant="spaced">
 												{release.changes.map((change, idx) => (
-													<li
+													<ListItem
+														variant="bullet"
 														key={`${release.version}-${idx}`}
-														className="flex gap-3 text-muted-foreground"
 													>
 														<GitCommit className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-														<span>{change}</span>
-													</li>
+														<Text variant="muted">{change}</Text>
+													</ListItem>
 												))}
-											</ul>
-										</Card>
-									</li>
-								))
-							)}
-						</ul>
-
-						{/* Pagination */}
-						{totalPages > 1 && (
-							<div className="flex items-center justify-center gap-2 mb-16">
-								<button
-									type="button"
-									onClick={() => goToPage(currentPage - 1)}
-									disabled={currentPage === 1}
-									className="p-2 rounded-lg border border-border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-									aria-label="Previous page"
-								>
-									<ChevronLeft className="h-5 w-5" />
-								</button>
-
-								<div className="flex items-center gap-1">
-									{Array.from({ length: totalPages }, (_, i) => i + 1).map(
-										(page) => {
-											// Show first page, last page, current page, and pages around current
-											const showPage =
-												page === 1 ||
-												page === totalPages ||
-												Math.abs(page - currentPage) <= 1;
-
-											if (!showPage) {
-												// Show ellipsis for skipped pages
-												if (
-													page === currentPage - 2 ||
-													page === currentPage + 2
-												) {
-													return (
-														<span
-															key={page}
-															className="px-2 text-muted-foreground"
-														>
-															...
-														</span>
-													);
-												}
-												return null;
-											}
-
-											return (
-												<button
-													key={page}
-													type="button"
-													onClick={() => goToPage(page)}
-													className={`min-w-[2.5rem] h-10 rounded-lg border transition-colors ${
-														page === currentPage
-															? "bg-primary text-primary-foreground border-primary"
-															: "border-border hover:bg-muted"
-													}`}
-													aria-label={`Go to page ${page}`}
-													aria-current={
-														page === currentPage ? "page" : undefined
-													}
-												>
-													{page}
-												</button>
-											);
-										},
-									)}
-								</div>
-
-								<button
-									type="button"
-									onClick={() => goToPage(currentPage + 1)}
-									disabled={currentPage === totalPages}
-									className="p-2 rounded-lg border border-border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-									aria-label="Next page"
-								>
-									<ChevronRight className="h-5 w-5" />
-								</button>
-							</div>
+											</List>
+										</CardContent>
+									</Card>
+								</ListItem>
+							))
 						)}
-					</>
-				)}
+					</List>
 
-				{/* CTA Section */}
-				<Card
-					aria-label="View releases on GitHub"
-					className="text-center p-8 lg:p-12 hover:shadow-lg transition-shadow"
-				>
-					<h2 className="text-2xl lg:text-3xl font-bold mb-4">Stay Updated</h2>
-					<p className="text-base lg:text-xl text-muted-foreground mb-6">
-						Follow our GitHub repository for the latest updates and releases
-					</p>
-					<a
-						href={EXTERNAL_LINKS.releases}
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="View Changelog on GitHub"
-						className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block"
-					>
-						View on GitHub
-					</a>
-				</Card>
-			</div>
+					{/* Pagination */}
+					{totalPages > 1 && (
+						<Div className="flex items-center justify-center gap-2 mb-16">
+							<button
+								type="button"
+								onClick={() => goToPage(currentPage - 1)}
+								disabled={currentPage === 1}
+								className="p-2 rounded-lg border border-border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+								aria-label="Previous page"
+							>
+								<ChevronLeft className="h-5 w-5" />
+							</button>
+
+							<Div className="flex items-center gap-1">
+								{Array.from({ length: totalPages }, (_, i) => i + 1).map(
+									(page) => {
+										// Show first page, last page, current page, and pages around current
+										const showPage =
+											page === 1 ||
+											page === totalPages ||
+											Math.abs(page - currentPage) <= 1;
+
+										if (!showPage) {
+											// Show ellipsis for skipped pages
+											if (
+												page === currentPage - 2 ||
+												page === currentPage + 2
+											) {
+												return (
+													<Span
+														key={page}
+														className="px-2 text-muted-foreground"
+													>
+														...
+													</Span>
+												);
+											}
+											return null;
+										}
+
+										return (
+											<button
+												key={page}
+												type="button"
+												onClick={() => goToPage(page)}
+												className={`min-w-10 h-10 rounded-lg border transition-colors ${
+													page === currentPage
+														? "bg-primary text-primary-foreground border-primary"
+														: "border-border hover:bg-muted"
+												}`}
+												aria-label={`Go to page ${page}`}
+												aria-current={page === currentPage ? "page" : undefined}
+											>
+												{page}
+											</button>
+										);
+									},
+								)}
+							</Div>
+
+							<button
+								type="button"
+								onClick={() => goToPage(currentPage + 1)}
+								disabled={currentPage === totalPages}
+								className="p-2 rounded-lg border border-border hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+								aria-label="Next page"
+							>
+								<ChevronRight className="h-5 w-5" />
+							</button>
+						</Div>
+					)}
+				</>
+			)}
+
+			{/* CTA Section */}
+			<Card
+				aria-label="View releases on GitHub"
+				className="text-center p-8 lg:p-12"
+			>
+				<Heading variant="section" className="mb-4">
+					Stay Updated
+				</Heading>
+				<Text variant="lead" className="text-muted-foreground mb-6">
+					Follow our GitHub repository for the latest updates and releases
+				</Text>
+			</Card>
 		</PageTemplate>
 	);
 };

@@ -1,6 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Check } from "lucide-react";
-import { Card } from "../atoms/Card";
+import { Card, CardContent } from "../atoms/Card";
+import { Div } from "../atoms/Div";
+import { Grid } from "../atoms/Grid";
+import { Heading } from "../atoms/Heading";
+import { Hero } from "../atoms/Hero";
+import { Section } from "../atoms/Section";
+import { Span } from "../atoms/Span";
+import { Text } from "../atoms/Text";
+import { FeatureList } from "../molecules/FeatureList";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export const PricingPage = () => {
@@ -57,58 +64,48 @@ export const PricingPage = () => {
 	];
 
 	return (
-		<PageTemplate>
+		<PageTemplate className="bg-transparent">
 			{/* Hero Section */}
-			<div className="text-center mb-16">
-				<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-					Simple,{" "}
-					<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-						Transparent Pricing
-					</span>
-				</h1>
-				<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-					Choose the plan that fits your needs. All plans include core features.
-				</p>
-			</div>
+			<Hero
+				title="Simple, Transparent"
+				brand="Pricing"
+				subtitle="Choose the plan that fits your needs. All plans include core features."
+			/>
 
 			{/* Pricing Cards */}
-			<ul className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
+			<Grid variant="responsive">
 				{plans.map((plan) => (
-					<li key={plan.name}>
-						<Card
-							aria-label={`${plan.name} plan`}
-							className={`relative p-8 hover:shadow-lg transition-shadow h-full ${
-								plan.popular
-									? "border-primary shadow-xl scale-105"
-									: "border-gray-200"
-							}`}
-						>
+					<Card
+						variant="hover"
+						key={plan.name}
+						aria-label={`${plan.name} plan`}
+						className={`relative h-full ${
+							plan.popular
+								? "border-primary shadow-xl scale-105"
+								: "border-gray-200"
+						}`}
+					>
+						<CardContent>
 							{plan.popular && (
-								<div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full">
+								<Div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full">
 									Most Popular
-								</div>
+								</Div>
 							)}
-							<div className="text-center mb-6">
-								<h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-								<div className="mb-2">
-									<span className="text-4xl font-bold">{plan.price}</span>
+							<Div variant="center" className="mb-6">
+								<Heading variant="subsection" className="mb-2">
+									{plan.name}
+								</Heading>
+								<Div className="mb-2">
+									<Span className="text-4xl font-bold">{plan.price}</Span>
 									{plan.price !== "Custom" && (
-										<span className="text-muted-foreground">
-											{" "}
-											/ {plan.period}
-										</span>
+										<Span variant="muted"> / {plan.period}</Span>
 									)}
-								</div>
-								<p className="text-muted-foreground">{plan.description}</p>
-							</div>
-							<ul className="space-y-3 mb-8">
-								{plan.features.map((feature) => (
-									<li key={feature} className="flex items-start gap-2">
-										<Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-										<span className="text-foreground">{feature}</span>
-									</li>
-								))}
-							</ul>
+								</Div>
+								<Text className="text-muted-foreground">
+									{plan.description}
+								</Text>
+							</Div>
+							<FeatureList features={plan.features} className="mb-8" />
 							<Link
 								to="/contact"
 								aria-label={`${plan.cta} for ${plan.name} plan`}
@@ -120,61 +117,55 @@ export const PricingPage = () => {
 							>
 								{plan.cta}
 							</Link>
-						</Card>
-					</li>
+						</CardContent>
+					</Card>
 				))}
-			</ul>
+			</Grid>
 
 			{/* FAQ Section */}
-			<section className="max-w-3xl mx-auto mb-16">
-				<h2 className="text-3xl font-bold text-center mb-8">
+			<Section>
+				<Heading variant="section" className="text-center mb-8">
 					Frequently Asked Questions
-				</h2>
-				<ul className="space-y-6">
-					<li>
-						<Card
-							aria-label="Can I change plans later?"
-							className="p-6 hover:shadow-lg transition-shadow"
-						>
-							<h3 className="text-xl font-semibold mb-2">
+				</Heading>
+				<Grid variant="features">
+					<Card variant="hover" aria-label="Can I change plans later?">
+						<CardContent>
+							<Heading variant="subsection" className="mb-2">
 								Can I change plans later?
-							</h3>
-							<p className="text-muted-foreground">
+							</Heading>
+							<Text className="text-muted-foreground">
 								Yes! You can upgrade or downgrade your plan at any time. Changes
 								take effect immediately.
-							</p>
-						</Card>
-					</li>
-					<li>
-						<Card
-							aria-label="What payment methods do you accept?"
-							className="p-6 hover:shadow-lg transition-shadow"
-						>
-							<h3 className="text-xl font-semibold mb-2">
+							</Text>
+						</CardContent>
+					</Card>
+					<Card
+						variant="hover"
+						aria-label="What payment methods do you accept?"
+					>
+						<CardContent>
+							<Heading variant="subsection" className="mb-2">
 								What payment methods do you accept?
-							</h3>
-							<p className="text-muted-foreground">
+							</Heading>
+							<Text className="text-muted-foreground">
 								We accept all major credit cards, PayPal, and wire transfers for
 								enterprise plans.
-							</p>
-						</Card>
-					</li>
-					<li>
-						<Card
-							aria-label="Is there a free trial?"
-							className="p-6 hover:shadow-lg transition-shadow"
-						>
-							<h3 className="text-xl font-semibold mb-2">
+							</Text>
+						</CardContent>
+					</Card>
+					<Card variant="hover" aria-label="Is there a free trial?">
+						<CardContent>
+							<Heading variant="subsection" className="mb-2">
 								Is there a free trial?
-							</h3>
-							<p className="text-muted-foreground">
+							</Heading>
+							<Text className="text-muted-foreground">
 								Yes! The Professional plan includes a 14-day free trial with no
 								credit card required.
-							</p>
-						</Card>
-					</li>
-				</ul>
-			</section>
+							</Text>
+						</CardContent>
+					</Card>
+				</Grid>
+			</Section>
 		</PageTemplate>
 	);
 };

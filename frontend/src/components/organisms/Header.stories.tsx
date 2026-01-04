@@ -4,6 +4,9 @@ import { Header } from "./Header";
 const meta: Meta<typeof Header> = {
 	title: "Organisms/Header",
 	component: Header,
+	parameters: {
+		layout: "centered",
+	},
 };
 
 export default meta;

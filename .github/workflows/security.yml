@@ -1,0 +1,82 @@
+name: "Security Scans"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+    paths:
+      - 'Dockerfile'
+      - 'src/**'
+      - 'frontend/src/**'
+      - '.github/workflows/security.yml'
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  # ------------------------------------------------------------------
+  # DOCKER SECURITY SCAN
+  # ------------------------------------------------------------------
+  docker-scan:
+    name: Docker Image Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t skillvector:${{ github.sha }} .
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'skillvector:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'skillvector:${{ github.sha }}'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+
+  # ------------------------------------------------------------------
+  # CODEQL ANALYSIS
+  # ------------------------------------------------------------------
+  codeql-analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript-typescript' ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-extended,security-and-quality
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+  # ------------------------------------------------------------------
+  # DEPENDENCY REVIEW (PR only)
+  # ------------------------------------------------------------------
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          deny-licenses: GPL-3.0, AGPL-3.0
+          comment-summary-in-pr: always

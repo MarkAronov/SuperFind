@@ -5,7 +5,12 @@ import {
 import { useEffect, useState } from "react";
 import { useSearch } from "@/hooks/useSearch";
 import type { SearchResult } from "@/types/search.types";
-import { Card } from "../atoms/Card";
+import { Button } from "../atoms/Button";
+import { Div } from "../atoms/Div";
+import { Hero } from "../atoms/Hero";
+import { Link } from "../atoms/Link";
+import { Text } from "../atoms/Text";
+import { ErrorMessage } from "../molecules/ErrorMessage";
 import { SearchBar } from "../molecules/SearchBar";
 import { SearchResults } from "../organisms/SearchResults";
 import { PageTemplate } from "../templates/PageTemplate";
@@ -73,82 +78,66 @@ export function SearchPage() {
 	};
 
 	return (
-		<PageTemplate className="bg-transparent" title={query || "Search"}>
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
+		<PageTemplate>
+			{/* Hero Section */}
+			<Hero
+				title="Find the "
+				brand="Perfect Talent"
+				subtitle="Semantic search powered by AI. Search by skills, experience, location, and more."
+			/>
 
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						Find the{" "}
-						<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Perfect Talent
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Semantic search powered by AI. Search by skills, experience,
-						location, and more.
-					</p>
-				</div>
+			{/* Search Bar */}
+			<SearchBar
+				onSearch={handleSearch}
+				placeholder="Search for people... (e.g., 'Python developers', 'DevOps from Europe')"
+				isLoading={isLoading}
+				initialValue={query}
+			/>
 
-				{/* Search Bar */}
-				<SearchBar
-					onSearch={handleSearch}
-					placeholder="Search for people... (e.g., 'Python developers', 'DevOps from Europe')"
-					isLoading={isLoading}
-					initialValue={query}
-				/>
+			{/* Error Message */}
+			{error && <ErrorMessage message={error.message} className="mt-4" />}
 
-				{/* Error Message */}
-				{error && (
-					<Card className="mt-4 p-4 bg-red-100 text-red-700">
-						<strong>Error:</strong> {error.message}
-					</Card>
-				)}
+			{/* Search Results */}
+			{accumulatedData && (
+				<SearchResults data={accumulatedData} isLoading={isLoading} />
+			)}
 
-				{/* Search Results */}
-				{accumulatedData && (
-					<SearchResults data={accumulatedData} isLoading={isLoading} />
-				)}
+			{/* Load More Button */}
+			{accumulatedData?.hasMore && (
+				<Div variant="center" className="mt-8">
+					<Button
+						type="button"
+						onClick={handleLoadMore}
+						disabled={isLoading}
+						className="max-w-xs"
+					>
+						{isLoading ? "Loading..." : "Load More Results"}
+					</Button>
+				</Div>
+			)}
 
-				{/* Load More Button */}
-				{accumulatedData?.hasMore && (
-					<div className="mt-8 flex justify-center">
-						<button
-							type="button"
-							onClick={handleLoadMore}
-							disabled={isLoading}
-							className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-						>
-							{isLoading ? "Loading..." : "Load More Results"}
-						</button>
-					</div>
-				)}
-
-				{/* Pagination Info */}
-				{accumulatedData?.people && accumulatedData.people.length > 0 && (
-					<div className="mt-4 text-center text-sm text-muted-foreground">
+			{/* Pagination Info */}
+			{accumulatedData?.people && accumulatedData.people.length > 0 && (
+				<Div variant="center" className="mt-4">
+					<Text variant="small">
 						Showing {accumulatedData.people.length} of{" "}
 						{accumulatedData.total || accumulatedData.people.length} results
-					</div>
-				)}
+					</Text>
+				</Div>
+			)}
 
-				{/* Hint for browse all*/}
-				{!query && (
-					<div className="mt-8 text-center">
-						<p className="text-xs text-muted-foreground/50">
-							Tip: Visit{" "}
-							<button
-								type="button"
-								onClick={() => navigate({ to: "/people" })}
-								className="underline hover:text-muted-foreground/70 transition-colors"
-							>
-								/people
-							</button>{" "}
-							to see everyone
-						</p>
-					</div>
-				)}
-			</div>
+			{/* Hint for browse all*/}
+			{!query && (
+				<Div variant="center" className="mt-8">
+					<Text variant="caption">
+						Tip: Visit{" "}
+						<Link to="/people" variant="underline">
+							/people
+						</Link>{" "}
+						to see everyone
+					</Text>
+				</Div>
+			)}
 		</PageTemplate>
 	);
 }

@@ -5,7 +5,7 @@ const meta: Meta<typeof PrivacyPage> = {
 	title: "Pages/PrivacyPage",
 	component: PrivacyPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

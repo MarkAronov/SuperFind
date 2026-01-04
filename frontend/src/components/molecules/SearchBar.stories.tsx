@@ -1,18 +1,17 @@
+import type { Meta, StoryObj } from "@storybook/react";
 import { SearchBar } from "./SearchBar";
 
-export default {
+const meta: Meta<typeof SearchBar> = {
 	title: "Molecules/SearchBar",
 	component: SearchBar,
+	parameters: {
+		layout: "centered",
+	},
 };
 
-export const Default = () => (
-	<div style={{ padding: "20px", width: "600px" }}>
-		<SearchBar onSearch={(q) => console.log("search", q)} />
-	</div>
-);
+export default meta;
+type Story = StoryObj<typeof SearchBar>;
 
-export const Loading = () => (
-	<div style={{ padding: "20px", width: "600px" }}>
-		<SearchBar onSearch={(q) => console.log("search", q)} isLoading />
-	</div>
-);
+export const Default: Story = {
+	render: () => <SearchBar onSearch={() => {}} />,
+};

@@ -1,8 +1,10 @@
+import type { ReactNode } from "react";
+
 interface SearchTemplateProps {
-	header: React.ReactNode;
-	searchBar: React.ReactNode;
-	results?: React.ReactNode;
-	error?: React.ReactNode;
+	header: ReactNode;
+	searchBar: ReactNode;
+	results?: ReactNode;
+	error?: ReactNode;
 }
 
 export function SearchTemplate({

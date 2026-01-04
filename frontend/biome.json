@@ -24,6 +24,12 @@
 		}
 	},
 	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		},
+		"formatter": {
+			"enabled": false
+		},
 		"linter": {
 			"enabled": false
 		}

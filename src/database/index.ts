@@ -890,10 +890,75 @@ export const hybridSearch = async (
 			result.length,
 		);
 
+		// Define type for payload with optional _boostedBy property
+		type BoostedPayload = Record<string, unknown> & { _boostedBy?: string };
+
+		// Apply metadata-based relevance boost when query matches structured fields
+		// (role/title and skills). This is applied BEFORE the relevance threshold filter.
+		const queryLower = query.toLowerCase();
+		const queryTokens = queryLower.split(/\W+/).filter(Boolean);
+
+		const TITLE_BOOST_STRONG = 0.35; // Exact token match in role
+		const TITLE_BOOST_WEAK = 0.15; // Partial substring match in role
+		const SKILLS_BOOST = 0.1; // Query token found in skills
+
+		const boostedResults = result.map((point) => {
+			let score = point.score || 0;
+			const boostReasons: string[] = [];
+
+			// Check both title and skills together as metadata matching
+			const role = (point.payload?.data_role as string | undefined) || "";
+			const skills = (point.payload?.data_skills as string | undefined) || "";
+
+			// Title/role matching
+			if (role) {
+				const roleLower = role.toLowerCase();
+				const roleTokens = roleLower.split(/\W+/).filter(Boolean);
+
+				const strongMatch = queryTokens.some((qt) => roleTokens.includes(qt));
+				const weakMatch =
+					!strongMatch && queryTokens.some((qt) => roleLower.includes(qt));
+
+				if (strongMatch) {
+					score = Math.min(1, score + TITLE_BOOST_STRONG);
+					boostReasons.push("title-strong");
+				} else if (weakMatch) {
+					score = Math.min(1, score + TITLE_BOOST_WEAK);
+					boostReasons.push("title-weak");
+				}
+			}
+
+			// Skills matching
+			if (skills) {
+				const skillsLower = skills.toLowerCase();
+				const skillsTokens = skillsLower.split(/\W+/).filter(Boolean);
+
+				const skillsMatch = queryTokens.some(
+					(qt) => skillsTokens.includes(qt) || skillsLower.includes(qt),
+				);
+
+				if (skillsMatch) {
+					score = Math.min(1, score + SKILLS_BOOST);
+					boostReasons.push("skills");
+				}
+			}
+
+			if (boostReasons.length > 0) {
+				(point.payload as BoostedPayload)._boostedBy = boostReasons.join("+");
+			}
+
+			return { ...point, score };
+		});
+
+		const boostedCount = boostedResults.filter(
+			(p) => (p.payload as BoostedPayload)._boostedBy,
+		).length;
+		console.log("[hybridSearch] Metadata-boosted results count:", boostedCount);
+
 		// Filter out low-quality results (relevance threshold)
 		// This prevents nonsense queries from returning random results
 		const RELEVANCE_THRESHOLD = 0.3; // Adjust this threshold as needed
-		const filteredResults = result.filter(
+		const filteredResults = boostedResults.filter(
 			(point) => (point.score || 0) >= RELEVANCE_THRESHOLD,
 		);
 

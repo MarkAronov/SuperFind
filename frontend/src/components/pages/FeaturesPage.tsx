@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import {
 	ArrowRight,
 	Cloud,
@@ -8,8 +7,11 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
-import { Card } from "../atoms/Card";
-import { FeatureCard } from "../molecules/FeatureCard";
+import { Grid } from "../atoms/Grid";
+import { Hero } from "../atoms/Hero";
+import { ListItem } from "../atoms/List";
+import { CTACard } from "../molecules/CTACard";
+import { IconCard } from "../molecules/IconCard";
 import { PageTemplate } from "../templates/PageTemplate";
 
 export const FeaturesPage = () => {
@@ -53,65 +55,47 @@ export const FeaturesPage = () => {
 	];
 
 	return (
-		<PageTemplate className="bg-transparent" title="Features">
-			<div className="max-w-5xl mx-auto">
-				{/* Hero Section */}
-				<div className="text-center mb-16">
-					<h1 className="text-3xl lg:text-5xl font-bold mb-4">
-						Powerful Features for{" "}
-						<span className="bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-							Modern Talent Search
-						</span>
-					</h1>
-					<p className="text-base lg:text-xl text-muted-foreground max-w-2xl mx-auto">
-						Leverage cutting-edge AI and vector search technology to find the
-						perfect candidates faster than ever.
-					</p>
-				</div>
+		<PageTemplate title="Features">
+			{/* Hero Section */}
+			<Hero
+				title="Powerful "
+				brand="Features"
+				subtitle="Leverage cutting-edge AI and vector search technology to find the perfect candidates faster than ever."
+			/>
 
-				{/* Features Grid */}
-				<ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-					{features.map((feature) => (
-						<li key={feature.title}>
-							<FeatureCard
-								icon={feature.icon}
-								title={feature.title}
-								description={feature.description}
-								className="h-full"
-							/>
-						</li>
-					))}
-				</ul>
+			{/* Features Grid */}
+			<Grid variant="cards">
+				{features.map((feature) => (
+					<ListItem key={feature.title}>
+						<IconCard
+							icon={feature.icon}
+							title={feature.title}
+							description={feature.description}
+						/>
+					</ListItem>
+				))}
+			</Grid>
 
-				{/* CTA Section */}
-				<Card
-					aria-label="Call to action"
-					className="text-center p-8 lg:p-12 hover:shadow-lg transition-shadow"
-				>
-					<h2 className="text-2xl lg:text-3xl font-bold mb-4">
-						Ready to get started?
-					</h2>
-					<p className="text-base lg:text-xl text-muted-foreground mb-6">
-						Try SkillVector today and experience the future of talent search.
-					</p>
-					<div className="flex flex-wrap gap-4 justify-center">
-						<Link
-							to="/"
-							aria-label="Try Search"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium inline-flex items-center gap-2 text-sm lg:text-base"
-						>
+			{/* Call to Action */}
+			<CTACard
+				title="Ready to get started?"
+				description="Try SkillVector today and experience the future of talent search."
+				primaryAction={{
+					label: (
+						<>
 							Try Search <ArrowRight className="h-4 w-4" />
-						</Link>
-						<Link
-							to="/api"
-							aria-label="View API Docs"
-							className="px-5 lg:px-6 py-2.5 lg:py-3 border border-border rounded-lg hover:bg-white/10 transition-colors font-medium text-sm lg:text-base"
-						>
-							View API Docs
-						</Link>
-					</div>
-				</Card>
-			</div>
+						</>
+					) as unknown as string,
+					to: "/",
+					ariaLabel: "Try Search",
+				}}
+				secondaryAction={{
+					label: "View API Docs",
+					to: "/api",
+					variant: "outline",
+					ariaLabel: "View API Docs",
+				}}
+			/>
 		</PageTemplate>
 	);
 };

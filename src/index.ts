@@ -16,6 +16,7 @@ import {
 } from "./parser";
 import parserApp from "./parser/routes";
 import type { ProcessedFile } from "./parser/types";
+import contactRouter from "./routes/contact";
 import { checkApplicationHealth } from "./services/health";
 import { log, separator } from "./utils/logger";
 
@@ -223,6 +224,7 @@ app.get("/health", async (c) => {
 
 app.route("/parser", parserApp);
 app.route("/ai", aiRouter);
+app.route("/contact", contactRouter);
 
 export default app;
 // test

@@ -5,7 +5,7 @@ const meta: Meta<typeof SupportPage> = {
 	title: "Pages/SupportPage",
 	component: SupportPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

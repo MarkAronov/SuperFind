@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SdkDocsPage } from "./SdkDocsPage";
 
 const meta: Meta<typeof SdkDocsPage> = {
-	title: "Pages/SDK Docs",
+	title: "Pages/SdkDocsPage",
 	component: SdkDocsPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

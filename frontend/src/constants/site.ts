@@ -7,6 +7,7 @@ export const SITE_CONFIG = {
 	name: "SkillVector",
 	description: "AI-powered semantic search for professional talent discovery",
 	version: "1.0.0",
+	apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
 } as const;
 
 export const CONTACT = {

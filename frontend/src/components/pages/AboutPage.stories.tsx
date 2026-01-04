@@ -5,7 +5,7 @@ const meta: Meta<typeof AboutPage> = {
 	title: "Pages/AboutPage",
 	component: AboutPage,
 	parameters: {
-		layout: "fullscreen",
+		layout: "centered",
 	},
 };
 

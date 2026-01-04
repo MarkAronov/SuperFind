@@ -13,5 +13,7 @@ export default meta;
 type Story = StoryObj<typeof SearchResults>;
 
 export const Default: Story = {
-	render: () => <SearchResults data={{ results: [], totalCount: 0, query: "" }} />,
+	render: () => (
+		<SearchResults data={{ results: [], totalCount: 0, query: "" }} />
+	),
 };

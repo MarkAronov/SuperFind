@@ -13,5 +13,11 @@ export default meta;
 type Story = StoryObj<typeof IconCard>;
 
 export const Default: Story = {
-	render: () => <IconCard icon={<span>📦</span>} title="Icon Card" description="This is an icon card" />,
+	render: () => (
+		<IconCard
+			icon={<span>📦</span>}
+			title="Icon Card"
+			description="This is an icon card"
+		/>
+	),
 };

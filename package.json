@@ -64,10 +64,8 @@
 			"biome check --fix"
 		],
 		"frontend/src/components/**/*.{tsx,jsx}": [
-			"bash -c 'cd frontend && bun run stories:generate:force'",
 			"bash -c 'cd frontend && biome format --write \"${0#frontend/}\"'",
-			"bash -c 'cd frontend && biome check --fix \"${0#frontend/}\"'",
-			"git add frontend/src/components/**/*.stories.tsx"
+			"bash -c 'cd frontend && biome check --fix \"${0#frontend/}\"'"
 		],
 		"frontend/src/**/*.{ts,tsx,js,jsx}": [
 			"bash -c 'cd frontend && biome format --write \"${0#frontend/}\"'",

@@ -13,5 +13,15 @@ export default meta;
 type Story = StoryObj<typeof PersonCard>;
 
 export const Default: Story = {
-	render: () => <PersonCard person={{ id: "1", name: "John Doe", title: "Software Engineer", skills: ["TypeScript", "React"], score: 0.95 }} />,
+	render: () => (
+		<PersonCard
+			person={{
+				id: "1",
+				name: "John Doe",
+				title: "Software Engineer",
+				skills: ["TypeScript", "React"],
+				score: 0.95,
+			}}
+		/>
+	),
 };

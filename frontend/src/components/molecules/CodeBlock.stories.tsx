@@ -13,5 +13,7 @@ export default meta;
 type Story = StoryObj<typeof CodeBlock>;
 
 export const Default: Story = {
-	render: () => <CodeBlock language="typescript" code="console.log('Hello, World!');" />,
+	render: () => (
+		<CodeBlock language="typescript" code="console.log('Hello, World!');" />
+	),
 };

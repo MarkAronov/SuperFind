@@ -8,6 +8,7 @@ interface ComponentInfo {
 	category: string;
 	hasProps: boolean;
 	isDefaultExport: boolean;
+	requiredProps: string[];
 }
 
 const COMPONENT_DIRS = {
@@ -57,12 +58,35 @@ async function analyzeComponent(filePath: string): Promise<ComponentInfo> {
 		`export\\s+(?:const|function)\\s+${fileName}`,
 	).test(content);
 
+	// Extract required props (simple heuristic - props without ? or = default)
+	const requiredProps: string[] = [];
+	const propsMatch = content.match(/interface\s+\w+Props\s*{([^}]+)}/s) ||
+		content.match(/type\s+\w+Props\s*=\s*{([^}]+)}/s);
+	
+	if (propsMatch) {
+		const propsBody = propsMatch[1];
+		const propLines = propsBody.split('\n').map(line => line.trim()).filter(Boolean);
+		
+		for (const line of propLines) {
+			// Skip lines with optional (?) or default values, or comments
+			if (line.startsWith('//') || line.startsWith('/*') || line.includes('?:') || line.includes('=')) {
+				continue;
+			}
+			// Extract prop name from lines like "propName: Type;"
+			const match = line.match(/^(\w+):/);
+			if (match) {
+				requiredProps.push(match[1]);
+			}
+		}
+	}
+
 	return {
 		name: fileName,
 		path: filePath,
 		category: category.charAt(0).toUpperCase() + category.slice(1),
 		hasProps,
 		isDefaultExport: isDefaultExport && !hasNamedExport,
+		requiredProps,
 	};
 }
 
@@ -70,6 +94,58 @@ function generateStoryContent(info: ComponentInfo): string {
 	const importPath = `./${info.name}`;
 	const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 	const categoryTitle = capitalize(info.category);
+
+	// Generate default props based on component name and required props
+	const getDefaultPropsAndChildren = (): { props: string; children: string; hasChildren: boolean } => {
+		if (info.requiredProps.length === 0) {
+			return { props: "", children: "", hasChildren: false };
+		}
+
+		// Component-specific defaults
+		const defaults: Record<string, Record<string, string>> = {
+			ActionButton: {}, // children handled separately
+			Hero: { title: `"Welcome"`, subtitle: `"This is a hero component"` },
+			StatusBadge: { status: `"active"` },
+			CodeBlock: { language: `"typescript"`, code: `"console.log('Hello, World!');"` },
+			CTACard: { title: `"Get Started"`, description: `"Start using SkillVector today"` },
+			ErrorMessage: { message: `"An error occurred"` },
+			FeatureList: { features: `{["Feature 1", "Feature 2", "Feature 3"]}` },
+			IconCard: { icon: `{<span>📦</span>}`, title: `"Icon Card"`, description: `"This is an icon card"` },
+			PersonCard: { person: `{{ id: "1", name: "John Doe", title: "Software Engineer", skills: ["TypeScript", "React"], score: 0.95 }}` },
+			SearchBar: { onSearch: `{() => {}}` },
+			ViewToggle: { view: `"grid"`, onViewChange: `{() => {}}` },
+			SearchResults: { data: `{{ results: [], totalCount: 0, query: "" }}` },
+			PlaceholderPage: { title: `"Placeholder"` },
+		};
+
+		const componentDefaults = defaults[info.name] || {};
+		
+		// Check if component has children prop
+		const hasChildrenProp = info.requiredProps.includes('children');
+		const childrenContent = hasChildrenProp ? 'Click Me' : '';
+		
+		// Build props string (exclude children from props)
+		const propParts: string[] = [];
+		for (const prop of info.requiredProps) {
+			if (prop === 'children') continue; // Handle children separately
+			const defaultValue = componentDefaults[prop] || `{undefined}`;
+			propParts.push(`${prop}=${defaultValue}`);
+		}
+
+		const propsString = propParts.length > 0 ? ` ${propParts.join(" ")}` : "";
+
+		return { 
+			props: propsString, 
+			children: childrenContent,
+			hasChildren: hasChildrenProp
+		};
+	};
+
+	const { props, children, hasChildren } = getDefaultPropsAndChildren();
+	
+	const componentTag = hasChildren 
+		? `<${info.name}${props}>${children}</${info.name}>`
+		: `<${info.name}${props} />`;
 
 	return `import type { Meta, StoryObj } from "@storybook/react";
 import { ${info.name} } from "${importPath}";
@@ -86,7 +162,7 @@ export default meta;
 type Story = StoryObj<typeof ${info.name}>;
 
 export const Default: Story = {
-	render: () => <${info.name} />,
+	render: () => ${componentTag},
 };
 `;
 }

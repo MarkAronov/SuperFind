@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof PlaceholderPage>;
 
 export const Default: Story = {
-	render: () => <PlaceholderPage />,
+	render: () => <PlaceholderPage title="Placeholder" />,
 };

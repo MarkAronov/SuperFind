@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof ViewToggle>;
 
 export const Default: Story = {
-	render: () => <ViewToggle />,
+	render: () => <ViewToggle view="grid" />,
 };

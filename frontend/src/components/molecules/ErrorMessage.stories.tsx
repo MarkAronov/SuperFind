@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof ErrorMessage>;
 
 export const Default: Story = {
-	render: () => <ErrorMessage />,
+	render: () => <ErrorMessage message="An error occurred" />,
 };

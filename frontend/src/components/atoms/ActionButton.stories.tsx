@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof ActionButton>;
 
 export const Default: Story = {
-	render: () => <ActionButton />,
+	render: () => <ActionButton>Click Me</ActionButton>,
 };

@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof FeatureList>;
 
 export const Default: Story = {
-	render: () => <FeatureList />,
+	render: () => <FeatureList features={["Feature 1", "Feature 2", "Feature 3"]} />,
 };

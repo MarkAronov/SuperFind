@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof CTACard>;
 
 export const Default: Story = {
-	render: () => <CTACard />,
+	render: () => <CTACard title="Get Started" description="Start using SkillVector today" />,
 };

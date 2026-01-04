@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof StatusBadge>;
 
 export const Default: Story = {
-	render: () => <StatusBadge />,
+	render: () => <StatusBadge status="active" />,
 };

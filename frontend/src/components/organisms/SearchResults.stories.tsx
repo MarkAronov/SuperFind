@@ -15,7 +15,13 @@ type Story = StoryObj<typeof SearchResults>;
 export const Default: Story = {
 	render: () => (
 		<SearchResults
-			data={{ success: true, query: "test", answer: "No results", people: [] }}
+			data={{
+				success: true,
+				query: "test",
+				answer: "No results",
+				people: [],
+				timestamp: new Date().toISOString(),
+			}}
 		/>
 	),
 };

@@ -1,6 +1,6 @@
 import { Book, Github, Mail, MessageCircle } from "lucide-react";
 import { EXTERNAL_LINKS } from "@/constants/site";
-import type { CardGridItem } from "../4-organisms/CardGrid.types";
+import type { GridItem } from "../4-organisms/cards/card.types";
 import type { SupportOption } from "./SupportPage.types";
 
 // Page section headers and content
@@ -51,7 +51,7 @@ export const supportOptions: SupportOption[] = [
 	},
 ];
 
-export const faqs: CardGridItem[] = [
+export const faqs: GridItem[] = [
 	{
 		title: "What file formats are supported for profile uploads?",
 		description:

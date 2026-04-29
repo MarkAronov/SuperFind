@@ -37,12 +37,12 @@ export const sdkExamples = [
 		description: "Perform a simple search with query, limit, and offset:",
 		code: `import { SkillVectorClient } from '@skillvector/sdk';
 
-    const client = new SkillVectorClient({
-      baseUrl: 'https://api.skillvector.com'
-    });
+const client = new SkillVectorClient({
+  baseUrl: 'https://api.skillvector.com'
+});
 
-    const results = await client.search('TypeScript developer', 10, 0);
-    console.log(results);`,
+const results = await client.search('TypeScript developer', 10, 0);
+console.log(results);`,
 	},
 	{
 		id: "filters",
@@ -157,28 +157,28 @@ results.forEach((result, index) => {
 			"Advanced filtering with multiple criteria and post-processing:",
 		code: `import { SkillVectorClient } from '@skillvector/sdk';
 
-            const client = new SkillVectorClient({
-              baseUrl: 'https://api.skillvector.com'
-            });
+const client = new SkillVectorClient({
+  baseUrl: 'https://api.skillvector.com'
+});
 
-            const results = await client.searchWithFilters({
-              query: 'Senior Software Engineer',
-              filters: {
-                skills: ['Kubernetes', 'AWS', 'Terraform', 'Python'],
-                experience: { min: 5, max: 10 },
-                location: ['Remote', 'San Francisco', 'Seattle'],
-                education: ['Bachelor', 'Master'],
-                certifications: ['AWS Certified', 'CKA']
-              },
-              limit: 50,
-              offset: 0
-            });
+const results = await client.searchWithFilters({
+  query: 'Senior Software Engineer',
+  filters: {
+    skills: ['Kubernetes', 'AWS', 'Terraform', 'Python'],
+    experience: { min: 5, max: 10 },
+    location: ['Remote', 'San Francisco', 'Seattle'],
+    education: ['Bachelor', 'Master'],
+    certifications: ['AWS Certified', 'CKA']
+  },
+  limit: 50,
+  offset: 0
+});
 
-            // Sort by score
-            const sorted = results.sort((a, b) => b.score - a.score);
+// Sort by score
+const sorted = results.sort((a, b) => b.score - a.score);
 
-            // Filter by minimum score threshold
-            const highQuality = sorted.filter(r => r.score > 0.8);`,
+// Filter by minimum score threshold
+const highQuality = sorted.filter(r => r.score > 0.8);`,
 	},
 	{
 		id: "stream",
@@ -186,38 +186,38 @@ results.forEach((result, index) => {
 		description: "Stream large result sets using async generators:",
 		code: `import { SkillVectorClient } from '@skillvector/sdk';
 
-            const client = new SkillVectorClient({
-              baseUrl: 'https://api.skillvector.com'
-            });
+const client = new SkillVectorClient({
+  baseUrl: 'https://api.skillvector.com'
+});
 
-            async function* searchWithPagination(query: string, pageSize: number = 20) {
-              let offset = 0;
-              let hasMore = true;
+async function* searchWithPagination(query: string, pageSize: number = 20) {
+  let offset = 0;
+  let hasMore = true;
 
-              while (hasMore) {
-                const results = await client.search(query, pageSize, offset);
+  while (hasMore) {
+    const results = await client.search(query, pageSize, offset);
 
-                if (results.length === 0) {
-                  hasMore = false;
-                  break;
-                }
+    if (results.length === 0) {
+      hasMore = false;
+      break;
+    }
 
-                yield results;
-                offset += pageSize;
+    yield results;
+    offset += pageSize;
 
-                if (results.length < pageSize) {
-                  hasMore = false;
-                }
-              }
-            }
+    if (results.length < pageSize) {
+      hasMore = false;
+    }
+  }
+}
 
-            // Usage
-            for await (const batch of searchWithPagination('ML Engineer', 50)) {
-              console.log(\`Processing batch of \${batch.length} results\`);
-              // Process each batch as it arrives
-              batch.forEach(result => {
-                console.log(result.name, result.score);
-              });
-            }`,
+// Usage
+for await (const batch of searchWithPagination('ML Engineer', 50)) {
+  console.log(\`Processing batch of \${batch.length} results\`);
+  // Process each batch as it arrives
+  batch.forEach(result => {
+    console.log(result.name, result.score);
+  });
+}`,
 	},
 ];

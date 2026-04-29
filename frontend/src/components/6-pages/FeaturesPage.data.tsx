@@ -1,7 +1,7 @@
 import { Cloud, Code, Search, Shield, Users, Zap } from "lucide-react";
-import type { CardGridItem } from "../4-organisms/CardGrid.types";
+import type { GridItem } from "../4-organisms/cards/card.types";
 
-export const features: CardGridItem[] = [
+export const features: GridItem[] = [
 	{
 		icon: <Search className="h-6 w-6" />,
 		title: "Semantic Search",

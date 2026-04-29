@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import type { ListItemProps, ListProps, ListVariant } from "./List.types";
 
 /**

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Input as ShadcnInput } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { BORDERS } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
 
 /**
  * Input Component

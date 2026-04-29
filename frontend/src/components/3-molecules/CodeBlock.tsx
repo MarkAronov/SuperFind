@@ -1,7 +1,9 @@
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { useState } from "react";
+import ShikiHighlighter from "react-shiki";
 import { cn } from "@/lib/utils";
-import { BORDERS, SPACING, TYPOGRAPHY } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { ScrollAreaScrollbar } from "../2-atoms/ScrollArea";
@@ -10,26 +12,54 @@ import type { CodeBlockProps } from "./CodeBlock.types";
 /**
  * CodeBlock Component
  *
- * Displays formatted code with syntax highlighting support and copy-to-clipboard functionality.
+ * Displays formatted code with syntax highlighting via react-shiki.
  *
  * Features:
- * - Responsive wrapping: Wraps on mobile while preserving code structure
+ * - Syntax highlighting: react-shiki lazily loads language grammars for minimal initial bundle
+ * - Dual themes: github-light / github-dark switch automatically with the site's dark mode
  * - Horizontal scroll: Available when needed for long lines
  * - Copy button: Positioned top-right, shows feedback on click
- * - Language support: Accepts language prop for syntax highlighting classes
  *
- * Layout:
- * - Code container: Muted background with medium border radius
- * - Copy button: Absolute positioned, small elevated button
- * - Text wrapping: whitespace-pre-wrap for mobile, scroll for overflow
+ * Theme switching uses CSS light-dark() — works because index.css sets
+ * `color-scheme: light` on `html` and `color-scheme: dark` on `html.dark`.
  *
  * Copy Behavior:
  * - Copies full code to clipboard
- * - Shows "Copied!" feedback for 2 seconds
+ * - Shows "Copied!" feedback for 3 seconds
  * - Automatically resets to "Copy" text
  */
 
+/**
+ * Strips the common leading whitespace from a multi-line code string.
+ * Allows template literals to be indented naturally in source files without
+ * that indentation leaking into the rendered code block.
+ */
+const dedent = (code: string): string => {
+	// Split into lines and strip leading/trailing empty lines
+	const lines = code.split("\n");
+	const trimmed = lines.slice(
+		// Skip empty first line (from template literal opening backtick)
+		lines[0].trim() === "" ? 1 : 0,
+		// Skip empty last line (from template literal closing indent)
+		lines[lines.length - 1].trim() === "" ? -1 : undefined,
+	);
+
+	// Find the minimum indentation among non-empty lines
+	const minIndent = trimmed.reduce((min, line) => {
+		if (line.trim() === "") return min;
+		const indent = line.match(/^(\s*)/)?.[1].length ?? 0;
+		return Math.min(min, indent);
+	}, Number.POSITIVE_INFINITY);
+
+	// Strip the common leading whitespace from every line
+	const indentToStrip = minIndent === Number.POSITIVE_INFINITY ? 0 : minIndent;
+	return trimmed.map((line) => line.slice(indentToStrip)).join("\n");
+};
+
 export const CodeBlock = ({ language, code }: CodeBlockProps) => {
+	// Strip any common leading indentation introduced by template literal formatting
+	const normalizedCode = dedent(code);
+
 	// Track copy state for user feedback
 	const [copied, setCopied] = useState(false);
 
@@ -37,16 +67,15 @@ export const CodeBlock = ({ language, code }: CodeBlockProps) => {
 	 * Copy code to clipboard and show feedback.
 	 * Uses navigator.clipboard with an execCommand fallback for mobile browsers
 	 * that don't support the async clipboard API.
-	 * Blurs the button after tap to prevent the stuck-hover issue on touch devices.
 	 */
 	const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		try {
 			// Modern clipboard API — works on HTTPS desktop & most mobile browsers
-			await navigator.clipboard.writeText(code);
+			await navigator.clipboard.writeText(normalizedCode);
 		} catch {
 			// Fallback for mobile browsers that block navigator.clipboard
 			const textarea = document.createElement("textarea");
-			textarea.value = code;
+			textarea.value = normalizedCode;
 			// Keep off-screen so it doesn't cause a layout shift
 			textarea.style.cssText =
 				"position:fixed;top:-9999px;left:-9999px;opacity:0";
@@ -71,7 +100,7 @@ export const CodeBlock = ({ language, code }: CodeBlockProps) => {
 		// sized by the parent, not by children) and provides the positioning context for the
 		// Copy button. It must NOT have overflow-hidden so the button is never clipped.
 		<Div className="relative grid">
-			{/* ScrollAreaPrimitive.Root: overflow-hidden clips the <pre> inside the
+			{/* ScrollAreaPrimitive.Root: overflow-hidden clips the pre inside the
 			    grid-constrained track so it cannot push the layout wider */}
 			<ScrollAreaPrimitive.Root
 				className={cn("overflow-hidden", BORDERS.RADIUS.md)}
@@ -79,20 +108,23 @@ export const CodeBlock = ({ language, code }: CodeBlockProps) => {
 				{/* Viewport: Radix sets overflow:scroll here; whitespace-pre lets long lines
 				    overflow horizontally so the horizontal scrollbar actually activates */}
 				<ScrollAreaPrimitive.Viewport className="w-full rounded-[inherit]">
-					<pre
-						className={cn(
-							// Colors
-							"bg-muted",
-							// Spacing — pr-20 (80px) reserves space so code never slides under the
-							// absolutely-positioned Copy button; pb-5 clears the horizontal scrollbar
-							SPACING.PADDING.md,
-							"pr-20 pb-5",
-							// Preserve formatting — horizontal overflow is handled by ScrollArea
-							"whitespace-pre",
-						)}
+					{/* react-shiki handles async grammar loading and React rendering internally.
+					    defaultColor="light-dark()" uses the CSS light-dark() function to switch
+					    themes automatically based on html { color-scheme } — set in index.css.
+					    addDefaultStyles={false}: we supply all styling via the shiki-wrapper CSS
+					    block in index.css so we have full control over padding and font. */}
+					<ShikiHighlighter
+						language={language}
+						// Dual themes — light-dark() CSS function switches automatically with html { color-scheme }
+						theme={{ light: "github-light", dark: "github-dark" }}
+						defaultColor="light-dark()"
+						addDefaultStyles={false}
+						showLanguage={false}
+						as="div"
+						className="shiki-wrapper"
 					>
-						<code className={cn(`language-${language}`, "block")}>{code}</code>
-					</pre>
+						{normalizedCode}
+					</ShikiHighlighter>
 				</ScrollAreaPrimitive.Viewport>
 
 				{/* Horizontal scrollbar — atom's auto-fade thumb, positioned bottom of Root */}

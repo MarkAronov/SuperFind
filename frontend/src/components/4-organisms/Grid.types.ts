@@ -1,4 +1,8 @@
 import type { ComponentProps, ReactNode } from "react";
+import type { GridItem } from "./cards/card.types";
+
+// Re-export GridItem for consumers that import it from Grid.types
+export type { GridItem } from "./cards/card.types";
 
 export type GapSize = "sm" | "md" | "lg" | "xl";
 export type MaxColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -44,63 +48,9 @@ export interface ResponsiveColumns {
 	"2xl"?: ColumnCount;
 }
 
-export interface CardGridItem {
-	/** Unique identifier */
-	id?: string | number;
-
-	/** Optional icon element */
-	icon?: ReactNode;
-
-	/** Card title/heading (required unless using customContent) */
-	title?: string;
-
-	/** Main description text */
-	description?: string;
-
-	/** Additional content text or React element */
-	content?: string | ReactNode;
-
-	/** List of items to display */
-	items?: string[];
-
-	/** List of subsections with title and content */
-	subsections?: { title: string; content: string }[];
-
-	/** Tags/badges to display */
-	tags?: string[];
-
-	/** Code example with label and code */
-	codeExample?: { label: string; code: string; note?: string };
-
-	/** Action button */
-	action?: {
-		text: string;
-		href: string;
-		isInternal?: boolean;
-	};
-
-	/** Icon color class */
-	color?: string;
-
-	/** Step number (for step-based designs) */
-	step?: number;
-
-	/** Custom aria-label */
-	ariaLabel?: string;
-
-	/** Custom content that completely replaces default rendering (but keeps Card wrapper) */
-	customContent?: ReactNode;
-
-	/** When true, customContent is rendered without Card wrapper (for content that's already a Card) */
-	noWrapper?: boolean;
-
-	/** Whether card content should be centered */
-	centered?: boolean;
-}
-
-export interface CardGridBaseProps {
+export interface GridBaseProps {
 	/** Array of items to render as cards */
-	items?: CardGridItem[];
+	items?: GridItem[];
 
 	/** Children elements (for manual card rendering) */
 	children?: ReactNode;
@@ -147,17 +97,17 @@ export interface CardGridBaseProps {
 	as?: "div" | "ul";
 
 	/** Custom render function for card content */
-	renderCard?: (item: CardGridItem) => ReactNode;
+	renderCard?: (item: GridItem) => ReactNode;
 
 	/** Enforce default card wrapper and baseline typography for custom content */
 	enforceCustomContent?: boolean;
 }
 
-export type CardGridProps = CardGridBaseProps &
-	Omit<ComponentProps<"div">, keyof CardGridBaseProps> &
-	Omit<ComponentProps<"ul">, keyof CardGridBaseProps>;
+export type GridProps = GridBaseProps &
+	Omit<ComponentProps<"div">, keyof GridBaseProps> &
+	Omit<ComponentProps<"ul">, keyof GridBaseProps>;
 
-export interface CardGridItemBaseProps {
+export interface GridItemBaseProps {
 	/** Span multiple columns (1-8) */
 	colSpan?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -171,6 +121,6 @@ export interface CardGridItemBaseProps {
 	as?: "div" | "li";
 }
 
-export type CardGridItemProps = CardGridItemBaseProps &
-	Omit<ComponentProps<"div">, keyof CardGridItemBaseProps> &
-	Omit<ComponentProps<"li">, keyof CardGridItemBaseProps>;
+export type GridItemProps = GridItemBaseProps &
+	Omit<ComponentProps<"div">, keyof GridItemBaseProps> &
+	Omit<ComponentProps<"li">, keyof GridItemBaseProps>;

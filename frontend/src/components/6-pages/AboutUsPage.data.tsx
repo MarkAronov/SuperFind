@@ -7,7 +7,7 @@ import {
 	Users,
 	Zap,
 } from "lucide-react";
-import type { CardGridItem } from "../4-organisms/CardGrid.types";
+import type { GridItem } from "../4-organisms/cards/card.types";
 
 // Mission section content
 export const missionContent = {
@@ -19,7 +19,7 @@ export const missionContent = {
 };
 
 // Capabilities/features grid
-export const capabilities: CardGridItem[] = [
+export const capabilities: GridItem[] = [
 	{
 		icon: <Target className="h-6 w-6" />,
 		title: "Precision",

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { BORDERS, SPACING } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SPACING } from "../1-ions/spacing";
 import type { DivProps, DivVariant } from "./Div.types";
 
 /**

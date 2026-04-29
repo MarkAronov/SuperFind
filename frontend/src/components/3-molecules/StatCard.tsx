@@ -1,6 +1,8 @@
 import type React from "react";
 import { cn } from "@/lib/utils";
-import { BORDERS, SIZING, SPACING } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { Text } from "../2-atoms/Text";

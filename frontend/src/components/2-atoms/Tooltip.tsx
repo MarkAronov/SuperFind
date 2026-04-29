@@ -8,7 +8,10 @@ import {
 	TooltipTrigger as ShadcnTooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { BORDERS, SIZING, TYPOGRAPHY, Z_INDEX } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SIZING } from "../1-ions/sizing";
+import { TYPOGRAPHY } from "../1-ions/typography";
+import { Z_INDEX } from "../1-ions/zIndex";
 
 /**
  * Tooltip Component

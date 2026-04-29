@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
-import { SPACING, TYPOGRAPHY } from "../1-ions";
 import { Glass } from "../1-ions/Glass";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Badge } from "../2-atoms/Badge";
 import { Div } from "../2-atoms/Div";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../2-atoms/Tooltip";

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { cn } from "@/lib/utils";
-import { CURSOR } from "../1-ions";
+import { CURSOR } from "../1-ions/cursor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./Tooltip";
 
 const meta = {

@@ -8,7 +8,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { BORDERS, SPACING, TYPOGRAPHY } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Badge } from "../2-atoms/Badge";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
@@ -16,6 +18,7 @@ import { Heading } from "../2-atoms/Heading";
 import { Input } from "../2-atoms/Input";
 import { Link } from "../2-atoms/Link";
 import { Text } from "../2-atoms/Text";
+import { MOTION } from "../animations/0-tokens/tokens";
 
 export interface FilterOption {
 	value: string;
@@ -305,7 +308,7 @@ export const FilterPanel = ({
 											initial={{ opacity: 0, scale: 0.85 }}
 											animate={{ opacity: 1, scale: 1 }}
 											exit={{ opacity: 0, scale: 0.85 }}
-											transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
+											transition={MOTION.transition.fast}
 										>
 											<Badge
 												variant="secondary"

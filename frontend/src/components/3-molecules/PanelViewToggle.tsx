@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
-import { BORDERS, SIZING, SPACING } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import type { PanelViewToggleProps } from "./PanelViewToggle.types";

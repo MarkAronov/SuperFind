@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { Text } from "../2-atoms/Text";

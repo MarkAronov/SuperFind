@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { Span } from "../2-atoms/Span";
 import { Text } from "../2-atoms/Text";
+import { FadeIn } from "../animations/1-entrance/FadeIn";
+import { SlideIn } from "../animations/1-entrance/SlideIn";
 import type { HeroProps } from "./Hero.types";
 
 /**
@@ -54,12 +56,16 @@ const Hero = ({
 
 	return (
 		<Div className={combinedClassName} {...props}>
-			{/* Hero title with optional brand text */}
-			<Heading variant="hero">
-				{title} {brand && <Span className={brandClass}>{brand}</Span>}
-			</Heading>
-			{/* Hero subtitle */}
-			<Text variant="lead">{subtitle}</Text>
+			{/* Heading slides up into view — primary focal point */}
+			<SlideIn direction="up">
+				<Heading variant="hero">
+					{title} {brand && <Span className={brandClass}>{brand}</Span>}
+				</Heading>
+			</SlideIn>
+			{/* Subtitle fades in slightly after the heading */}
+			<FadeIn delay={0.15}>
+				<Text variant="lead">{subtitle}</Text>
+			</FadeIn>
 		</Div>
 	);
 };

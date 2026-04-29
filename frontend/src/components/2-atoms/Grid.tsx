@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { GRID, SPACING } from "../1-ions";
+import { GRID } from "../1-ions/grid";
+import { SPACING } from "../1-ions/spacing";
 import type { GridProps, GridVariant } from "./Grid.types";
 
 /**

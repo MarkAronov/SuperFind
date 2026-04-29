@@ -46,6 +46,18 @@ const getSnapshot = () => {
 const setThemeInternal = (newTheme: Theme) => {
 	currentTheme = newTheme;
 	localStorage.setItem(STORAGE_KEY, newTheme);
+
+	// Add transitioning class BEFORE applying theme so the CSS gate
+	// activates immediately, making all color properties animate over 400ms.
+	// Remove it after 450ms (slightly longer than the CSS transition duration).
+	if (typeof window !== "undefined") {
+		document.documentElement.classList.add("theme-transitioning");
+		setTimeout(
+			() => document.documentElement.classList.remove("theme-transitioning"),
+			450,
+		);
+	}
+
 	applyTheme(newTheme);
 	// Notify all subscribers
 	for (const listener of listeners) {

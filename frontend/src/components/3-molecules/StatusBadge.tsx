@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { TYPOGRAPHY } from "../1-ions";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Badge } from "../2-atoms/Badge";
 import type { BadgeStatus, StatusBadgeProps } from "./StatusBadge.types";
 

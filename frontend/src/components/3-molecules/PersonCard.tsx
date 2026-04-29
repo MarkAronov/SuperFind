@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { SPACING, TYPOGRAPHY } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Avatar, AvatarFallback } from "../2-atoms/Avatar";
 import { Badge } from "../2-atoms/Badge";
 import { Div } from "../2-atoms/Div";

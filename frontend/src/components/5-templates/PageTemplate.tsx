@@ -1,11 +1,12 @@
 import { useMatches } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import { Div } from "../2-atoms/Div";
 import { ScrollArea } from "../2-atoms/ScrollArea";
 import { Footer } from "../4-organisms/Footer";
 import { Header } from "../4-organisms/Header";
+import { AnimatedRoute } from "../animations/4-route/AnimatedRoute";
 import type { PageTemplateProps } from "./PageTemplate.types";
 
 /**
@@ -98,32 +99,31 @@ export const PageTemplate = ({
 	);
 
 	return (
-		<Div
-			className={cn(
-				// Layout — h-screen so ScrollArea gets a bounded height
-				// and can overflow, enabling the custom Radix scrollbar
-				"h-screen flex flex-col",
-			)}
-		>
+		// h-screen container gives ScrollArea a bounded height so it can overflow,
+		// enabling the custom Radix scrollbar for the full page
+		<Div className={cn("h-screen flex flex-col")}>
 			<ScrollArea className="flex-1">
 				{/* Flex wrapper ensures footer sticks to bottom on short pages */}
 				<Div className="min-h-screen flex flex-col">
 					{/* Header inside ScrollArea so sticky positioning works
-					    within the scroll viewport — backdrop-filter can then
-					    blur content that scrolls behind it (glass effect) */}
+					    within the scroll viewport — backdrop-filter can blur
+					    content scrolling behind it (glass effect) */}
 					<Header />
-					<main
-						className={cn(
-							// Flex grow pushes footer to bottom on short pages
-							"flex-1",
-							contained && paddingClass,
-							contained && maxWidthClass,
-							contained && "mx-auto",
-							className,
-						)}
-					>
-						{content}
-					</main>
+					{/* AnimatedRoute wraps only <main> so Header/Footer are stable during transitions */}
+					<AnimatedRoute>
+						<main
+							className={cn(
+								// Flex grow pushes footer to bottom on short pages
+								"flex-1",
+								contained && paddingClass,
+								contained && maxWidthClass,
+								contained && "mx-auto",
+								className,
+							)}
+						>
+							{content}
+						</main>
+					</AnimatedRoute>
 					<Footer />
 				</Div>
 			</ScrollArea>

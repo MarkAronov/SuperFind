@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CURSOR } from "../1-ions";
+import { CURSOR } from "../1-ions/cursor";
 import { Span } from "../2-atoms/Span";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../2-atoms/Tooltip";
 

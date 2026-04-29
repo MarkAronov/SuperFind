@@ -15,7 +15,7 @@ import {
 import { Text } from "../2-atoms/Text";
 import { Card, CardContent } from "../3-molecules/Card";
 import { Hero } from "../3-molecules/Hero";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { cookieCategories } from "./CookiesPage.data.tsx";
 
@@ -31,7 +31,7 @@ export const CookiesPage = () => {
 
 			{/* Cookie Policy Content — Single section with all policy cards */}
 			<Section>
-				<CardGrid maxColumns={1}>
+				<Grid maxColumns={1}>
 					{/* Introduction — What cookies are and how they relate to SkillVector */}
 					<Card variant="hover" aria-label="Introduction" fill>
 						<CardContent>
@@ -248,7 +248,7 @@ export const CookiesPage = () => {
 							</Div>
 						</CardContent>
 					</Card>
-				</CardGrid>
+				</Grid>
 			</Section>
 		</PageTemplate>
 	);

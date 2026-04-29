@@ -1,6 +1,10 @@
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { motion } from "framer-motion";
 import { ChevronDownIcon } from "lucide-react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useHoverRipple } from "../../hooks/animations/useHoverRipple";
+import { MOTION } from "../animations/0-tokens/tokens";
 import type {
 	AccordionContentProps,
 	AccordionItemProps,
@@ -31,7 +35,7 @@ export const Accordion = ({ ...props }: AccordionProps) => {
  * Use island styling (border + rounded) for separated items, or default for connected items.
  *
  * Features:
- * - Hover effect matches outline button styling (border color change)
+ * - Hover effect: Framer Motion animates borderColor (no CSS hover — motion owns it)
  * - Island style: separated items with rounded borders
  * - Default style: connected items with dividing lines
  *
@@ -43,15 +47,22 @@ export const Accordion = ({ ...props }: AccordionProps) => {
  * <AccordionItem>
  */
 export const AccordionItem = ({ className, ...props }: AccordionItemProps) => {
+	// Track hover state so Framer Motion can animate the border color
+	const { isHovering, onMouseEnter, onMouseLeave } = useHoverRipple();
+
 	return (
-		<AccordionPrimitive.Item
-			data-slot="accordion-item"
-			className={cn(
-				"border-b last:border-b-0 hover:border-accent  dark:hover:border-accent ",
-				className,
-			)}
-			{...props}
-		/>
+		<motion.div
+			// Animate borderColor via Framer Motion; replaces hover:border-accent CSS class
+			animate={{
+				borderColor: isHovering ? MOTION.hover.border : "oklch(var(--border))",
+			}}
+			transition={MOTION.ripple.borderHover}
+			onMouseEnter={onMouseEnter}
+			onMouseLeave={onMouseLeave}
+			className={cn("border-b last:border-b-0", className)}
+		>
+			<AccordionPrimitive.Item data-slot="accordion-item" {...props} />
+		</motion.div>
 	);
 };
 
@@ -104,26 +115,71 @@ export const AccordionTrigger = ({
 
 /**
  * AccordionContent component
- * Collapsible content area with smooth expand/collapse animation.
- * Content is hidden when collapsed and revealed when expanded.
+ * Collapsible content area with smooth Framer Motion expand/collapse animation.
+ * Content is always mounted (forceMount) so Framer Motion can animate height to/from 0.
  *
  * Animation behavior:
- * - Smooth slide down when opening
- * - Smooth slide up when closing
- * - Uses CSS animations for performance
+ * - Height animates from 0 → "auto" on open, "auto" → 0 on close
+ * - Inner content fades + slides up (expandContent variants)
+ * - MutationObserver syncs React state with Radix data-state attribute changes
  */
 export const AccordionContent = ({
 	className,
 	children,
 	...props
 }: AccordionContentProps) => {
+	// Ref to the Radix Content element so we can read its data-state attribute
+	const contentRef = useRef<HTMLDivElement>(null);
+
+	// Local open state — synced from Radix via MutationObserver
+	const [isOpen, setIsOpen] = useState(false);
+
+	// Watch the data-state attribute set by Radix to drive Framer Motion
+	useLayoutEffect(() => {
+		const el = contentRef.current;
+		if (!el) return;
+
+		// Sync initial state from Radix (runs before first paint — no flash)
+		setIsOpen(el.getAttribute("data-state") === "open");
+
+		// Track subsequent Radix state machine transitions
+		const observer = new MutationObserver(() => {
+			setIsOpen(el.getAttribute("data-state") === "open");
+		});
+		observer.observe(el, { attributes: true, attributeFilter: ["data-state"] });
+
+		// Cleanup observer on unmount
+		return () => observer.disconnect();
+	}, []);
+
 	return (
 		<AccordionPrimitive.Content
+			ref={contentRef}
+			// forceMount keeps the element in DOM so the close animation can play
+			forceMount
 			data-slot="accordion-content"
-			className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm"
+			className="text-sm"
 			{...props}
 		>
-			<div className={cn("pt-0 pb-4", className)}>{children}</div>
+			{/* Outer div animates the height: 0 ↔ "auto" with a springy feel (overflow clips content) */}
+			<motion.div
+				initial={false}
+				animate={
+					isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }
+				}
+				transition={MOTION.expand.transitionSpring}
+				style={{ overflow: "hidden" }}
+			>
+				{/* Inner div fades + slides down as content reveals */}
+				<motion.div
+					initial={false}
+					variants={MOTION.expand.content}
+					animate={isOpen ? "visible" : "hidden"}
+					className={cn("pt-0 pb-4", className)}
+				>
+					{children}
+				</motion.div>
+			</motion.div>
 		</AccordionPrimitive.Content>
 	);
 };

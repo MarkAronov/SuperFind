@@ -1,18 +1,16 @@
 import { Search } from "lucide-react";
 import { type KeyboardEvent, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import {
-	ANIMATION,
-	BORDERS,
-	CURSOR,
-	OPACITY,
-	SIZING,
-	TYPOGRAPHY,
-} from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { CURSOR } from "../1-ions/cursor";
 import { Glass } from "../1-ions/Glass";
+import { OPACITY } from "../1-ions/opacity";
+import { SIZING } from "../1-ions/sizing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Input } from "../2-atoms/Input";
+import { ANIMATION } from "../animations/0-tokens/tailwind";
 import type { SearchBarProps } from "./SearchBar.types";
 
 /**

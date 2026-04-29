@@ -10,7 +10,9 @@ import {
 	TableRow as ShadcnTableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { BORDERS, SPACING, TYPOGRAPHY } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import type { TableCellProps, TableProps, TableRowProps } from "./Table.types";
 
 /**

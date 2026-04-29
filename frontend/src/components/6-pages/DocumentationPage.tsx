@@ -1,7 +1,7 @@
 import { Code, FileText } from "lucide-react";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import {
 	Accordion,
 	AccordionContent,

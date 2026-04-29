@@ -2,7 +2,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { FileText, Github, SquareArrowOutUpRight } from "lucide-react";
 import { EXTERNAL_LINKS, SOCIAL_LINKS } from "@/constants/site";
 import { cn } from "@/lib/utils";
-import { SIZING, SPACING, TYPOGRAPHY } from "../1-ions";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
@@ -12,7 +14,7 @@ import { Text } from "../2-atoms/Text";
 import { Card, CardContent } from "../3-molecules/Card";
 import { Hero } from "../3-molecules/Hero";
 import { StatusBadge } from "../3-molecules/StatusBadge";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { categories } from "./IntegrationsPage.data.tsx";
 import type { Integration } from "./IntegrationsPage.types";
@@ -202,14 +204,14 @@ export const IntegrationsPage = () => {
 					</Div>
 
 					{/* Integration Cards Grid — responsive 2-3 column layout */}
-					<CardGrid maxColumns={3} centerIncompleteRows>
+					<Grid maxColumns={3} centerIncompleteRows>
 						{category.integrations.map((integration) => (
 							<IntegrationCard
 								key={integration.title}
 								integration={integration}
 							/>
 						))}
-					</CardGrid>
+					</Grid>
 				</Section>
 			))}
 

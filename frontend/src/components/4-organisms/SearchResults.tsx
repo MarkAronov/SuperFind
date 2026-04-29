@@ -7,7 +7,7 @@ import { Text } from "../2-atoms/Text";
 import { Card } from "../3-molecules/Card";
 import { PersonCard } from "../3-molecules/PersonCard";
 import { ViewToggle } from "../3-molecules/ViewToggle";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import type { SearchResultsProps } from "./SearchResults.types";
 
 export const SearchResults = ({ data, isLoading }: SearchResultsProps) => {
@@ -258,7 +258,7 @@ export const SearchResults = ({ data, isLoading }: SearchResultsProps) => {
 				</Div>
 
 				{uniquePeople.length > 0 ? (
-					<CardGrid
+					<Grid
 						maxColumns={view === "grid" ? 3 : 1}
 						items={uniquePeople.map((item, index) => ({
 							id: `${item.person.name}-${index}`,

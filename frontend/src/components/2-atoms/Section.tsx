@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import type { SectionGap, SectionProps, SectionVariant } from "./Section.types";
 
 /**
@@ -10,8 +10,8 @@ import type { SectionGap, SectionProps, SectionVariant } from "./Section.types";
  *
  * Two spacing modes:
  * 1. `variant` — named presets for general-purpose sections
- * 2. `gap` — syncs padding to a CardGrid's gap using a 2:1 ratio
- *    (Section padding is always ~2× the CardGrid inter-card gap)
+ * 2. `gap` — syncs padding to a Grid's gap using a 2:1 ratio
+ *    (Section padding is always ~2× the Grid inter-card gap)
  */
 
 /**
@@ -37,25 +37,25 @@ const variantClasses: Record<SectionVariant, string> = {
 };
 
 /**
- * Gap-synced padding classes (2:1 ratio with CardGrid gap)
+ * Gap-synced padding classes (2:1 ratio with Grid gap)
  *
- * CardGrid gap:  sm=16px  md=24px  lg=32px  xl=48px
+ * Grid gap:  sm=16px  md=24px  lg=32px  xl=48px
  * Section py:    sm=32px  md=48px  lg=64px  xl=96px
  *
  * This ensures visual hierarchy: cards within a group are tighter,
  * while sections are visually separated at double the spacing.
  */
 const gapSyncClasses: Record<SectionGap, string> = {
-	// 2× CardGrid gap-4 (16px) → py-8 (32px)
+	// 2× Grid gap-4 (16px) → py-8 (32px)
 	sm: "py-8",
 
-	// 2× CardGrid gap-6 (24px) → py-12 (48px)
+	// 2× Grid gap-6 (24px) → py-12 (48px)
 	md: "py-12",
 
-	// 2× CardGrid gap-8 (32px) → py-16 (64px)
+	// 2× Grid gap-8 (32px) → py-16 (64px)
 	lg: "py-16",
 
-	// 2× CardGrid gap-12 (48px) → py-24 (96px)
+	// 2× Grid gap-12 (48px) → py-24 (96px)
 	xl: "py-24",
 };
 

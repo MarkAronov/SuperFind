@@ -1,8 +1,9 @@
 /**
- * IONS: Animation Tokens
+ * ANIMATIONS: Tailwind Animation Utilities
  *
- * Animation-specific design primitives including durations, timing functions, and keyframes.
- * These tokens ensure consistent motion design across the application.
+ * Migrated from 1-ions/animation.ts.
+ * Provides Tailwind CSS class strings for animation, duration, easing, and keyframes.
+ * Use these for CSS-driven animations (no JavaScript required).
  *
  * Duration Scale:
  * - instant: 0ms - Immediate changes with no transition

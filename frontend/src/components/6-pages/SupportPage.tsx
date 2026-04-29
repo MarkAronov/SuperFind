@@ -6,7 +6,7 @@ import { Section } from "../2-atoms/Section";
 import { Text } from "../2-atoms/Text";
 import { ContactForm } from "../3-molecules/ContactForm";
 import { Hero } from "../3-molecules/Hero";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { faqs, pageContent, supportOptions } from "./SupportPage.data.tsx";
 
@@ -22,7 +22,7 @@ export const SupportPage = () => {
 
 			{/* Support Options */}
 			<Section>
-				<CardGrid
+				<Grid
 					items={supportOptions.map((opt) => ({
 						id: opt.title,
 						icon: opt.icon,
@@ -70,7 +70,7 @@ export const SupportPage = () => {
 				<Heading variant="section" className="mb-8 text-center">
 					{pageContent.faqSection.title}
 				</Heading>
-				<CardGrid items={faqs} maxColumns={1} />
+				<Grid items={faqs} maxColumns={1} />
 			</Section>
 
 			{/* Contact Form Section */}
@@ -81,7 +81,7 @@ export const SupportPage = () => {
 				<Text variant="lead" className="text-center mb-8 text-muted-foreground">
 					{pageContent.contactSection.description}
 				</Text>
-				<CardGrid
+				<Grid
 					items={[
 						{
 							title: "",

@@ -7,7 +7,7 @@ import { Hero } from "../3-molecules/Hero";
 import { LoadingState } from "../3-molecules/LoadingState";
 import { PersonCard } from "../3-molecules/PersonCard";
 import { ViewToggle } from "../3-molecules/ViewToggle";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 
 export const BrowsePage = () => {
@@ -61,7 +61,7 @@ export const BrowsePage = () => {
 						</Text>
 					</Div>
 
-					<CardGrid
+					<Grid
 						maxColumns={view === "grid" ? 3 : 1}
 						items={data.people.map((person) => {
 							const personData = {

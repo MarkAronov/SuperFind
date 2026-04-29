@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SIZING } from "../1-ions";
 import { Glass } from "../1-ions/Glass";
+import { SIZING } from "../1-ions/sizing";
 import { Button } from "../2-atoms/Button";
 import { Heading } from "../2-atoms/Heading";
 import { Link } from "../2-atoms/Link";

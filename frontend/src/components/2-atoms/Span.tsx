@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { BORDERS, TYPOGRAPHY } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import type { SpanProps, SpanVariant } from "./Span.types";
 
 /**

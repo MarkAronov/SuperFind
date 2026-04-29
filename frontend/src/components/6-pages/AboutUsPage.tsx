@@ -2,7 +2,7 @@ import { Heading } from "../2-atoms/Heading";
 import { Section } from "../2-atoms/Section";
 import { Text } from "../2-atoms/Text";
 import { Hero } from "../3-molecules/Hero";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { capabilities, missionContent } from "./AboutUsPage.data.tsx";
 
@@ -14,7 +14,7 @@ export const AboutPage = () => {
 
 			{/* Mission Section */}
 			<Section>
-				<CardGrid
+				<Grid
 					items={[
 						{
 							title: missionContent.title,
@@ -45,7 +45,7 @@ export const AboutPage = () => {
 			</Section>
 
 			<Section>
-				<CardGrid
+				<Grid
 					items={capabilities}
 					maxColumns={2}
 					gap="lg"

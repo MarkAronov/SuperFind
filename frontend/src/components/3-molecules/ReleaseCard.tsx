@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import {
 	Calendar,
 	ChevronDown,
@@ -10,7 +11,10 @@ import {
 import type React from "react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { BORDERS, SIZING, SPACING, TYPOGRAPHY } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Badge } from "../2-atoms/Badge";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
@@ -19,6 +23,7 @@ import { Link } from "../2-atoms/Link";
 import { List, ListItem } from "../2-atoms/List";
 import { Span } from "../2-atoms/Span";
 import { Text } from "../2-atoms/Text";
+import { MOTION } from "../animations/0-tokens/tokens";
 import { Card, CardContent } from "./Card";
 import type { ReleaseCardProps } from "./ReleaseCard.types";
 
@@ -140,11 +145,6 @@ export const ReleaseCard: React.FC<ReleaseCardProps> = ({
 
 	// Determine if we need a "Read More" button
 	const needsReadMore = changes.length > MAX_CHANGES_COLLAPSED;
-
-	// Get visible changes based on expanded state
-	const visibleChanges = isExpanded
-		? changes
-		: changes.slice(0, MAX_CHANGES_COLLAPSED);
 
 	// Compact mode renders a condensed card for dense panel contexts.
 	if (compact) {
@@ -416,19 +416,19 @@ export const ReleaseCard: React.FC<ReleaseCardProps> = ({
 				</Div>
 
 				{/* Changes List */}
-				<Div
-					className={cn(
-						"relative",
-						needsReadMore && !isExpanded && (compact ? "pb-12" : "pb-16"),
-					)}
-				>
-					<List variant="spaced">
-						{visibleChanges.map((change) => {
+				<Div className="relative">
+					{/* Split changes: always-visible initial items + animated extra items */}
+					{(() => {
+						// First N changes are always in the DOM (no animation)
+						const initialChanges = changes.slice(0, MAX_CHANGES_COLLAPSED);
+						// Extra changes animate in/out with height + fade
+						const extraChanges = changes.slice(MAX_CHANGES_COLLAPSED);
+
+						const renderItem = (change: string) => {
 							const content = parseMarkdownLinks(
 								change,
 								changes.indexOf(change),
 							);
-
 							return (
 								<ListItem variant="bullet" key={`${version}-${change}`}>
 									<GitCommit
@@ -437,56 +437,109 @@ export const ReleaseCard: React.FC<ReleaseCardProps> = ({
 											SIZING.ICON.sm,
 										)}
 									/>
-									<Text
-										variant="muted"
-										className={cn(
-											"flex-1",
-											compact ? "leading-normal" : "leading-relaxed",
-										)}
-									>
+									<Text variant="muted" className="flex-1 leading-relaxed">
 										{content}
 									</Text>
 								</ListItem>
 							);
-						})}
-					</List>
+						};
 
-					{/* Gradient fade with button overlay */}
-					{needsReadMore && !isExpanded && (
-						<Div
-							className="absolute bottom-0 left-0 right-0 h-24 flex items-end justify-center pb-2"
-							style={{
-								background:
-									"linear-gradient(to top, hsl(var(--card)) 0%, hsl(var(--card) / 0.95) 25%, hsl(var(--card) / 0.8) 50%, hsl(var(--card) / 0.4) 75%, transparent 100%)",
-							}}
-						>
-							<Button
-								variant="secondary"
-								size="sm"
-								onClick={() => setIsExpanded(!isExpanded)}
-								className="shadow-sm"
-							>
-								<ChevronDown className={SIZING.ICON.sm} />
-								Show {changes.length - MAX_CHANGES_COLLAPSED} More
-							</Button>
-						</Div>
-					)}
+						return (
+							<>
+								{/* Always-visible items */}
+								<List variant="spaced">{initialChanges.map(renderItem)}</List>
+
+								{/* Gradient overlay when collapsed and more items exist */}
+								<AnimatePresence>
+									{needsReadMore && !isExpanded && (
+										<motion.div
+											key="gradient"
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0 }}
+											transition={MOTION.transition.fast}
+											className="absolute bottom-0 left-0 right-0 h-24 flex items-end justify-center pb-2"
+											style={{
+												// Gradient from card background to transparent
+												background:
+													"linear-gradient(to top, hsl(var(--card)) 0%, hsl(var(--card) / 0.95) 25%, hsl(var(--card) / 0.8) 50%, hsl(var(--card) / 0.4) 75%, transparent 100%)",
+											}}
+										>
+											<Button
+												variant="secondary"
+												size="sm"
+												onClick={() => setIsExpanded(true)}
+												className="shadow-sm"
+											>
+												<ChevronDown className={SIZING.ICON.sm} />
+												Show {extraChanges.length} More
+											</Button>
+										</motion.div>
+									)}
+								</AnimatePresence>
+
+								{/* Extra items — spring height from 0 to auto on expand, spring back on collapse */}
+								<AnimatePresence>
+									{isExpanded && extraChanges.length > 0 && (
+										<motion.div
+											key="extra-changes"
+											initial={{ height: 0, opacity: 0 }}
+											animate={{ height: "auto", opacity: 1 }}
+											exit={{ height: 0, opacity: 0 }}
+											// Spring on height for the bouncy end; fast opacity sync
+											transition={MOTION.expand.transitionSpring}
+											style={{ overflow: "hidden" }}
+										>
+											{/* Stagger container: each item cascades top-to-bottom as it appears */}
+											<motion.div
+												variants={MOTION.stagger.containerFast}
+												initial="hidden"
+												animate="visible"
+												exit="hidden"
+											>
+												<List variant="spaced">
+													{extraChanges.map((change) => (
+														// Each item slides up from its stagger position
+														<motion.div
+															key={`extra-${version}-${change}`}
+															variants={MOTION.stagger.item}
+														>
+															{renderItem(change)}
+														</motion.div>
+													))}
+												</List>
+											</motion.div>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</>
+						);
+					})()}
 				</Div>
 
-				{/* Show Less Button (when expanded) */}
-				{needsReadMore && isExpanded && (
-					<Div className="mt-4 flex justify-center">
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={() => setIsExpanded(!isExpanded)}
-							className="text-primary hover:text-accent"
+				{/* Show Less button animates in after expansion */}
+				<AnimatePresence>
+					{needsReadMore && isExpanded && (
+						<motion.div
+							key="show-less"
+							initial={{ opacity: 0, y: 8 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: 4 }}
+							transition={MOTION.transition.fast}
+							className="mt-4 flex justify-center"
 						>
-							<ChevronUp className={SIZING.ICON.sm} />
-							Show Less
-						</Button>
-					</Div>
-				)}
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => setIsExpanded(false)}
+								className="text-primary"
+							>
+								<ChevronUp className={SIZING.ICON.sm} />
+								Show Less
+							</Button>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</CardContent>
 		</Card>
 	);

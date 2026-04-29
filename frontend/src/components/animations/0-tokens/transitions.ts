@@ -1,8 +1,9 @@
 /**
- * IONS: Design Tokens - Transitions
+ * ANIMATIONS: CSS Transition Tokens
  *
- * Animation timing functions and durations for consistent motion design.
- * Combines durations with easing curves for smooth UI animations.
+ * Migrated from 1-ions/transitions.ts.
+ * Raw CSS transition strings for inline styles and non-Tailwind contexts.
+ * Use these when you need CSS transition values as strings (e.g., style prop, custom CSS-in-JS).
  *
  * Duration Scale:
  * - 75ms: Instant feedback (checkboxes, switches)

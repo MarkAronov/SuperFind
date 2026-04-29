@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { TYPOGRAPHY } from "../1-ions";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import type {
 	HeadingLevel,
 	HeadingProps,

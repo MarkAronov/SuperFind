@@ -1,5 +1,5 @@
 import { Brain, Search, Upload, Zap } from "lucide-react";
-import type { CardGridItem } from "../4-organisms/CardGrid.types";
+import type { GridItem } from "../4-organisms/cards/card.types";
 
 // Call-to-action section content
 export const ctaContent = {
@@ -19,7 +19,7 @@ export const ctaContent = {
 };
 
 // Process steps
-export const steps: CardGridItem[] = [
+export const steps: GridItem[] = [
 	{
 		step: 1,
 		icon: <Upload className="h-6 w-6" />,

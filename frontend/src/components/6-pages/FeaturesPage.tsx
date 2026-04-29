@@ -1,9 +1,9 @@
 import { ArrowRight } from "lucide-react";
-import { SIZING } from "../1-ions";
+import { SIZING } from "../1-ions/sizing";
 import { Section } from "../2-atoms/Section";
 import { CTACard } from "../3-molecules/CTACard";
 import { Hero } from "../3-molecules/Hero";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { features } from "./FeaturesPage.data.tsx";
 
@@ -19,7 +19,7 @@ export const FeaturesPage = () => {
 
 			{/* Features Grid */}
 			<Section>
-				<CardGrid items={features} maxColumns={2} centerIncompleteRows />
+				<Grid items={features} maxColumns={2} centerIncompleteRows />
 			</Section>
 
 			<CTACard

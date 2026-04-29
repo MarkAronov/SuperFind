@@ -4,13 +4,16 @@ import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "../../hooks/useTheme";
-import { SIZING, SPACING, TYPOGRAPHY } from "../1-ions";
 import { Glass } from "../1-ions/Glass";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Link } from "../2-atoms/Link";
 import { Logo } from "../2-atoms/Logo";
 import { Span } from "../2-atoms/Span";
+import { MOTION } from "../animations/0-tokens/tokens.ts";
 import { navigationItems, themeIcons, themeLabels } from "./Header.data.tsx";
 
 export const Header = () => {
@@ -28,22 +31,18 @@ export const Header = () => {
 		const isActive =
 			!item.external && (item.to ?? "").split("#")[0] === location.pathname;
 
-		// Match footer link behavior by using accent hover transitions
-		// and only keeping layout/typography differences per breakpoint.
+		// Match footer link behavior — layout/typography differences per breakpoint only.
+		// hover:text-* and transition-colors removed — the Link atom's MotionTextRipple handles the animation.
 		const className = isMobile
 			? cn(
-					// Colors
+					// Colors (rest state only; hover handled by MotionTextRipple inside Link)
 					isActive ? "text-primary" : "text-muted-foreground",
-					// States
-					"hover:text-accent active:text-accent transition-colors",
 					// Typography
 					TYPOGRAPHY.FONT_WEIGHT.medium,
 				)
 			: cn(
-					// Colors
+					// Colors (rest state only; hover handled by MotionTextRipple inside Link)
 					isActive ? "text-primary" : "text-foreground/90",
-					// States
-					"hover:text-accent active:text-accent transition-colors",
 					// Typography
 					TYPOGRAPHY.FONT_WEIGHT.medium,
 					TYPOGRAPHY.FONT_SIZE.sm_base,
@@ -235,7 +234,7 @@ export const Header = () => {
 							initial={{ opacity: 0, y: -8, scale: 0.97 }}
 							animate={{ opacity: 1, y: 0, scale: 1 }}
 							exit={{ opacity: 0, y: -8, scale: 0.97 }}
-							transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+							transition={MOTION.transition.base}
 							// Float directly below the pill without pushing page content
 							className="absolute top-full left-0 right-0 mt-2 md:hidden"
 						>

@@ -1,9 +1,9 @@
-import type { CardGridItem } from "../4-organisms/CardGrid.types";
+import type { GridItem } from "../4-organisms/cards/card.types";
 
 // Last updated date for display in the Terms of Service page
 export const termsLastUpdated = "February 1, 2026";
 
-export const termsSections: CardGridItem[] = [
+export const termsSections: GridItem[] = [
 	// Section 1 — Scope and acceptance of the agreement
 	{
 		title: "1. Acceptance of Terms",

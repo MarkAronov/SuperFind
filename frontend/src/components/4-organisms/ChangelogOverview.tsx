@@ -18,7 +18,11 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { EXTERNAL_LINKS } from "@/constants/site";
 import { cn } from "@/lib/utils";
-import { BORDERS, CHART_COLORS, SIZING, SPACING, TYPOGRAPHY } from "../1-ions";
+import { BORDERS } from "../1-ions/borders";
+import { CHART_COLORS } from "../1-ions/colors";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
+import { TYPOGRAPHY } from "../1-ions/typography";
 import { Badge } from "../2-atoms/Badge";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";

@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { EXTERNAL_LINKS } from "@/constants/site";
 import { formatRepoSize, formatShortDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { SIZING, SPACING } from "../1-ions";
+import { SIZING } from "../1-ions/sizing";
+import { SPACING } from "../1-ions/spacing";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
@@ -15,7 +16,7 @@ import { Card, CardContent } from "../3-molecules/Card";
 import { PaginationButtons } from "../3-molecules/PaginationButtons";
 import { ReleaseCard } from "../3-molecules/ReleaseCard";
 import { StatCard } from "../3-molecules/StatCard";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { primaryStats, secondaryStats } from "./ProductUpdatesOverview.data";
 import type { ProductUpdatesOverviewProps } from "./ProductUpdatesOverview.types";
 
@@ -162,7 +163,7 @@ export const ProductUpdatesOverview = ({
 					</Div>
 
 					{/* Repository stats grid */}
-					<CardGrid
+					<Grid
 						columns={{ base: 2, md: 3, lg: 6 }}
 						gap="md"
 						stretchCards
@@ -188,7 +189,7 @@ export const ProductUpdatesOverview = ({
 								/>
 							</Div>
 						))}
-					</CardGrid>
+					</Grid>
 
 					{/* Releases panel: 3 releases per page */}
 					{releases.length > 0 && (

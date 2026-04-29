@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
@@ -7,7 +7,7 @@ import { Link } from "../2-atoms/Link";
 import { Section } from "../2-atoms/Section";
 import { Text } from "../2-atoms/Text";
 import { Hero } from "../3-molecules/Hero";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { ctaContent, steps } from "./HowItWorksPage.data.tsx";
 
@@ -19,12 +19,12 @@ export const HowItWorksPage = () => {
 
 			{/* Process Steps */}
 			<Section>
-				<CardGrid items={steps} maxColumns={1} centerIncompleteRows />
+				<Grid items={steps} maxColumns={1} centerIncompleteRows />
 			</Section>
 
 			{/* Call to Action */}
 			<Section>
-				<CardGrid
+				<Grid
 					items={[
 						{
 							title: ctaContent.title,

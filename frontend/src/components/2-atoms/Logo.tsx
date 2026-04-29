@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { SIZING } from "../1-ions";
+import { SIZING } from "../1-ions/sizing";
 import type { LogoProps } from "./Logo.types";
 
 /**

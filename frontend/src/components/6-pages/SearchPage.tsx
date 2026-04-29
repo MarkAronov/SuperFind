@@ -9,7 +9,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useSearch as useSearchAPI } from "@/hooks/useSearch";
 import type { SearchResult } from "@/types/search.types";
-import { SIZING } from "../1-ions";
+import { SIZING } from "../1-ions/sizing";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Link } from "../2-atoms/Link";

@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SIZING } from "../1-ions";
+import { SIZING } from "../1-ions/sizing";
 import { Div } from "../2-atoms/Div";
 import { List, ListItem } from "../2-atoms/List";
 import { Text } from "../2-atoms/Text";

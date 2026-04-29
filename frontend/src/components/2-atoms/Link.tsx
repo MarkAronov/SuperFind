@@ -1,5 +1,7 @@
 import { Link as RouterLink } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { MOTION } from "../animations/0-tokens/tokens";
+import { MotionTextRipple } from "../animations/3-interactive/MotionTextRipple";
 import type { LinkProps, LinkVariant } from "./Link.types";
 
 /**
@@ -15,26 +17,23 @@ import type { LinkProps, LinkVariant } from "./Link.types";
 
 /**
  * Variant styles mapping
- * Each variant provides different visual emphasis:
- * - default: Standard link with hover underline (unless underline={false})
- * - primary: Primary color link for emphasis
- * - muted: Subtle link that brightens on hover (pink accent)
- * - underline: Always underlined for maximum visibility (unless underline={false})
+ * Each variant provides different visual emphasis.
+ * hover:text-* and transition-colors classes are removed — Framer Motion MotionTextRipple
+ * handles the color-change animation with a clipPath ripple from mouse entry direction.
+ * active:text-accent kept as a touch-state fallback (CSS handles tap on mobile).
  */
 const variantClasses: Record<LinkVariant, string> = {
-	// Default link - no underline, color change on hover/active (mobile tap)
-	default: "hover:text-accent active:text-accent transition-colors",
+	// Default link — no underline, color change handled by MotionTextRipple
+	default: "active:text-accent",
 
-	// Primary link - uses primary color, accent on hover/active
-	primary:
-		"text-primary hover:text-accent active:text-accent transition-colors",
+	// Primary link - uses primary color, ripple transitions to accent
+	primary: "text-primary active:text-accent",
 
-	// Muted link - subtle, brightens to pink accent on hover/active
-	muted:
-		"text-muted-foreground hover:text-accent active:text-accent transition-colors",
+	// Muted link - subtle foreground, ripple transitions to accent
+	muted: "text-muted-foreground active:text-accent",
 
-	// Underline link - always visible, pink accent on hover/active
-	underline: "underline hover:text-accent active:text-accent transition-colors",
+	// Underline link - always underlined, ripple transitions to accent
+	underline: "underline active:text-accent",
 };
 
 const Link = ({
@@ -60,6 +59,12 @@ const Link = ({
 	if (external || href) {
 		const children = props.children;
 
+		// Resolve the raw children for MotionTextRipple wrapping
+		const resolvedChildren =
+			typeof children === "function"
+				? children({ isActive: false, isTransitioning: false })
+				: children;
+
 		return (
 			<a
 				href={href}
@@ -69,15 +74,33 @@ const Link = ({
 					rel: "noopener noreferrer",
 				})}
 			>
-				{typeof children === "function"
-					? children({ isActive: false, isTransitioning: false })
-					: children}
+				{/* Wrap with ripple so color change animates from mouse entry direction */}
+				<MotionTextRipple hoverColor={MOTION.hover.link}>
+					{resolvedChildren}
+				</MotionTextRipple>
 			</a>
 		);
 	}
 
 	// Internal links use TanStack Router for SPA navigation
-	return <RouterLink className={combinedClassName} {...props} />;
+	// MotionTextRipple is rendered inside so it works with RouterLink's render prop
+	return (
+		<RouterLink className={combinedClassName} {...props}>
+			{(renderProps) => {
+				// TanStack Router children can be a function (render prop) or static nodes
+				const resolvedChildren =
+					typeof props.children === "function"
+						? props.children(renderProps)
+						: props.children;
+
+				return (
+					<MotionTextRipple hoverColor={MOTION.hover.link}>
+						{resolvedChildren}
+					</MotionTextRipple>
+				);
+			}}
+		</RouterLink>
+	);
 };
 
 export { Link, type LinkProps, type LinkVariant };

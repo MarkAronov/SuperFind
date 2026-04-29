@@ -2,9 +2,13 @@ import {
 	createRootRoute,
 	createRoute,
 	createRouter,
+	Outlet,
 	useLocation,
+	useMatch,
+	useMatches,
 	useNavigate,
 } from "@tanstack/react-router";
+import { AnimatePresence } from "framer-motion";
 import { lazy, useEffect } from "react";
 import { SearchPage } from "./components/6-pages/SearchPage";
 
@@ -71,8 +75,38 @@ const BrowsePage = lazy(() =>
 	})),
 );
 
+/**
+ * RootLayout
+ *
+ * Follows the official TanStack Router + Framer Motion example exactly:
+ * https://tanstack.com/router/latest/docs/framework/react/examples/with-framer-motion
+ *
+ * - useMatches + useMatch to find the next matched route (the page being rendered)
+ * - key={nextMatch.id} on <Outlet> — when the route changes, Outlet gets a new key
+ * - AnimatePresence mode="wait" holds the old Outlet until its exit animation finishes
+ * - The actual motion.div with enter/exit lives inside PageTemplate around <main>
+ */
+const RootLayout = () => {
+	// Get all active matches and the current one (rootRoute)
+	const matches = useMatches();
+	const match = useMatch({ strict: false });
+
+	// nextMatch is the route rendered by <Outlet> at this level (the actual page)
+	const nextMatchIndex = matches.findIndex((d) => d.id === match.id) + 1;
+	const nextMatch = matches[nextMatchIndex];
+
+	return (
+		<AnimatePresence mode="wait">
+			{/* Key on Outlet is the official TanStack Router + Framer Motion pattern.
+			    When the route changes, nextMatch.id changes → Outlet remounts →
+			    AnimatePresence triggers exit on the old Outlet and enter on the new one. */}
+			<Outlet key={nextMatch?.id} />
+		</AnimatePresence>
+	);
+};
+
 // Root route
-const rootRoute = createRootRoute();
+const rootRoute = createRootRoute({ component: RootLayout });
 
 // Define routes
 const RedirectToSearch = () => {

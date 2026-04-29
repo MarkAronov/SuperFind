@@ -1,6 +1,6 @@
 import { Section } from "../2-atoms/Section";
 import { Hero } from "../3-molecules/Hero";
-import { CardGrid } from "../4-organisms/CardGrid";
+import { Grid } from "../4-organisms/Grid";
 import { PageTemplate } from "../5-templates/PageTemplate";
 import { privacySections } from "./PrivacyPage.data.tsx";
 
@@ -16,7 +16,7 @@ export const PrivacyPage = () => {
 
 			{/* Privacy Sections */}
 			<Section>
-				<CardGrid items={privacySections} maxColumns={1} />
+				<Grid items={privacySections} maxColumns={1} />
 			</Section>
 		</PageTemplate>
 	);

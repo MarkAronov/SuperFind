@@ -1,6 +1,6 @@
 import { LayoutGrid, List as ListIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions";
+import { SPACING } from "../1-ions/spacing";
 import { Button } from "../2-atoms/Button";
 import { Div } from "../2-atoms/Div";
 import { Span } from "../2-atoms/Span";

@@ -1,6 +1,6 @@
-import type { SearchResult } from "@/types/search.types";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
+import type { SearchResult } from "@/types/search.types";
 import { SearchResults } from "./SearchResults";
 
 const meta: Meta<typeof SearchResults> = {
@@ -166,7 +166,7 @@ export const WithPagination: Story = {
 			pagination={{
 				currentPage: 1,
 				totalPages: 5,
-				onPageChange: () => void 0,
+				onPageChange: (_: number) => undefined,
 			}}
 		/>
 	),
@@ -213,7 +213,7 @@ export const MiddlePage: Story = {
 			pagination={{
 				currentPage: 5,
 				totalPages: 10,
-				onPageChange: () => void 0,
+				onPageChange: (_: number) => undefined,
 			}}
 		/>
 	),

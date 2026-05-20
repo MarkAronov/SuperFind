@@ -15,8 +15,8 @@
  * ```
  */
 
-import { useReducedMotion } from "@/hooks/animations/useReducedMotion";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/animations/useReducedMotion";
 import { MOTION } from "../0-tokens/tokens";
 import type { ScaleInProps } from "./ScaleIn.types";
 

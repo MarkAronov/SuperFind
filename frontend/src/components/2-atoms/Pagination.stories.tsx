@@ -56,7 +56,7 @@ export const FirstPage: Story = {
 	args: {
 		currentPage: 1,
 		totalPages: 10,
-		onPageChange: () => void 0,
+		onPageChange: (_: number) => undefined,
 	},
 };
 
@@ -67,7 +67,7 @@ export const MiddlePage: Story = {
 	args: {
 		currentPage: 5,
 		totalPages: 10,
-		onPageChange: () => void 0,
+		onPageChange: (_: number) => undefined,
 	},
 };
 
@@ -78,7 +78,7 @@ export const LastPage: Story = {
 	args: {
 		currentPage: 10,
 		totalPages: 10,
-		onPageChange: () => void 0,
+		onPageChange: (_: number) => undefined,
 	},
 };
 
@@ -89,7 +89,7 @@ export const FewPages: Story = {
 	args: {
 		currentPage: 3,
 		totalPages: 5,
-		onPageChange: () => void 0,
+		onPageChange: (_: number) => undefined,
 	},
 };
 
@@ -100,7 +100,7 @@ export const TwoPages: Story = {
 	args: {
 		currentPage: 1,
 		totalPages: 2,
-		onPageChange: () => void 0,
+		onPageChange: (_: number) => undefined,
 	},
 };
 
@@ -115,7 +115,7 @@ export const SinglePage: Story = {
 			<PaginationBar
 				currentPage={1}
 				totalPages={1}
-				onPageChange={() => void 0}
+				onPageChange={(_: number) => undefined}
 			/>
 		</div>
 	),
@@ -128,6 +128,6 @@ export const LargeDatasetNearEnd: Story = {
 	args: {
 		currentPage: 48,
 		totalPages: 50,
-		onPageChange: () => void 0,
+		onPageChange: (_: number) => undefined,
 	},
 };

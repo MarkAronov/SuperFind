@@ -1,7 +1,7 @@
-import { useReducedMotion } from "@/hooks/animations/useReducedMotion";
 import type { Variants } from "framer-motion";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useReducedMotion } from "@/hooks/animations/useReducedMotion";
 // Shared direction type
 import type { SlideDirection } from "../0-tokens/SlideDirection";
 // Internal tokens and hooks

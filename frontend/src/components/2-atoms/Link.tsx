@@ -1,7 +1,7 @@
+import { Link as RouterLink } from "@tanstack/react-router";
 import { MOTION } from "@/animations/0-tokens/tokens";
 import { MotionTextRipple } from "@/animations/3-interactive/MotionTextRipple";
 import { cn } from "@/lib/utils";
-import { Link as RouterLink } from "@tanstack/react-router";
 import type { LinkProps, LinkVariant } from "./Link.types";
 
 /**

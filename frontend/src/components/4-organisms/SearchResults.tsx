@@ -1,6 +1,6 @@
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { PersonSearchResult } from "@/types/search.types";
-import { useEffect, useMemo, useState } from "react";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { PaginationBar } from "../2-atoms/Pagination";

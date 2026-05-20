@@ -1,6 +1,6 @@
-import { useSearch as useSearchAPI } from "@/hooks/useSearch";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useSearch as useSearchAPI } from "@/hooks/useSearch";
 import { Div } from "../2-atoms/Div";
 import { Link } from "../2-atoms/Link";
 import { Text } from "../2-atoms/Text";

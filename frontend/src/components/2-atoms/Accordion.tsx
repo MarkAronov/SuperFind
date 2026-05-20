@@ -1,9 +1,9 @@
-import { MOTION } from "@/animations/0-tokens/tokens";
-import { cn } from "@/lib/utils";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { motion } from "framer-motion";
 import { ChevronDownIcon } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
+import { MOTION } from "@/animations/0-tokens/tokens";
+import { cn } from "@/lib/utils";
 import { useHoverRipple } from "../../hooks/animations/useHoverRipple";
 import type {
 	AccordionContentProps,

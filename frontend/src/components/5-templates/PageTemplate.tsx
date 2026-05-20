@@ -1,7 +1,7 @@
-import { AnimatedRoute } from "@/animations/4-route/AnimatedRoute";
-import { cn } from "@/lib/utils";
 import { useMatches } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { AnimatedRoute } from "@/animations/4-route/AnimatedRoute";
+import { cn } from "@/lib/utils";
 import { LAYOUT } from "../1-ions/layout";
 import { Div } from "../2-atoms/Div";
 import { ScrollArea } from "../2-atoms/ScrollArea";

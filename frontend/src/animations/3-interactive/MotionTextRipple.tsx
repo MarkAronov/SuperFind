@@ -1,7 +1,7 @@
-import { useHoverRipple } from "@/hooks/animations/useHoverRipple";
-import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import type React from "react";
+import { useHoverRipple } from "@/hooks/animations/useHoverRipple";
+import { cn } from "@/lib/utils";
 import { MOTION } from "../0-tokens/tokens";
 
 export type MotionTextRippleProps = {

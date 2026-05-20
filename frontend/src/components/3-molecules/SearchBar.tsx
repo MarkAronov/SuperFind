@@ -1,7 +1,7 @@
-import { ANIMATION } from "@/animations/0-tokens/tailwind";
-import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import { type KeyboardEvent, useEffect, useState } from "react";
+import { ANIMATION } from "@/animations/0-tokens/tailwind";
+import { cn } from "@/lib/utils";
 import { BORDERS } from "../1-ions/borders";
 import { CURSOR } from "../1-ions/cursor";
 import { Glassmorphism as Glass } from "../1-ions/designs/Glassmorphism";

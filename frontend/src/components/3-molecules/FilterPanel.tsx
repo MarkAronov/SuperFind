@@ -1,7 +1,7 @@
-import { MOTION } from "@/animations/0-tokens/tokens";
-import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { MOTION } from "@/animations/0-tokens/tokens";
+import { cn } from "@/lib/utils";
 import { BORDERS } from "../1-ions/borders";
 import { SPACING } from "../1-ions/spacing";
 import { TYPOGRAPHY } from "../1-ions/typography";

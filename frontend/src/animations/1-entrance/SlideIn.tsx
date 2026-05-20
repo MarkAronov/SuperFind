@@ -28,9 +28,9 @@
  * ```
  */
 
-import { useReducedMotion } from "@/hooks/animations/useReducedMotion";
 import type { Variants } from "framer-motion";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/animations/useReducedMotion";
 import type { SlideDirection } from "../0-tokens/SlideDirection";
 import { MOTION } from "../0-tokens/tokens";
 import type { SlideInProps } from "./SlideIn.types";

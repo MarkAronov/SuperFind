@@ -18,12 +18,18 @@ import type { PaginationBarProps } from "./Pagination.types";
  * - Insert ellipsis wherever the gap between adjacent items is > 1
  *
  * Examples:
- *  total=10, current=1  → [1, 2, '...', 10]
- *  total=10, current=5  → [1, '...', 4, 5, 6, '...', 10]
- *  total=10, current=9  → [1, '...', 8, 9, 10]
+ *  total=10, current=1  → [1, 2, 'ellipsis-right', 10]
+ *  total=10, current=5  → [1, 'ellipsis-left', 4, 5, 6, 'ellipsis-right', 10]
+ *  total=10, current=9  → [1, 'ellipsis-left', 8, 9, 10]
  *  total=5,  current=3  → [1, 2, 3, 4, 5] (no ellipsis when total ≤ 7)
+ *
+ * Ellipsis items use stable string IDs ("ellipsis-left" / "ellipsis-right")
+ * so React keys are never based on array index.
  */
-const buildPageRange = (current: number, total: number): (number | "...")[] => {
+const buildPageRange = (
+	current: number,
+	total: number,
+): (number | "ellipsis-left" | "ellipsis-right")[] => {
 	// When pages fit in 7 slots, just return all page numbers sequentially
 	if (total <= 7) {
 		return Array.from({ length: total }, (_, i) => i + 1);
@@ -33,10 +39,10 @@ const buildPageRange = (current: number, total: number): (number | "...")[] => {
 	const windowStart = Math.max(2, current - 1);
 	const windowEnd = Math.min(total - 1, current + 1);
 
-	const range: (number | "...")[] = [1];
+	const range: (number | "ellipsis-left" | "ellipsis-right")[] = [1];
 
 	// Left ellipsis — gap between page 1 and the window start
-	if (windowStart > 2) range.push("...");
+	if (windowStart > 2) range.push("ellipsis-left");
 
 	// Pages in the current window
 	for (let p = windowStart; p <= windowEnd; p++) {
@@ -44,7 +50,7 @@ const buildPageRange = (current: number, total: number): (number | "...")[] => {
 	}
 
 	// Right ellipsis — gap between the window end and last page
-	if (windowEnd < total - 1) range.push("...");
+	if (windowEnd < total - 1) range.push("ellipsis-right");
 
 	range.push(total);
 
@@ -100,14 +106,14 @@ export const PaginationBar = ({
 				</PaginationItem>
 
 				{/* Numbered pages + ellipsis */}
-				{pageRange.map((item, index) =>
-					item === "..." ? (
-						// Ellipsis placeholder — not interactive
-						<PaginationItem key={`ellipsis-${index}`}>
+				{pageRange.map((item) =>
+					typeof item === "string" ? (
+						// Ellipsis placeholder — stable key "ellipsis-left" or "ellipsis-right"
+						<PaginationItem key={item}>
 							<PaginationEllipsis />
 						</PaginationItem>
 					) : (
-						// Clickable page number
+						// Clickable page number — page number itself is a unique key
 						<PaginationItem key={item}>
 							<PaginationLink
 								isActive={item === currentPage}

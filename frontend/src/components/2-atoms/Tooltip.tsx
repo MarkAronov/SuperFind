@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
+import { cn } from "@/lib/utils";
 import { BORDERS } from "../1-ions/borders";
 import { SIZING } from "../1-ions/sizing";
 import { TYPOGRAPHY } from "../1-ions/typography";

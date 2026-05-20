@@ -5,8 +5,8 @@
  * Defines the complete type system for consistent text rendering.
  *
  * Font Family Strategy:
- * - sans: System UI fonts (default, -apple-system fallbacks)
- * - serif: Traditional reading fonts (long-form content)
+ * - sans: Apple's SF Pro stack (apple.com) — -apple-system → SF Pro → Helvetica Neue → Arial
+ * - serif: Editorial stack modeled on Washington Post (Postoni) and NYT (nyt-cheltenham)
  * - mono: Fixed-width code fonts (code blocks, data tables)
  *
  * Font Size Scale (with line heights):
@@ -50,24 +50,27 @@ export const typography = {
 	 * System font fallbacks for consistent cross-platform rendering
 	 */
 	fontFamily: {
-		// Sans-serif: Modern UI fonts (default for most UI)
+		// Sans-serif: Apple's SF Pro stack — mirrors apple.com and Apple developer guidelines
 		sans: [
-			"ui-sans-serif",
-			"system-ui",
-			"sans-serif",
-			"Apple Color Emoji",
-			"Segoe UI Emoji",
-			"Segoe UI Symbol",
-			"Noto Color Emoji",
+			"-apple-system", // SF Pro Text/Display on Safari + WebKit (Apple's own CSS keyword)
+			"BlinkMacSystemFont", // SF Pro on Chrome/Chromium on macOS
+			"SF Pro Display", // Apple's display sans-serif — used on apple.com for headings
+			"SF Pro Text", // Apple's text-optimized variant — optimized for body copy
+			"SF Pro Icons", // Apple's icon companion font
+			"Helvetica Neue", // Apple's pre-SF default — primary non-Apple fallback
+			"Helvetica", // Classic Helvetica — macOS/print fallback
+			"Arial", // Windows cross-platform fallback
+			"sans-serif", // Generic system fallback
 		],
-		// Serif: Traditional reading fonts (long-form content)
+		// Serif: Editorial reading fonts modeled on Washington Post (Postoni) and NYT (nyt-cheltenham)
 		serif: [
-			"ui-serif",
-			"Georgia",
-			"Cambria",
-			"Times New Roman",
-			"Times",
-			"serif",
+			"Postoni", // Washington Post's primary editorial serif
+			"nyt-cheltenham", // New York Times' iconic body text font (Cheltenham variant)
+			"Georgia", // Best screen-optimized serif — primary web-safe fallback
+			"Cambria", // High-quality Windows screen serif
+			"Times New Roman", // Universal fallback
+			"Times", // macOS/iOS fallback
+			"serif", // Generic fallback
 		],
 		// Monospace: Fixed-width code fonts (code blocks, data)
 		mono: [

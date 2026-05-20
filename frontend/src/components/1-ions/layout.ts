@@ -28,14 +28,21 @@ export const LAYOUT = {
 	 * Content max-width tokens
 	 * Constrains content width for optimal readability
 	 */
+	CONTENT_MEDIUM: "max-w-3xl", // 768px  - Focused content (reading, modals)
+	CONTENT_NARROW: "max-w-4xl", // 896px  - Standard content (blog posts, forms)
 	CONTENT_WIDE: "max-w-5xl", // 1024px - Wide content (galleries, dashboards)
-	CONTENT_NARROW: "max-w-4xl", // 896px - Standard content (blog posts, forms)
-	CONTENT_MEDIUM: "max-w-3xl", // 768px - Focused content (reading, modals)
+	CONTENT_WIDER: "max-w-6xl", // 1152px - Extra wide
+	CONTENT_WIDEST: "max-w-7xl", // 1280px - Max width (docs, API)
 
 	/**
 	 * Page structure spacing
 	 * Standard padding and margins for page layout
 	 */
-	PAGE: "px-4 py-8 lg:py-12", // Page padding: 16px horizontal, 32px vertical (48px on lg+)
+	PAGE: "px-4 py-8 lg:py-12", // Page padding: 16px horizontal, 32px → 48px vertical
+	PAGE_PADDING: {
+		responsive: "px-4 sm:px-6 lg:px-8 py-12", // adapts horizontal padding to screen size
+		compact: "px-4 py-8", // less vertical breathing room
+		none: "", // custom layouts handle their own padding
+	},
 	SECTION: "mb-8", // Section spacing: 32px bottom margin between sections
 } as const;

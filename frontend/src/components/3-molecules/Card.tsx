@@ -1,7 +1,7 @@
-import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
+import type { ComponentProps } from "react";
 import { BORDERS } from "../1-ions/borders";
-import { Glass } from "../1-ions/Glass";
+import { Glassmorphism as Glass } from "../1-ions/designs/Glassmorphism";
 import { SHADOWS } from "../1-ions/shadows";
 import { TYPOGRAPHY } from "../1-ions/typography";
 import { Div } from "../2-atoms/Div";

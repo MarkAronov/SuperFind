@@ -1,6 +1,7 @@
+import type * as AvatarPrimitive from "@radix-ui/react-avatar";
 import type * as React from "react";
-import type { Avatar as ShadcnAvatar } from "@/components/ui/avatar";
 
-export interface AvatarProps extends React.ComponentProps<typeof ShadcnAvatar> {
+export interface AvatarProps
+	extends React.ComponentProps<typeof AvatarPrimitive.Root> {
 	variant?: "default" | "nonagon";
 }

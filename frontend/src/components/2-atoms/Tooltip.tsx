@@ -1,13 +1,7 @@
+import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
-import {
-	Tooltip as ShadcnTooltip,
-	type TooltipContent as ShadcnTooltipContent,
-	TooltipProvider as ShadcnTooltipProvider,
-	TooltipTrigger as ShadcnTooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 import { BORDERS } from "../1-ions/borders";
 import { SIZING } from "../1-ions/sizing";
 import { TYPOGRAPHY } from "../1-ions/typography";
@@ -33,7 +27,7 @@ const TooltipProvider = ({
 	delayDuration = 0,
 	...props
 }: React.ComponentProps<typeof TooltipPrimitive.Provider>) => {
-	return <ShadcnTooltipProvider delayDuration={delayDuration} {...props} />;
+	return <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />;
 };
 
 /**
@@ -45,17 +39,17 @@ const Tooltip = ({
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) => {
 	return (
 		<TooltipProvider>
-			<ShadcnTooltip {...props} />
+			<TooltipPrimitive.Root data-slot="tooltip" {...props} />
 		</TooltipProvider>
 	);
 };
 
 /**
  * Tooltip Trigger
- * Re-export of shadcn trigger component
+ * Re-export of Radix trigger primitive
  * Wraps the element that displays tooltip on hover
  */
-const TooltipTrigger = ShadcnTooltipTrigger;
+const TooltipTrigger = TooltipPrimitive.Trigger;
 
 /**
  * Tooltip Content
@@ -78,7 +72,7 @@ const TooltipContent = ({
 	asChild = false,
 	children,
 	...props
-}: React.ComponentProps<typeof ShadcnTooltipContent> & {
+}: React.ComponentProps<typeof TooltipPrimitive.Content> & {
 	variant?: "default" | "badge";
 	asChild?: boolean;
 }) => {

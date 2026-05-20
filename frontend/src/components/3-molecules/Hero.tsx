@@ -1,11 +1,11 @@
+import { FadeIn } from "@/animations/1-entrance/FadeIn";
+import { SlideIn } from "@/animations/1-entrance/SlideIn";
 import { cn } from "@/lib/utils";
 import { SPACING } from "../1-ions/spacing";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { Span } from "../2-atoms/Span";
 import { Text } from "../2-atoms/Text";
-import { FadeIn } from "../animations/1-entrance/FadeIn";
-import { SlideIn } from "../animations/1-entrance/SlideIn";
 import type { HeroProps } from "./Hero.types";
 
 /**

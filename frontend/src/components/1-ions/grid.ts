@@ -80,4 +80,27 @@ export const GRID = {
 		rowDense: "grid-flow-row-dense", // Pack rows, fill gaps (masonry)
 		colDense: "grid-flow-col-dense", // Pack columns, fill gaps (vertical masonry)
 	},
+
+	/**
+	 * Container query column tokens (Tailwind 4 native)
+	 * Responds to the parent container's inline size instead of the viewport.
+	 * Requires a @container ancestor — Grid adds this automatically when containerQuery={true}.
+	 *
+	 * Breakpoints map to container inline size (same pixel scale as viewport breakpoints):
+	 * - @md: container >= 768px  → 2 columns
+	 * - @lg: container >= 1024px → max columns
+	 * - @xl: container >= 1280px → extra columns (7–8 col layouts only)
+	 *
+	 * Use cases: sidebars, modals, cards placed in variable-width containers
+	 */
+	CONTAINER_COLUMNS: {
+		1: "grid-cols-1", // Always 1 col — no breakpoints needed
+		2: "grid-cols-1 @md:grid-cols-2", // 1 col → 2 cols at md
+		3: "grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3", // 1 → 2 → 3 cols
+		4: "grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4", // 1 → 2 → 4 cols
+		5: "grid-cols-1 @md:grid-cols-2 @lg:grid-cols-5", // 1 → 2 → 5 cols
+		6: "grid-cols-1 @md:grid-cols-2 @lg:grid-cols-6", // 1 → 2 → 6 cols
+		7: "grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 @xl:grid-cols-7", // 1 → 2 → 4 → 7 cols
+		8: "grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4 @xl:grid-cols-8", // 1 → 2 → 4 → 8 cols
+	},
 } as const;

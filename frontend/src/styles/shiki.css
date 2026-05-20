@@ -1,0 +1,27 @@
+/* ─── SHIKI SYNTAX HIGHLIGHTING ──────────────────────────────────────────────
+   react-shiki renders a <pre class="shiki ..."> inside .shiki-wrapper.
+   defaultColor="light-dark()" outputs CSS light-dark() inline color values —
+   theme switching is driven by html { color-scheme: light } / html.dark { color-scheme: dark }.
+   ──────────────────────────────────────────────────────────────────────────── */
+@layer base {
+	/* Style the <pre> that react-shiki outputs */
+	.shiki-wrapper pre {
+		/* Preserve whitespace — horizontal scroll handled by parent ScrollArea */
+		white-space: pre;
+		/* p-4 padding, pr-20 (80px) reserves space for the Copy button,
+		   pb-5 clears the horizontal scrollbar thumb */
+		padding: 1rem;
+		padding-right: 5rem;
+		padding-bottom: 1.25rem;
+		/* Fill the scroll viewport width */
+		width: 100%;
+		/* Monospace font stack */
+		font-family:
+			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+			"Courier New", monospace;
+		font-size: 0.875rem;
+		line-height: 1.6;
+		/* Remove Shiki's default border-radius — parent ScrollArea handles it */
+		border-radius: 0;
+	}
+}

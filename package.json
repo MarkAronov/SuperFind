@@ -41,7 +41,9 @@
 		"build:all": "bun run build:backend && bun run build:sdk && bun run build:frontend",
 		"ci-local": "bun run check:all && bun run typecheck:all && bun run test && bun run build:all",
 		"push:full": "cross-env FULL_PRE_PUSH=1 git push",
-		"push:partial": "git commit --allow-empty -m \"chore: partial push [run-partial]\" && git push && git reset --soft HEAD~1"
+		"push:partial": "git commit --allow-empty -m \"chore: partial push [run-partial]\" && git push && git reset --soft HEAD~1",
+		"clean": "git clean -fdxn",
+		"clean:force": "git clean -fdx"
 	},
 	"dependencies": {
 		"@getbrevo/brevo": "^3.0.1",

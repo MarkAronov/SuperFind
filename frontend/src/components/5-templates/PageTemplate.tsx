@@ -1,12 +1,12 @@
+import { AnimatedRoute } from "@/animations/4-route/AnimatedRoute";
+import { cn } from "@/lib/utils";
 import { useMatches } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions/spacing";
+import { LAYOUT } from "../1-ions/layout";
 import { Div } from "../2-atoms/Div";
 import { ScrollArea } from "../2-atoms/ScrollArea";
 import { Footer } from "../4-organisms/Footer";
 import { Header } from "../4-organisms/Header";
-import { AnimatedRoute } from "../animations/4-route/AnimatedRoute";
 import type { PageTemplateProps } from "./PageTemplate.types";
 
 /**
@@ -32,21 +32,19 @@ import type { PageTemplateProps } from "./PageTemplate.types";
  * - Custom: <PageTemplate contained={false}>{customLayout}</PageTemplate>
  */
 
-// Helper to convert path to title
+// Helper: converts a URL path to a human-readable title
+// e.g. "/about-us/team" → "About Us - Team"
 const pathToTitle = (path: string): string => {
 	if (path === "/") return "Search";
 
-	// Remove leading slash and convert kebab-case to Title Case
-	return path
-		.slice(1)
-		.split("/")
-		.map((segment) =>
-			segment
-				.split("-")
-				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-				.join(" "),
-		)
-		.join(" - ");
+	// "about-us" -> "About Us" for example
+	const capitalize = (word: string) =>
+		word
+			.split("-")
+			.map((w) => w[0].toUpperCase() + w.slice(1))
+			.join(" ");
+
+	return path.slice(1).split("/").map(capitalize).join(" - ");
 };
 
 export const PageTemplate = ({
@@ -68,27 +66,16 @@ export const PageTemplate = ({
 		document.title = `SkillVector - ${pageTitle}`;
 	}, [title, currentPath]);
 
-	// Map width variants to Tailwind max-width classes
-	const maxWidthClass =
-		maxWidth === "sm"
-			? "max-w-3xl"
-			: maxWidth === "md"
-				? "max-w-4xl"
-				: maxWidth === "lg"
-					? "max-w-5xl"
-					: maxWidth === "xl"
-						? "max-w-6xl"
-						: maxWidth === "2xl"
-							? "max-w-7xl"
-							: ""; // "full" = no max-width
-
-	// Map padding variants to classes
-	const paddingClass =
-		paddingVariant === "responsive"
-			? `${SPACING.PADDING_X.responsive.sm} py-12`
-			: paddingVariant === "compact"
-				? `${SPACING.PADDING_X.md} ${SPACING.PADDING_Y.xl}`
-				: ""; // "none" = no padding
+	// Resolve layout tokens from ions
+	const maxWidthClass = {
+		sm: LAYOUT.CONTENT_MEDIUM,
+		md: LAYOUT.CONTENT_NARROW,
+		lg: LAYOUT.CONTENT_WIDE,
+		xl: LAYOUT.CONTENT_WIDER,
+		"2xl": LAYOUT.CONTENT_WIDEST,
+		full: "",
+	}[maxWidth];
+	const paddingClass = LAYOUT.PAGE_PADDING[paddingVariant];
 
 	const content = constrain ? (
 		<Div constrain maxWidthClass={constrainMaxWidth}>

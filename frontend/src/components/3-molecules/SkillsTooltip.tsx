@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Glass } from "../1-ions/Glass";
+import { Glassmorphism as Glass } from "../1-ions/designs/Glassmorphism";
 import { SPACING } from "../1-ions/spacing";
 import { TYPOGRAPHY } from "../1-ions/typography";
 import { Badge } from "../2-atoms/Badge";

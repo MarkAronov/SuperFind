@@ -1,14 +1,5 @@
+import type * as React from "react";
 import { createContext, useContext } from "react";
-import {
-	Table as ShadcnTable,
-	TableBody as ShadcnTableBody,
-	TableCaption as ShadcnTableCaption,
-	TableCell as ShadcnTableCell,
-	TableFooter as ShadcnTableFooter,
-	TableHead as ShadcnTableHead,
-	TableHeader as ShadcnTableHeader,
-	TableRow as ShadcnTableRow,
-} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { BORDERS } from "../1-ions/borders";
 import { SPACING } from "../1-ions/spacing";
@@ -190,13 +181,10 @@ const Table = ({
 		className,
 	);
 
-	// Wrapper classes to control overflow behavior
-	// Auto layout: force overflow-visible to allow content wrapping (using !important to override ui/table)
-	// Fixed layout: keep default overflow for horizontal scroll
-	const wrapperClass =
-		layout === "auto"
-			? "[&_[data-slot='table-container']]:!overflow-visible [&_table]:w-full [&_table]:table-auto"
-			: "";
+	// Wrapper overflow — auto layout allows content to wrap (no horizontal scroll),
+	// fixed layout enables horizontal scroll for wide tables
+	const wrapperOverflow =
+		layout === "auto" ? "overflow-visible" : "overflow-x-auto";
 
 	// Provide context to child components
 	const contextValue: TableContextValue = {
@@ -207,10 +195,15 @@ const Table = ({
 
 	return (
 		<TableContext.Provider value={contextValue}>
-			<div className={wrapperClass}>
-				<ShadcnTable className={combinedClassName} {...props}>
+			{/* Outer scroll wrapper — overflow behavior depends on layout mode */}
+			<div className={cn("relative w-full", wrapperOverflow)}>
+				<table
+					data-slot="table"
+					className={cn("w-full caption-bottom text-sm", combinedClassName)}
+					{...props}
+				>
 					{children}
-				</ShadcnTable>
+				</table>
 			</div>
 		</TableContext.Provider>
 	);
@@ -218,27 +211,63 @@ const Table = ({
 
 /**
  * TableHeader - Header section wrapper
- * Re-exports shadcn component without modification
+ * Wraps native <thead> with a bottom border separating headers from body
  */
-const TableHeader = ShadcnTableHeader;
+const TableHeader = ({
+	className,
+	...props
+}: React.ComponentProps<"thead">) => (
+	<thead
+		data-slot="table-header"
+		className={cn("[&_tr]:border-b", className)}
+		{...props}
+	/>
+);
 
 /**
  * TableBody - Body section wrapper
- * Re-exports shadcn component without modification
+ * Wraps native <tbody>; removes border from last row to avoid double borders
  */
-const TableBody = ShadcnTableBody;
+const TableBody = ({ className, ...props }: React.ComponentProps<"tbody">) => (
+	<tbody
+		data-slot="table-body"
+		className={cn("[&_tr:last-child]:border-0", className)}
+		{...props}
+	/>
+);
 
 /**
  * TableFooter - Footer section wrapper
- * Re-exports shadcn component without modification
+ * Wraps native <tfoot> with muted background and top border
  */
-const TableFooter = ShadcnTableFooter;
+const TableFooter = ({
+	className,
+	...props
+}: React.ComponentProps<"tfoot">) => (
+	<tfoot
+		data-slot="table-footer"
+		className={cn(
+			"bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
+			className,
+		)}
+		{...props}
+	/>
+);
 
 /**
  * TableCaption - Table caption/title
- * Re-exports shadcn component without modification
+ * Wraps native <caption>; positioned below the table by default (caption-bottom)
  */
-const TableCaption = ShadcnTableCaption;
+const TableCaption = ({
+	className,
+	...props
+}: React.ComponentProps<"caption">) => (
+	<caption
+		data-slot="table-caption"
+		className={cn("text-muted-foreground mt-4 text-sm", className)}
+		{...props}
+	/>
+);
 
 /**
  * TableRow with interactive hover support
@@ -264,7 +293,7 @@ const TableRow = ({
 	// Combine classes
 	const combinedClassName = cn(interactiveClass, className);
 
-	return <ShadcnTableRow className={combinedClassName} {...props} />;
+	return <tr data-slot="table-row" className={combinedClassName} {...props} />;
 };
 
 /**
@@ -272,10 +301,7 @@ const TableRow = ({
  *
  * Applies size-based padding and font styling from context.
  */
-const TableHead = ({
-	className,
-	...props
-}: React.ComponentProps<typeof ShadcnTableHead>) => {
+const TableHead = ({ className, ...props }: React.ComponentProps<"th">) => {
 	// Get size from context
 	const { size } = useContext(TableContext);
 
@@ -285,7 +311,7 @@ const TableHead = ({
 	// Combine classes
 	const combinedClassName = cn(sizeClass, className);
 
-	return <ShadcnTableHead className={combinedClassName} {...props} />;
+	return <th data-slot="table-head" className={combinedClassName} {...props} />;
 };
 
 /**
@@ -328,7 +354,7 @@ const TableCell = ({
 	// Combine all classes
 	const combinedClassName = cn(sizeClass, variantClass, className);
 
-	return <ShadcnTableCell className={combinedClassName} {...props} />;
+	return <td data-slot="table-cell" className={combinedClassName} {...props} />;
 };
 
 export {

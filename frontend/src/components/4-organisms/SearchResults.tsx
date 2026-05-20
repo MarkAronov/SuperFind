@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { PersonSearchResult } from "@/types/search.types";
+import { useEffect, useMemo, useState } from "react";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
+import { PaginationBar } from "../2-atoms/Pagination";
 import { Text } from "../2-atoms/Text";
 import { Card } from "../3-molecules/Card";
 import { PersonCard } from "../3-molecules/PersonCard";
@@ -10,7 +11,11 @@ import { ViewToggle } from "../3-molecules/ViewToggle";
 import { Grid } from "../4-organisms/Grid";
 import type { SearchResultsProps } from "./SearchResults.types";
 
-export const SearchResults = ({ data, isLoading }: SearchResultsProps) => {
+export const SearchResults = ({
+	data,
+	isLoading,
+	pagination,
+}: SearchResultsProps) => {
 	// Parse people from the data
 	const people = useMemo((): PersonSearchResult[] => {
 		// If we have people array from the backend (flat structure)
@@ -281,6 +286,16 @@ export const SearchResults = ({ data, isLoading }: SearchResultsProps) => {
 					</Card>
 				)}
 			</Div>
+
+			{/* Numbered pagination bar — rendered by the PaginationBar atom */}
+			{pagination && (
+				<PaginationBar
+					currentPage={pagination.currentPage}
+					totalPages={pagination.totalPages}
+					onPageChange={pagination.onPageChange}
+					className="mt-8"
+				/>
+			)}
 		</Div>
 	);
 };

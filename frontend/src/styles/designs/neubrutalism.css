@@ -1,0 +1,85 @@
+/* ─── NEUBRUTALISM COMPONENT - Pure Visual Primitive ─────────────────────────
+   Applies the Neubrutalism (Elevated Brutalism) aesthetic:
+   - Thick solid border — visible structure, not decorative
+   - Hard offset box-shadow (no blur) — physical depth illusion
+   - Flat opaque background — no glass, no transparency
+   - Sharp corners — constructed, deliberate
+
+   Shadow sizes are set via companion classes (neubrutalism-shadow-*).
+   Variant classes control surface color and border/shadow color.
+   Components using Neubrutalism are responsible for:
+   - Padding, layout, typography
+   ──────────────────────────────────────────────────────────────────────── */
+@layer components {
+	/* Base structure — shared by all variants */
+	.neubrutalism {
+		position: relative;
+		border-width: 2px;
+		border-style: solid;
+		/* Sharp corners — neubrutalism aesthetic */
+		border-radius: 0;
+		/* Smooth translation on hover interactions */
+		transition:
+			transform 0.1s ease,
+			box-shadow 0.1s ease;
+	}
+
+	/* ── Variant: default ── white surface, black border + shadow */
+	.neubrutalism-default {
+		background-color: #ffffff;
+		border-color: #000000;
+		/* Shadow color set by shadow-size class below */
+		--neu-shadow-color: #000000;
+	}
+
+	/* ── Variant: accent ── bold yellow, black border + shadow */
+	.neubrutalism-accent {
+		background-color: #fde047; /* yellow-300 equivalent */
+		border-color: #000000;
+		--neu-shadow-color: #000000;
+	}
+
+	/* ── Variant: coral ── warm coral, dark border + shadow */
+	.neubrutalism-coral {
+		background-color: #fb7185; /* rose-400 equivalent */
+		border-color: #1c1917; /* stone-900 */
+		--neu-shadow-color: #1c1917;
+	}
+
+	/* ── Variant: dark ── black surface, white border + shadow */
+	.neubrutalism-dark {
+		background-color: #0a0a0a;
+		border-color: #ffffff;
+		--neu-shadow-color: #ffffff;
+	}
+
+	/* ── Variant: subtle ── white surface, lighter 1px border, smaller shadow */
+	.neubrutalism-subtle {
+		background-color: #fafafa;
+		border-color: #a8a29e; /* stone-400 */
+		border-width: 1px;
+		--neu-shadow-color: #a8a29e;
+	}
+
+	/* ── Shadow sizes — the hard offset signature of neubrutalism ── */
+
+	/* 3px offset — compact elements: badges, tags, small chips */
+	.neubrutalism-shadow-sm {
+		box-shadow: 3px 3px 0px 0px var(--neu-shadow-color, #000000);
+	}
+
+	/* 4px offset — default: standard cards, panels, buttons */
+	.neubrutalism-shadow-md {
+		box-shadow: 4px 4px 0px 0px var(--neu-shadow-color, #000000);
+	}
+
+	/* 6px offset — large cards, prominent sections */
+	.neubrutalism-shadow-lg {
+		box-shadow: 6px 6px 0px 0px var(--neu-shadow-color, #000000);
+	}
+
+	/* 8px offset — hero elements, maximum visual impact */
+	.neubrutalism-shadow-xl {
+		box-shadow: 8px 8px 0px 0px var(--neu-shadow-color, #000000);
+	}
+}

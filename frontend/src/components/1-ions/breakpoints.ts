@@ -45,3 +45,28 @@ export const RESPONSIVE_PREFIXES = {
 	xl: "xl:", // Apply at 1280px and above
 	"2xl": "2xl:", // Apply at 1536px and above
 } as const;
+
+/**
+ * Tailwind 4 container query prefixes (native, no plugin needed)
+ * Used for applying styles based on the parent @container's size, not the viewport.
+ * Requires a @container ancestor element.
+ *
+ * Container breakpoints share the same pixel scale as viewport breakpoints:
+ * - @sm: container >= 640px
+ * - @md: container >= 768px
+ * - @lg: container >= 1024px
+ * - @xl: container >= 1280px
+ * - @2xl: container >= 1536px
+ *
+ * Usage Examples:
+ * - "@md:grid-cols-2" - 2 columns when container >= 768px
+ * - "@lg:hidden" - Hidden when container >= 1024px
+ * - "@sm:flex-row" - Row layout when container >= 640px
+ */
+export const CONTAINER_PREFIXES = {
+	sm: "@sm:", // Container >= 640px
+	md: "@md:", // Container >= 768px
+	lg: "@lg:", // Container >= 1024px
+	xl: "@xl:", // Container >= 1280px
+	"2xl": "@2xl:", // Container >= 1536px
+} as const;

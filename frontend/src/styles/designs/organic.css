@@ -1,0 +1,83 @@
+/* ─── ORGANIC COMPONENT - Pure Visual Primitive ──────────────────────────────
+   Applies the Nature Distilled / Organic aesthetic (2025 trend):
+   - Paper/linen grain texture — surfaces feel physically real
+   - Warm earthy background tones — clay, parchment, linen, sand
+   - No cold digital gloss — anti-glassmorphism
+   - Subtle desaturation — colors feel sun-faded, aged, natural
+
+   Grain intensity is controlled by companion classes (organic-grain-*).
+   CSS custom properties --grain-x, --grain-y are set per-instance in JS
+   to randomize the texture tile offset (prevents visible repetition).
+   ──────────────────────────────────────────────────────────────────────── */
+@layer components {
+	/* Base structure — shared by all variants */
+	.organic {
+		position: relative;
+		/* Soft organic radius — not mechanical */
+		border-radius: var(--radius);
+		/* default: neutral warm off-white surface */
+		background-color: #faf8f5;
+	}
+
+	/* Grain texture pseudo-element (same technique as .glass::before) */
+	.organic::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		/* Paper/grain SVG — denser than glass noise for a tactile feel */
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23grain)' opacity='0.4'/%3E%3C/svg%3E");
+		background-repeat: repeat;
+		/* Size and offset are set per-instance via JS (--grain-x/y/size) */
+		background-size: var(--grain-size, 600px 600px);
+		background-position: var(--grain-x, 0px) var(--grain-y, 0px);
+		opacity: var(--grain-opacity, 0.08);
+		mix-blend-mode: multiply;
+	}
+
+	/* ── Variant backgrounds (earthy warm tones) ── */
+
+	/* paper: cream/parchment — editorial, newspaper-like */
+	.organic-paper {
+		background-color: #f5efd8;
+	}
+
+	/* clay: warm muted tan — earthy, grounded */
+	.organic-clay {
+		background-color: #e8d5b5;
+	}
+
+	/* linen: warm light beige — fabric softness */
+	.organic-linen {
+		background-color: #f0ece2;
+	}
+
+	/* stone: cool gray-beige — mineral, architectural */
+	.organic-stone {
+		background-color: #e8e5df;
+	}
+
+	/* ── Grain intensity levels ── */
+
+	/* light: barely perceptible — clean but warm */
+	.organic-grain-light {
+		--grain-opacity: 0.04;
+	}
+
+	/* medium: visible paper texture — editorial, magazine-like */
+	.organic-grain-medium {
+		--grain-opacity: 0.08;
+	}
+
+	/* heavy: strong grain — analog, handcrafted, artistic */
+	.organic-grain-heavy {
+		--grain-opacity: 0.15;
+	}
+
+	/* Dark mode: warm grain texture inverts to soft-light blend */
+	.dark .organic::before {
+		mix-blend-mode: soft-light;
+		opacity: calc(var(--grain-opacity, 0.08) * 0.7);
+	}
+}

@@ -1,13 +1,7 @@
+import { MOTION } from "@/animations/0-tokens/tokens";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import { BORDERS } from "../1-ions/borders";
 import { SPACING } from "../1-ions/spacing";
 import { TYPOGRAPHY } from "../1-ions/typography";
@@ -17,8 +11,14 @@ import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { Input } from "../2-atoms/Input";
 import { Link } from "../2-atoms/Link";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "../2-atoms/Select";
 import { Text } from "../2-atoms/Text";
-import { MOTION } from "../animations/0-tokens/tokens";
 
 export interface FilterOption {
 	value: string;

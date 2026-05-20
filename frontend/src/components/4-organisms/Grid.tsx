@@ -1,10 +1,10 @@
+import { MOTION } from "@/animations/0-tokens/tokens";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import type React from "react";
 import type { ElementType } from "react";
-import { cn } from "@/lib/utils";
 import { GRID } from "../1-ions/grid";
 import { ListItem } from "../2-atoms/List";
-import { MOTION } from "../animations/0-tokens/tokens";
 import { DescriptionCard } from "./cards/DescriptionCard";
 import type {
 	ColumnCount,
@@ -114,7 +114,7 @@ const columnClassMap: Record<ColumnCount, string> = {
 };
 
 /**
- * Breakpoint prefixes for Tailwind responsive classes
+ * Breakpoint prefixes for Tailwind viewport responsive classes
  * "base" has no prefix (mobile-first default)
  */
 const breakpointPrefixes: Record<keyof ResponsiveColumns, string> = {
@@ -126,17 +126,42 @@ const breakpointPrefixes: Record<keyof ResponsiveColumns, string> = {
 	"2xl": "2xl:",
 };
 
+/**
+ * Container query prefixes for Tailwind 4 @container responsive classes
+ * Responds to the parent container's width instead of the viewport
+ */
+const containerBreakpointPrefixes: Record<keyof ResponsiveColumns, string> = {
+	base: "",
+	sm: "@sm:",
+	md: "@md:",
+	lg: "@lg:",
+	xl: "@xl:",
+	"2xl": "@2xl:",
+};
+
 // ── Helper functions ──────────────────────────────────────────────────────────
 
 /**
  * Build responsive grid column classes from a ResponsiveColumns config.
- * Only generates classes for breakpoints that are explicitly specified.
+ * Switches between viewport prefixes (md:) and container query prefixes (@md:)
+ * based on the containerQuery flag.
  *
  * @example
  * buildResponsiveColumnClasses({ base: 2, md: 3, lg: 6 })
  * // → "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
+ *
+ * buildResponsiveColumnClasses({ base: 2, md: 3, lg: 6 }, true)
+ * // → "grid-cols-2 @md:grid-cols-3 @lg:grid-cols-6"
  */
-const buildResponsiveColumnClasses = (columns: ResponsiveColumns): string => {
+const buildResponsiveColumnClasses = (
+	columns: ResponsiveColumns,
+	containerQuery = false,
+): string => {
+	// Pick viewport or container query prefix set
+	const prefixes = containerQuery
+		? containerBreakpointPrefixes
+		: breakpointPrefixes;
+
 	// Ordered breakpoints from smallest to largest
 	const breakpoints: (keyof ResponsiveColumns)[] = [
 		"base",
@@ -151,7 +176,7 @@ const buildResponsiveColumnClasses = (columns: ResponsiveColumns): string => {
 		.filter((bp) => columns[bp] !== undefined)
 		.map((bp) => {
 			const count = columns[bp] as ColumnCount;
-			const prefix = breakpointPrefixes[bp];
+			const prefix = prefixes[bp];
 			return `${prefix}${columnClassMap[count]}`;
 		})
 		.join(" ");
@@ -160,12 +185,15 @@ const buildResponsiveColumnClasses = (columns: ResponsiveColumns): string => {
 /**
  * Calculate if item is in incomplete last row and should be centered.
  * Returns a Tailwind col-start class string or empty string.
+ * Switches between viewport prefixes (md:) and container query prefixes (@md:)
+ * based on the containerQuery flag.
  */
 const getCenteringClass = (
 	itemIndex: number,
 	totalItems: number,
 	maxColumns: MaxColumns,
 	breakpoint: "base" | "md" | "lg",
+	containerQuery = false,
 ): string => {
 	if (maxColumns === 1) return "";
 
@@ -226,8 +254,11 @@ const getCenteringClass = (
 		return "";
 	}
 
-	// Apply appropriate prefix based on breakpoint
-	const prefix = breakpoint === "md" ? "md:" : breakpoint === "lg" ? "lg:" : "";
+	// Apply appropriate prefix — viewport (md:, lg:) or container query (@md:, @lg:)
+	const mdPrefix = containerQuery ? "@md:" : "md:";
+	const lgPrefix = containerQuery ? "@lg:" : "lg:";
+	const prefix =
+		breakpoint === "md" ? mdPrefix : breakpoint === "lg" ? lgPrefix : "";
 
 	if (colStart === 2) return `${prefix}col-start-2`;
 	if (colStart === 3) return `${prefix}col-start-3`;
@@ -259,6 +290,8 @@ export const Grid = ({
 	as = "div",
 	renderCard,
 	className,
+	// Container query mode — grid responds to its own width, not the viewport
+	containerQuery = false,
 	...props
 }: GridProps) => {
 	// Determine effective max columns for stretch/centering logic.
@@ -273,10 +306,13 @@ export const Grid = ({
 	// For multi-column layouts, default to true (cards should align heights).
 	const shouldStretch = stretchCards ?? effectiveMaxColumns > 1;
 
-	// Build grid column classes — responsive `columns` prop takes priority over `maxColumns`
+	// Build grid column classes — `columns` prop > container query tokens > viewport breakpoints
+	// When both `columns` and `containerQuery` are provided, use container query prefixes (@md:) instead of viewport (md:)
 	const columnClasses = columns
-		? buildResponsiveColumnClasses(columns)
-		: baseColumnClasses[maxColumns];
+		? buildResponsiveColumnClasses(columns, containerQuery)
+		: containerQuery
+			? GRID.CONTAINER_COLUMNS[maxColumns]
+			: baseColumnClasses[maxColumns];
 
 	const gridClasses = cn(
 		"grid",
@@ -302,18 +338,23 @@ export const Grid = ({
 
 	const totalItems = items?.length || 0;
 
+	// When container query mode is active, wrap the grid in @container so it
+	// responds to its own width rather than the viewport — more reusable in any layout context
+	const wrapIfContainer = (content: React.ReactElement): React.ReactElement =>
+		containerQuery ? <div className="@container">{content}</div> : content;
+
 	// Children mode: backward compatibility for manual card rendering
 	if (children) {
-		return (
+		return wrapIfContainer(
 			<Component className={gridClasses} {...props}>
 				{children}
-			</Component>
+			</Component>,
 		);
 	}
 
 	// ul / semantic-list case: plain markup, no stagger animation needed for lists
 	if (as === "ul") {
-		return (
+		return wrapIfContainer(
 			<Component className={gridClasses} {...props}>
 				{items?.map((item, index) => {
 					const key = item.id || item.title || index;
@@ -321,20 +362,37 @@ export const Grid = ({
 					// Calculate centering offsets for incomplete last rows
 					const mdCentering =
 						centerIncompleteRows && maxColumns === 3
-							? getCenteringClass(index, totalItems, maxColumns, "md")
+							? getCenteringClass(
+									index,
+									totalItems,
+									maxColumns,
+									"md",
+									containerQuery,
+								)
 							: "";
 					const smCentering =
 						centerIncompleteRows && maxColumns === 2
-							? getCenteringClass(index, totalItems, 2, "md")
+							? getCenteringClass(index, totalItems, 2, "md", containerQuery)
 							: "";
 					const lgCentering = centerIncompleteRows
-						? getCenteringClass(index, totalItems, maxColumns, "lg")
+						? getCenteringClass(
+								index,
+								totalItems,
+								maxColumns,
+								"lg",
+								containerQuery,
+							)
 						: "";
 
 					const spanClass = cn(
-						maxColumns === 2 && "sm:col-span-2",
+						// Viewport mode: 4 sub-cols trick needs col-span-2 to make 2-col layout.
+						// Container query mode: uses @md:grid-cols-2 (2 direct cols) — no span needed.
+						maxColumns === 2 && !containerQuery && "sm:col-span-2",
 						mdCentering,
-						smCentering && `sm:${smCentering}`,
+						// Viewport mode: smCentering already carries "md:" prefix; wrap with "sm:" for the
+						// sm-breakpoint 4-sub-col grid (existing behavior preserved).
+						// Container query mode: smCentering already carries "@md:" — use directly.
+						containerQuery ? smCentering : smCentering && `sm:${smCentering}`,
 						lgCentering,
 					);
 
@@ -344,7 +402,7 @@ export const Grid = ({
 						</ListItem>
 					);
 				})}
-			</Component>
+			</Component>,
 		);
 	}
 
@@ -370,7 +428,7 @@ export const Grid = ({
 	>;
 	const motionSafeProps = props as MotionSafeDivProps;
 
-	return (
+	return wrapIfContainer(
 		<motion.div
 			className={gridClasses}
 			// Trigger once when at least 5% of the grid is in view
@@ -387,21 +445,38 @@ export const Grid = ({
 				// Calculate centering for incomplete rows (only if enabled)
 				const mdCentering =
 					centerIncompleteRows && maxColumns === 3
-						? getCenteringClass(index, totalItems, maxColumns, "md")
+						? getCenteringClass(
+								index,
+								totalItems,
+								maxColumns,
+								"md",
+								containerQuery,
+							)
 						: "";
 				const smCentering =
 					centerIncompleteRows && maxColumns === 2
-						? getCenteringClass(index, totalItems, 2, "md")
+						? getCenteringClass(index, totalItems, 2, "md", containerQuery)
 						: "";
 				const lgCentering = centerIncompleteRows
-					? getCenteringClass(index, totalItems, maxColumns, "lg")
+					? getCenteringClass(
+							index,
+							totalItems,
+							maxColumns,
+							"lg",
+							containerQuery,
+						)
 					: "";
 
 				// Column span + centering for incomplete last rows
 				const spanClass = cn(
-					maxColumns === 2 && "sm:col-span-2",
+					// Viewport mode: 4 sub-cols trick needs col-span-2 to make 2-col layout.
+					// Container query mode: uses @md:grid-cols-2 (2 direct cols) — no span needed.
+					maxColumns === 2 && !containerQuery && "sm:col-span-2",
 					mdCentering,
-					smCentering && `sm:${smCentering}`,
+					// Viewport mode: smCentering already carries "md:" prefix; wrap with "sm:" for the
+					// sm-breakpoint 4-sub-col grid (existing behavior preserved).
+					// Container query mode: smCentering already carries "@md:" — use directly.
+					containerQuery ? smCentering : smCentering && `sm:${smCentering}`,
 					lgCentering,
 				);
 
@@ -416,7 +491,7 @@ export const Grid = ({
 					</motion.div>
 				);
 			})}
-		</motion.div>
+		</motion.div>,
 	);
 };
 

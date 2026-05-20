@@ -101,6 +101,14 @@ export interface GridBaseProps {
 
 	/** Enforce default card wrapper and baseline typography for custom content */
 	enforceCustomContent?: boolean;
+
+	/**
+	 * Use CSS container queries instead of viewport breakpoints for column responsiveness.
+	 * When true, the grid responds to its own width rather than the viewport width.
+	 * Useful for grids placed inside sidebars, modals, or any variable-width containers.
+	 * Default: false (viewport breakpoints)
+	 */
+	containerQuery?: boolean;
 }
 
 export type GridProps = GridBaseProps &

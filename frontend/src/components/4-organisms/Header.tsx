@@ -1,10 +1,11 @@
+import { MOTION } from "@/animations/0-tokens/tokens";
+import { cn } from "@/lib/utils";
 import { Link as RouterLink, useLocation } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { useTheme } from "../../hooks/useTheme";
-import { Glass } from "../1-ions/Glass";
+import { Glassmorphism as Glass } from "../1-ions/designs/Glassmorphism";
 import { SIZING } from "../1-ions/sizing";
 import { SPACING } from "../1-ions/spacing";
 import { TYPOGRAPHY } from "../1-ions/typography";
@@ -13,7 +14,6 @@ import { Div } from "../2-atoms/Div";
 import { Link } from "../2-atoms/Link";
 import { Logo } from "../2-atoms/Logo";
 import { Span } from "../2-atoms/Span";
-import { MOTION } from "../animations/0-tokens/tokens.ts";
 import { navigationItems, themeIcons, themeLabels } from "./Header.data.tsx";
 
 export const Header = () => {

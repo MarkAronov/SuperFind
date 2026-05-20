@@ -1,9 +1,4 @@
 import type { ComponentProps } from "react";
-import type {
-	Table as ShadcnTable,
-	TableCell as ShadcnTableCell,
-	TableRow as ShadcnTableRow,
-} from "@/components/ui/table";
 
 /**
  * Table Component Props
@@ -18,7 +13,7 @@ import type {
  * - Column borders for clearer separation
  */
 
-export interface TableProps extends ComponentProps<typeof ShadcnTable> {
+export interface TableProps extends ComponentProps<"table"> {
 	/**
 	 * Size of the table - affects padding and font size
 	 * - sm: Compact (8px padding, 12px font)
@@ -59,7 +54,7 @@ export interface TableProps extends ComponentProps<typeof ShadcnTable> {
 	showColumnBorder?: boolean;
 }
 
-export interface TableCellProps extends ComponentProps<typeof ShadcnTableCell> {
+export interface TableCellProps extends ComponentProps<"td"> {
 	/**
 	 * Cell content variant
 	 * - default: Standard text
@@ -69,7 +64,7 @@ export interface TableCellProps extends ComponentProps<typeof ShadcnTableCell> {
 	variant?: "default" | "code" | "muted";
 }
 
-export interface TableRowProps extends ComponentProps<typeof ShadcnTableRow> {
+export interface TableRowProps extends ComponentProps<"tr"> {
 	/**
 	 * Make this row interactive (hover effect)
 	 * Inherits from Table's interactive prop if not specified

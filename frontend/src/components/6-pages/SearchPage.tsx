@@ -1,26 +1,27 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import {
-	Briefcase,
-	MapPin,
-	Search,
-	SlidersHorizontal,
-	Star,
-} from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
 import { useSearch as useSearchAPI } from "@/hooks/useSearch";
-import type { SearchResult } from "@/types/search.types";
-import { SIZING } from "../1-ions/sizing";
-import { Button } from "../2-atoms/Button";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { Div } from "../2-atoms/Div";
 import { Link } from "../2-atoms/Link";
 import { Text } from "../2-atoms/Text";
-import { Card } from "../3-molecules/Card";
+import { Card, CardContent } from "../3-molecules/Card";
 import { ErrorMessage } from "../3-molecules/ErrorMessage";
 import { FilterPanel } from "../3-molecules/FilterPanel";
 import { Hero } from "../3-molecules/Hero";
 import { SearchBar } from "../3-molecules/SearchBar";
 import { SearchResults } from "../4-organisms/SearchResults";
 import { PageTemplate } from "../5-templates/PageTemplate";
+import {
+	experienceLabels,
+	filterPanelFilters,
+	filterSearchIcon,
+	heroContent,
+	hintContent,
+	regionMap,
+	roleMap,
+	searchBarPlaceholder,
+	sortLabels,
+} from "./SearchPage.data.tsx";
 
 type SearchParams = {
 	q?: string;
@@ -45,11 +46,11 @@ export const SearchPage = () => {
 	const navigate = useNavigate();
 	const searchParams = useSearch({ from: "/search" });
 	const query = searchParams.q || "";
-	const [offset, setOffset] = useState(0);
-	const [accumulatedData, setAccumulatedData] = useState<SearchResult | null>(
-		null,
-	);
+	const [currentPage, setCurrentPage] = useState(1);
 	const limit = 10;
+
+	// Compute offset from page number — drives which page the API fetches
+	const offset = (currentPage - 1) * limit;
 
 	// Filter states (synced with URL)
 	const filterSearch = (searchParams as SearchParams).filter || "";
@@ -58,47 +59,27 @@ export const SearchPage = () => {
 	const roleFilter = (searchParams as SearchParams).role || "all";
 	const sortBy = (searchParams as SearchParams).sort || "relevance";
 
-	// Fetch data from API
+	// Fetch data from API — offset changes automatically when currentPage changes
 	const { data, isLoading, error, refetch } = useSearchAPI(query, {
 		enabled: true,
 		limit,
 		offset,
 	});
 
-	// Accumulate results when new data arrives
+	// Reset to page 1 whenever the search query changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: query change should reset page
 	useEffect(() => {
-		if (data) {
-			if (offset === 0) {
-				// First page - replace all data
-				setAccumulatedData(data);
-			} else {
-				// Subsequent pages - append to existing data
-				setAccumulatedData((prev) => {
-					if (!prev) return data;
-					return {
-						...data,
-						people: [...(prev.people || []), ...(data.people || [])],
-					};
-				});
-			}
-		}
-	}, [data, offset]);
-
-	// Reset accumulated data when query changes
-	// biome-ignore lint/correctness/useExhaustiveDependencies: query change should reset state
-	useEffect(() => {
-		setOffset(0);
-		setAccumulatedData(null);
+		setCurrentPage(1);
 	}, [query]);
 
-	// Apply client-side filtering and sorting
-	const filteredData = useMemo((): SearchResult | null => {
-		if (!accumulatedData) return null;
-		if (!accumulatedData.people) {
-			return { ...accumulatedData, people: [] };
+	// Apply client-side filtering and sorting to the current page's results
+	const filteredData = useMemo(() => {
+		if (!data) return null;
+		if (!data.people) {
+			return { ...data, people: [] };
 		}
 
-		let filtered = [...accumulatedData.people];
+		let filtered = [...data.people];
 
 		// Apply filter search
 		if (filterSearch.trim()) {
@@ -143,7 +124,7 @@ export const SearchPage = () => {
 			});
 		}
 
-		// Apply region filter
+		// Apply region filter — keyword list lives in SearchPage.data.tsx
 		if (regionFilter !== "all") {
 			filtered = filtered.filter((person) => {
 				// Combine all location-related fields so city-only or country-only records match correctly
@@ -151,152 +132,12 @@ export const SearchPage = () => {
 					.filter(Boolean)
 					.join(" ")
 					.toLowerCase();
-
-				const regionMap: Record<string, string[]> = {
-					"north-america": [
-						"usa",
-						"canada",
-						"mexico",
-						"united states",
-						"u.s.",
-						"u.s.a",
-						"america",
-						// US major cities — many records only store the city
-						"new york",
-						"california",
-						"texas",
-						"seattle",
-						"chicago",
-						"san francisco",
-						"los angeles",
-						"boston",
-						"austin",
-						// Canadian cities
-						"toronto",
-						"vancouver",
-						"montreal",
-					],
-					europe: [
-						"uk",
-						"united kingdom",
-						"england",
-						"germany",
-						"france",
-						"spain",
-						"italy",
-						"poland",
-						"netherlands",
-						"europe",
-						"sweden",
-						"norway",
-						"denmark",
-						"finland",
-						"switzerland",
-						"austria",
-						"belgium",
-						"portugal",
-						"ireland",
-						"czech",
-						"greece",
-						"romania",
-						"hungary",
-						"ukraine",
-						"russia",
-						"turkey",
-						// Major EU cities
-						"london",
-						"berlin",
-						"paris",
-						"amsterdam",
-						"madrid",
-						"rome",
-						"warsaw",
-						"stockholm",
-					],
-					asia: [
-						"india",
-						"china",
-						"japan",
-						"korea",
-						"singapore",
-						"asia",
-						"vietnam",
-						"thailand",
-						"indonesia",
-						"philippines",
-						"malaysia",
-						"taiwan",
-						"hong kong",
-						"bangladesh",
-						"pakistan",
-						"sri lanka",
-						// Major Asian cities
-						"mumbai",
-						"delhi",
-						"bangalore",
-						"hyderabad",
-						"chennai",
-						"beijing",
-						"tokyo",
-						"seoul",
-						"shanghai",
-						"shenzhen",
-					],
-					"south-america": [
-						"brazil",
-						"argentina",
-						"chile",
-						"colombia",
-						"peru",
-						"venezuela",
-						"ecuador",
-						"uruguay",
-						"bolivia",
-						"south america",
-						// Major SA cities
-						"sao paulo",
-						"buenos aires",
-						"bogota",
-						"lima",
-					],
-					africa: [
-						"south africa",
-						"egypt",
-						"nigeria",
-						"kenya",
-						"africa",
-						"ethiopia",
-						"ghana",
-						"tanzania",
-						"morocco",
-						"algeria",
-						"mozambique",
-						// Major African cities
-						"johannesburg",
-						"cairo",
-						"lagos",
-						"nairobi",
-						"cape town",
-					],
-					oceania: [
-						"australia",
-						"new zealand",
-						"oceania",
-						"pacific",
-						// Major Oceania cities
-						"sydney",
-						"melbourne",
-						"brisbane",
-						"perth",
-						"auckland",
-					],
-				};
 				const keywords = regionMap[regionFilter] || [];
 				return keywords.some((k) => locationStr.includes(k));
 			});
 		}
 
-		// Apply role filter
+		// Apply role filter — keyword list lives in SearchPage.data.tsx
 		if (roleFilter !== "all") {
 			filtered = filtered.filter((person) => {
 				// Search role and description for broader coverage
@@ -304,103 +145,6 @@ export const SearchPage = () => {
 					.filter(Boolean)
 					.join(" ")
 					.toLowerCase();
-				const roleMap: Record<string, string[]> = {
-					engineering: [
-						"engineer",
-						"developer",
-						"programmer",
-						"software",
-						"frontend",
-						"front-end",
-						"front end",
-						"backend",
-						"back-end",
-						"back end",
-						"fullstack",
-						"full-stack",
-						"full stack",
-						"devops",
-						"dev ops",
-						"sre",
-						"infrastructure",
-						"platform",
-						"architect",
-						"mobile",
-						"android",
-						"ios",
-						"cloud",
-						"embedded",
-						"systems",
-						"web developer",
-					],
-					design: [
-						"designer",
-						"ux",
-						"ui",
-						"ux/ui",
-						"ui/ux",
-						"graphic",
-						"visual",
-						"creative",
-						"interaction",
-						"product designer",
-					],
-					product: [
-						"product manager",
-						"product owner",
-						"pm",
-						"scrum master",
-						"agile coach",
-						// Avoid matching "product engineer" etc — keep short tokens last
-						"product lead",
-					],
-					data: [
-						"data scientist",
-						"data analyst",
-						"data engineer",
-						"analytics",
-						"machine learning",
-						"ml engineer",
-						"deep learning",
-						"artificial intelligence",
-						"ai engineer",
-						"researcher",
-						"bi analyst",
-						"business intelligence",
-						"statistician",
-					],
-					management: [
-						"manager",
-						"director",
-						"team lead",
-						"lead",
-						"cto",
-						"ceo",
-						"coo",
-						"vp",
-						"vice president",
-						"head of",
-						"principal",
-						"chief",
-					],
-					marketing: [
-						"marketing",
-						"growth",
-						"content",
-						"copywriter",
-						"seo",
-						"brand",
-						"communications",
-						"social media",
-					],
-					sales: [
-						"sales",
-						"account executive",
-						"account manager",
-						"business development",
-						"revenue",
-					],
-				};
 				const keywords = roleMap[roleFilter] || [];
 				return keywords.some((k) => roleText.includes(k));
 			});
@@ -429,17 +173,10 @@ export const SearchPage = () => {
 		});
 
 		return {
-			...accumulatedData,
+			...data,
 			people: filtered,
 		};
-	}, [
-		accumulatedData,
-		filterSearch,
-		experienceFilter,
-		regionFilter,
-		roleFilter,
-		sortBy,
-	]);
+	}, [data, filterSearch, experienceFilter, regionFilter, roleFilter, sortBy]);
 
 	// Calculate active filters
 	const activeFilters = useMemo(() => {
@@ -452,18 +189,12 @@ export const SearchPage = () => {
 				label: `"${filterSearch}"`,
 			});
 		if (experienceFilter !== "all") {
-			const labels = {
-				entry: "Entry Level",
-				junior: "Junior",
-				mid: "Mid-Level",
-				senior: "Senior",
-				expert: "Expert",
-			};
 			filters.push({
 				id: "experience",
 				type: "experience",
 				value: experienceFilter,
-				label: labels[experienceFilter as keyof typeof labels],
+				// Label comes from the shared map in SearchPage.data.tsx
+				label: experienceLabels[experienceFilter],
 			});
 		}
 		if (regionFilter !== "all")
@@ -483,25 +214,20 @@ export const SearchPage = () => {
 				label: roleFilter.charAt(0).toUpperCase() + roleFilter.slice(1),
 			});
 		if (sortBy !== "relevance") {
-			const labels = {
-				"experience-high": "Experience ↓",
-				"experience-low": "Experience ↑",
-				"name-asc": "Name A-Z",
-				"name-desc": "Name Z-A",
-			};
 			filters.push({
 				id: "sort",
 				type: "sort",
 				value: sortBy,
-				label: labels[sortBy as keyof typeof labels],
+				// Label comes from the shared map in SearchPage.data.tsx
+				label: sortLabels[sortBy],
 			});
 		}
 		return filters;
 	}, [filterSearch, experienceFilter, regionFilter, roleFilter, sortBy]);
 
 	const handleSearch = (newQuery: string, forceRefetch?: boolean) => {
-		setOffset(0);
-		setAccumulatedData(null);
+		// Reset to first page on every new search
+		setCurrentPage(1);
 		if (forceRefetch && newQuery === query) {
 			refetch();
 		} else {
@@ -509,12 +235,6 @@ export const SearchPage = () => {
 				to: "/search",
 				search: newQuery.trim() ? { q: newQuery } : {},
 			});
-		}
-	};
-
-	const handleLoadMore = () => {
-		if (accumulatedData?.hasMore) {
-			setOffset((prev) => prev + limit);
 		}
 	};
 
@@ -552,15 +272,15 @@ export const SearchPage = () => {
 		<PageTemplate title="Search">
 			{/* Hero Section */}
 			<Hero
-				title="Find the "
-				brand="Perfect Talent"
-				subtitle="Semantic search powered by AI. Search by skills, experience, location, and more."
+				title={heroContent.title}
+				brand={heroContent.brand}
+				subtitle={heroContent.subtitle}
 			/>
 
 			{/* Search Bar */}
 			<SearchBar
 				onSearch={handleSearch}
-				placeholder="Search for people... (e.g., 'Python developers', 'DevOps from Europe')"
+				placeholder={searchBarPlaceholder}
 				isLoading={isLoading}
 				initialValue={query}
 			/>
@@ -569,9 +289,9 @@ export const SearchPage = () => {
 			{error && <ErrorMessage message={error.message} className="mt-4" />}
 
 			{/* Filter Panel - Only show when we have search results */}
-			{accumulatedData?.people && accumulatedData.people.length > 0 && (
-				<Div className="mt-6">
-					<Card>
+			{data?.people && data.people.length > 0 && (
+				<Card className="mt-6 overflow-hidden">
+					<CardContent className="p-0">
 						<FilterPanel
 							variant="compact"
 							search={{
@@ -583,64 +303,10 @@ export const SearchPage = () => {
 										replace: true,
 									}),
 								placeholder: "Filter by name, role, skills...",
-								icon: <Search className={SIZING.ICON.md} />,
+								icon: filterSearchIcon,
 							}}
-							filters={[
-								{
-									label: "Experience",
-									value: "experience",
-									icon: <Briefcase className={SIZING.ICON.sm} />,
-									options: [
-										{ value: "all", label: "All Levels" },
-										{ value: "entry", label: "Entry (0-2 years)" },
-										{ value: "junior", label: "Junior (2-5 years)" },
-										{ value: "mid", label: "Mid (5-10 years)" },
-										{ value: "senior", label: "Senior (10-15 years)" },
-										{ value: "expert", label: "Expert (15+ years)" },
-									],
-								},
-								{
-									label: "Region",
-									value: "region",
-									icon: <MapPin className={SIZING.ICON.sm} />,
-									options: [
-										{ value: "all", label: "All Regions" },
-										{ value: "north-america", label: "North America" },
-										{ value: "europe", label: "Europe" },
-										{ value: "asia", label: "Asia" },
-										{ value: "south-america", label: "South America" },
-										{ value: "africa", label: "Africa" },
-										{ value: "oceania", label: "Oceania" },
-									],
-								},
-								{
-									label: "Role",
-									value: "role",
-									icon: <Star className={SIZING.ICON.sm} />,
-									options: [
-										{ value: "all", label: "All Roles" },
-										{ value: "engineering", label: "Engineering" },
-										{ value: "design", label: "Design" },
-										{ value: "product", label: "Product" },
-										{ value: "data", label: "Data & Analytics" },
-										{ value: "management", label: "Management" },
-										{ value: "marketing", label: "Marketing" },
-										{ value: "sales", label: "Sales" },
-									],
-								},
-								{
-									label: "Sort",
-									value: "sort",
-									icon: <SlidersHorizontal className={SIZING.ICON.sm} />,
-									options: [
-										{ value: "relevance", label: "Relevance" },
-										{ value: "experience-high", label: "Experience ↓" },
-										{ value: "experience-low", label: "Experience ↑" },
-										{ value: "name-asc", label: "Name A-Z" },
-										{ value: "name-desc", label: "Name Z-A" },
-									],
-								},
-							]}
+							// Filter definitions (options + icons) come from SearchPage.data.tsx
+							filters={filterPanelFilters}
 							filterValues={{
 								experience: experienceFilter,
 								region: regionFilter,
@@ -669,53 +335,38 @@ export const SearchPage = () => {
 							onClearAll={clearAllFilters}
 							resultsCount={filteredData?.people?.length || 0}
 							totalCount={
-								filteredData?.people?.length !== accumulatedData?.people?.length
-									? accumulatedData?.people?.length
+								filteredData?.people?.length !== data?.people?.length
+									? data?.people?.length
 									: undefined
 							}
 						/>
-					</Card>
-				</Div>
+					</CardContent>
+				</Card>
 			)}
 
-			{/* Search Results - Use filtered data */}
+			{/* Search Results — includes numbered pagination bar */}
 			{filteredData && (
-				<SearchResults data={filteredData} isLoading={isLoading} />
+				<SearchResults
+					data={filteredData}
+					isLoading={isLoading}
+					pagination={{
+						currentPage,
+						// Calculate total pages from API's total count + page size
+						totalPages: Math.max(1, Math.ceil((data?.total ?? 0) / limit)),
+						onPageChange: setCurrentPage,
+					}}
+				/>
 			)}
 
-			{/* Load More Button */}
-			{accumulatedData?.hasMore && (
-				<Div variant="center" className="mt-8">
-					<Button type="button" onClick={handleLoadMore} disabled={isLoading}>
-						{isLoading ? "Loading..." : "Load More Results"}
-					</Button>
-				</Div>
-			)}
-
-			{/* Pagination Info */}
-			{accumulatedData?.people && accumulatedData.people.length > 0 && (
-				<Div variant="center" className="mt-4">
-					<Text variant="small">
-						Loaded {accumulatedData.people.length} of{" "}
-						{accumulatedData.total || accumulatedData.people.length} total
-						results
-						{filteredData?.people &&
-							filteredData.people.length !== accumulatedData.people.length && (
-								<> ({filteredData.people.length} after filtering)</>
-							)}
-					</Text>
-				</Div>
-			)}
-
-			{/* Hint for browse all*/}
+			{/* Hint for browse all — content from SearchPage.data.tsx */}
 			{!query && (
 				<Div variant="center" className="mt-8">
 					<Text variant="caption">
-						Tip: Visit{" "}
-						<Link to="/people" variant="underline">
-							/people
+						{hintContent.text}{" "}
+						<Link to={hintContent.linkTo} variant="underline">
+							{hintContent.linkLabel}
 						</Link>{" "}
-						to see everyone
+						{hintContent.suffix}
 					</Text>
 				</Div>
 			)}

@@ -1,0 +1,20 @@
+/* ============================================
+   CUSTOM VARIANTS
+   ============================================
+   Tailwind v4 custom variant definitions used throughout the design system.
+*/
+
+/* Dark mode: targets elements that are descendants of .dark */
+@custom-variant dark (&:is(.dark *));
+
+/* Override the built-in hover variant so it only triggers on real pointer
+   devices (mouse/trackpad). On touch screens `hover: none` is reported,
+   so touch taps will never leave a sticky hover state behind.
+   Block form is required for nested @media + selector in Tailwind v4. */
+@custom-variant hover {
+	@media (hover: hover) {
+		&:hover {
+			@slot;
+		}
+	}
+}

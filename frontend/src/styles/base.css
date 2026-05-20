@@ -1,0 +1,75 @@
+/* ============================================
+   BASE LAYER — Global Element Defaults
+   ============================================
+   Foundational styles applied to bare HTML elements.
+   Covers: reset defaults, color-scheme, background gradient, typography weights.
+*/
+@layer base {
+	* {
+		border-color: var(--color-border);
+		outline-color: oklch(from var(--color-ring) l c h / 0.5);
+	}
+
+	html {
+		/* Ensure color-scheme is set for native browser elements */
+		color-scheme: light;
+	}
+
+	html.dark {
+		color-scheme: dark;
+	}
+
+	body {
+		color: var(--color-foreground);
+		font-family: var(--font-sans);
+		font-weight: 300; /* Light as default */
+		letter-spacing: 0.01em;
+		/* Solid base color for gradient overlay */
+		background-color: oklch(1 0 0); /* Pure white for light mode */
+		/* Brand gradient: Indigo → Violet/Pink blend → Violet */
+		background-image: linear-gradient(
+			135deg,
+			oklch(0.74 0.25 264 / 0.75) 0%,
+			oklch(0.94 0.18 280 / 0.55) 50%,
+			oklch(0.77 0.26 292 / 0.75) 100%
+		);
+		background-repeat: no-repeat;
+		background-size: cover;
+		min-height: 100vh;
+		background-attachment: fixed;
+		/* Only transition background-color, not gradient (gradient transitions look grey) */
+		transition: background-color 0.2s ease;
+	}
+
+	/* Typography weights for Outfit */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: 400; /* Regular for headings */
+	}
+
+	strong,
+	b {
+		font-weight: 500; /* Medium for bold text */
+	}
+
+	button,
+	[type="button"],
+	[type="submit"] {
+		font-weight: 400; /* Regular for buttons - readable */
+	}
+
+	/* Dark mode background gradient */
+	.dark body {
+		background-color: oklch(0.13 0.02 270); /* Solid dark base */
+		background-image: linear-gradient(
+			135deg,
+			oklch(0.18 0.1 264 / 0.95) 0%,
+			oklch(0.15 0.08 280 / 0.9) 50%,
+			oklch(0.18 0.1 292 / 0.95) 100%
+		);
+	}
+}

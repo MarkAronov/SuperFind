@@ -1,3 +1,5 @@
+import { MOTION } from "@/animations/0-tokens/tokens";
+import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import {
@@ -6,10 +8,7 @@ import {
 	type TargetAndTransition,
 } from "framer-motion";
 import type * as React from "react";
-
-import { cn } from "@/lib/utils";
 import { useHoverRipple } from "../../hooks/animations/useHoverRipple";
-import { MOTION } from "../animations/0-tokens/tokens";
 
 /**
  * Button Component

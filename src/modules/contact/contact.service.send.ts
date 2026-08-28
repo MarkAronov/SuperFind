@@ -1,20 +1,7 @@
-import {
-	TransactionalEmailsApi,
-	TransactionalEmailsApiApiKeys,
-} from "@getbrevo/brevo";
+import { BrevoClient, BrevoError } from "@getbrevo/brevo";
 import { z } from "zod";
 
-// Define error type for Brevo API errors
-interface BrevoApiError {
-	message: string;
-	status?: number;
-	response?: {
-		data?: unknown;
-	};
-}
-
 // Initialize Brevo with API key
-const apiInstance = new TransactionalEmailsApi();
 const apiKey = process.env.BREVO_API_KEY;
 if (!apiKey) {
 	// biome-ignore lint/suspicious/noConsole: Configuration error needs direct output
@@ -22,8 +9,8 @@ if (!apiKey) {
 } else {
 	// biome-ignore lint/suspicious/noConsole: Configuration logging at startup
 	console.log("Brevo API key configured:", `${apiKey.substring(0, 10)}...`);
-	apiInstance.setApiKey(TransactionalEmailsApiApiKeys.apiKey, apiKey);
 }
+const apiInstance = new BrevoClient({ apiKey: apiKey ?? "" });
 
 // Email configuration from environment variables
 const _CONTACT_FROM_EMAIL =
@@ -73,9 +60,6 @@ export const sendContactEmail = async (
 
 		const sendSmtpEmail = {
 			to: [{ email: CONTACT_TO_EMAIL }],
-			templateId: undefined,
-			params: undefined,
-			headers: undefined,
 			sender: { email: _CONTACT_FROM_EMAIL, name: "SkillVector" },
 			subject: `${CONTACT_SUBJECT_PREFIX} ${validatedData.name}`,
 			htmlContent: htmlContent,
@@ -89,20 +73,22 @@ export const sendContactEmail = async (
 				from: _CONTACT_FROM_EMAIL,
 				subject: `${CONTACT_SUBJECT_PREFIX} ${validatedData.name}`,
 			});
-			await apiInstance.sendTransacEmail(sendSmtpEmail);
+			await apiInstance.transactionalEmails.sendTransacEmail(sendSmtpEmail);
 			// biome-ignore lint/suspicious/noConsole: Email success confirmation
 			console.log("Brevo email sent successfully:");
 		} catch (brevoError: unknown) {
-			const error = brevoError as BrevoApiError;
+			const message =
+				brevoError instanceof BrevoError ? brevoError.message : "Unknown error";
 			// biome-ignore lint/suspicious/noConsole: Brevo API error details for debugging
 			console.error("Brevo API error:", {
-				message: error.message,
-				status: error.status,
-				response: error.response?.data,
+				message,
+				statusCode:
+					brevoError instanceof BrevoError ? brevoError.statusCode : undefined,
+				body: brevoError instanceof BrevoError ? brevoError.body : undefined,
 			});
 			return {
 				success: false,
-				error: `Email service error: ${error.message || "Unknown error"}`,
+				error: `Email service error: ${message}`,
 			};
 		}
 

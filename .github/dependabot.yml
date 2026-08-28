@@ -61,6 +61,7 @@ updates:
         patterns:
           - "@types/*"
           - "@storybook/*"
+          - "storybook"
           - "@biomejs/*"
         update-types:
           - "minor"

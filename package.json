@@ -68,7 +68,7 @@
 		"@types/papaparse": "^5.5.2",
 		"csv-parse": "^7.0.2",
 		"csv-stringify": "^6.6.0",
-		"cross-env": "^7.0.3"
+		"cross-env": "^10.1.0"
 	},
 	"lint-staged": {
 		"package.json": "bash -c 'bun install && git add bun.lock'",

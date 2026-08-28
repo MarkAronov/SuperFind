@@ -56,7 +56,7 @@ jobs:
     steps:
       - name: Set flags from commit message or workflow inputs
         id: set
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         with:
           script: |
             const msg = (context.payload.head_commit && context.payload.head_commit.message) || ''

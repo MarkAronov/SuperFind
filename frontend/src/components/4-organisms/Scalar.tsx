@@ -7,7 +7,6 @@ import { useTheme } from "../../hooks/useTheme";
 import { BORDERS } from "../1-ions/borders";
 import { LAYOUT } from "../1-ions/layout";
 import { Div } from "../2-atoms/Div";
-import { ScrollArea } from "../2-atoms/ScrollArea";
 import "./Scalar.css";
 
 /**
@@ -88,13 +87,11 @@ export const Scalar = ({
 	);
 
 	return (
-		<ScrollArea className={scalarWrapperClassName}>
-			<Div className="h-full">
-				<ApiReferenceReact
-					key={`scalar-${isDark}`}
-					configuration={configuration}
-				/>
-			</Div>
-		</ScrollArea>
+		<Div className={cn(scalarWrapperClassName, "overflow-auto")}>
+			<ApiReferenceReact
+				key={`scalar-${isDark}`}
+				configuration={configuration}
+			/>
+		</Div>
 	);
 };

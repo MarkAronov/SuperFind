@@ -1,7 +1,6 @@
 import { FadeIn } from "@/animations/1-entrance/FadeIn";
 import { SlideIn } from "@/animations/1-entrance/SlideIn";
 import { cn } from "@/lib/utils";
-import { SPACING } from "../1-ions/spacing";
 import { Div } from "../2-atoms/Div";
 import { Heading } from "../2-atoms/Heading";
 import { Span } from "../2-atoms/Span";
@@ -21,7 +20,10 @@ import type { HeroProps } from "./Hero.types";
  *
  * Layout:
  * - Default: Centered text alignment (text-center)
- * - Spacing: Large section padding (64-96px vertical)
+ * - Spacing: Large top padding (64-96px) to clear the header; small bottom
+ *   padding (24-32px) since Hero is always immediately followed by a
+ *   Section/content block that supplies its own top padding — matching
+ *   bottom paddings here stacked with theirs into a ~150px dead gap
  * - Width: Controlled by parent container (PageTemplate)
  *
  * Gradient System:
@@ -51,8 +53,12 @@ const Hero = ({
 	// Build gradient brand class
 	const brandClass = cn(gradientClass, "bg-clip-text text-transparent");
 
-	// Combine section classes
-	const combinedClassName = cn(centeredClass, SPACING.SECTION.lg, className);
+	// Combine section classes — asymmetric padding, see Layout note above
+	const combinedClassName = cn(
+		centeredClass,
+		"pt-16 pb-6 lg:pt-24 lg:pb-8",
+		className,
+	);
 
 	return (
 		<Div className={combinedClassName} {...props}>

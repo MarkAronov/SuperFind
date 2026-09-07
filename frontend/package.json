@@ -95,7 +95,7 @@
 		"axe-core": "4.13.0",
 		"baseline-browser-mapping": "^2.11.20",
 		"chrome-launcher": "1.2.1",
-		"globals": "^17.11.0",
+		"globals": "^17.12.0",
 		"lighthouse": "13.4.1",
 		"puppeteer": "25.9.0",
 		"storybook": "10.6.0",
